@@ -11,6 +11,8 @@
     tools:context="a2is70.quizmaster.activities.LoginActivity">
 
     <!-- Login progress -->
+
+
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -29,6 +31,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notice_onboarding" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -62,6 +70,7 @@
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
+
 
             <Button
                 android:id="@+id/email_sign_in_button"
