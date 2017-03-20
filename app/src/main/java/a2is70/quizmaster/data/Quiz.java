@@ -28,6 +28,12 @@ public class Quiz {
     /**Quotient of total points required to pass this Quiz.*/
     private double passTreshold;
 
+    /**Final score of a quiz (upon completion).*/
+    private double score;
+
+    /**List of selected answers for the quiz (by the student).*/
+    private List<String> answers;
+
     public Quiz(String name, String group, String owner, List<Question> questions){
         this.name = name;
         this.group = group;
@@ -81,4 +87,16 @@ public class Quiz {
     public void setDuration(int in){
         duration = in;
     }
+
+    public double getScore(){ return score; }
+
+    public void calculateScore(){
+
+    }
+
+    public void setAnswers(List<String> a){
+        answers = a;
+    }
+
+    public List<String> getAnswers(){ return answers; }
 }

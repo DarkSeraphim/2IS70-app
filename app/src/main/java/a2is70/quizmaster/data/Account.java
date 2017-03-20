@@ -10,9 +10,6 @@ public class Account {
     /* Full name of user. */
     private String name;
 
-    /* Password hash (in long format(?)).*/
-    private long pw_hash;
-
     /* Account type of user. See enum AccountType*/
     private final AccountType accType;
 
@@ -30,6 +27,12 @@ public class Account {
         this.accType = type;
         this.email = email;
         this.school = school;
+    }
+
+    /**Method to add this account to the database (if it does not already exist).
+     */
+    public void create(){
+
     }
 
     /**Method to delete this account from the database.
@@ -70,10 +73,7 @@ public class Account {
         return school;
     }
 
-    public long getHash(){
-        return pw_hash;
+    public AccountType getAccType(){
+        return accType;
     }
-
-
-
 }
