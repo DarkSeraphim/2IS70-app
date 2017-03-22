@@ -17,7 +17,7 @@
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".activities.OverviewActivity" />
-        <activity android:name=".activities.GroupActivity" />
+        <activity android:name=".activities.GroupActivity" android:label="Groups" />
         <activity android:name=".activities.QuizActivity" />
         <activity android:name=".activities.ReviewActivity" />
         <activity android:name=".activities.CreateActivity"></activity>
