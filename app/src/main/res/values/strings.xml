@@ -18,6 +18,14 @@
         completions."
     </string>
 
+
+    <!-- Dummy text placeholders -->
+    <string-array name="placeholder_group_list">
+        <item>Class A</item>
+        <item>Class B</item>
+        <item>Honour Class</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

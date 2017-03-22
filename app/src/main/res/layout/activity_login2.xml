@@ -14,15 +14,14 @@
 
     <!-- Swap these two fragments out dynamically in the activity-->
 
-    <!--<fragment android:name="layout.RegisterFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--tools:layout="@layout/fragment_register"></fragment>-->
+    <fragment android:name="layout.RegisterFragment"
+        android:layout_width="match_parent"
+       android:layout_height="match_parent"
+        tools:layout="@layout/fragment_register"></fragment>
 
     <fragment android:name="layout.RegisterFragment2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_register2"></fragment>
-
 
 </LinearLayout>
