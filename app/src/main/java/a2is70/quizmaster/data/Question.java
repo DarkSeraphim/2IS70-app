@@ -11,6 +11,9 @@ public class Question {
     /**String with the correct answer.*/
     private String correctAnswer;
 
+    /**String with the answer chosen by student (if any).*/
+    private String chosenAnswer;
+
     /**Weight of this question in the Quiz.*/
     private double weight;
 
@@ -44,5 +47,13 @@ public class Question {
 
     public String getCorrectAnswer(){
         return correctAnswer;
+    }
+
+    public void setChosenAnswer(String in){
+        chosenAnswer = in;
+    }
+
+    public String getChosenAnswer(){
+        return chosenAnswer;
     }
 }

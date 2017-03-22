@@ -98,5 +98,11 @@ public class Quiz {
         answers = a;
     }
 
+    /**Method to list the answers to all questions in this Quiz.*/
     public List<String> getAnswers(){ return answers; }
+
+    /**Method to turn this object into a String (for file storage).*/
+    public String toString(){
+        return "";
+    }
 }

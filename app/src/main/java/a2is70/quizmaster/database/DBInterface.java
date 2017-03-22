@@ -1,42 +1,62 @@
 package a2is70.quizmaster.database;
 import a2is70.quizmaster.data.*;
+import java.util.List;
 
 /**Interface to facilitate communication with database.*/
 public interface DBInterface {
 
     /**Method to retrieve account data for authentication.*/
-    public void loadAccount(Account a, DBCallback b);
+    @POST("user/login")
+    DBCallback<Account> loadAccount(String email, String password);
 
     /**Method to add new account to database.*/
-    public void addAccount(Account a, DBCallback b);
+    @POST("user/register")
+    DBCallback<Account> addAccount(String email, String password);
 
     /**Method to edit existing account in database.*/
-    public void editAccount(Account a, DBCallback b);
+    DBCallback editAccount(Account a);
 
     /**Method to delete an existing account from database.*/
-    public void deleteAccount(Account a, DBCallback b);
+    DBCallback deleteAccount(Account a);
 
     /**Method to retrieve group data for one account (to list in groupActivity).*/
-    public void loadGroups(Account a, DBCallback b);
+    @GET("/groups")
+    DBCallback<List<Group>> loadGroups(Account a);
 
     /**Method to retrieve Quiz data for one account (to list in overviewActivity).*/
-    public void loadQuizzes(Account a, DBCallback b);
+    @GET("/tests")
+    DBCallback<List<Quiz>> loadQuizzes(Account a);
 
     /**Method to join group data.*/
-    public void joinGroup(Group g, DBCallback b);
+    @POST("/group/subscription")
+    DBCallback joinGroup(Group g);
 
     /**Method to edit group.*/
-    public void editGroup(Group g, DBCallback b);
+    DBCallback editGroup(Group g);
 
+    @DELETE("/group/subscription")
     /**Method to leave group.*/
-    public void leaveGroup(Group g, DBCallback b);
+    DBCallback leaveGroup(Group g);
 
     /**Method to create a new Quiz.*/
-    public void addQuiz(Quiz q, DBCallback b);
+    DBCallback addQuiz(Quiz q);
 
     /**Method to edit an existing Quiz.*/
-    public void editQuiz(Quiz q, DBCallback b);
+    DBCallback editQuiz(Quiz q);
 
     /**Method to delete an existing Quiz.*/
-    public void deleteQuiz(Quiz q, DBCallback b);
+    @DELETE("/test")
+    DBCallback deleteQuiz(@Path("test") Quiz q);
+
+    /**Method to submit a completed Quiz.*/
+    @POST("/test/submit")
+    DBCallback submitQuiz(Quiz q);
+
+    /**Method to request a student's test review.*/
+    @GET("/review/as_teacher?test_id=id")
+    DBCallback reviewStudentQuiz(Quiz q);
+
+    /**Method to request a teacher's test review.*/
+    @GET("/review/as_student?test_id=id")
+    DBCallback reviewTeacherQuiz(Quiz q);
 }
