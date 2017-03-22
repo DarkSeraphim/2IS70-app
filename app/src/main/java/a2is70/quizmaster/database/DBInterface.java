@@ -6,11 +6,11 @@ import java.util.List;
 public interface DBInterface {
 
     /**Method to retrieve account data for authentication.*/
-    @POST("user/login")
+    //@POST("user/login")
     DBCallback<Account> loadAccount(String email, String password);
 
     /**Method to add new account to database.*/
-    @POST("user/register")
+    //@POST("user/register")
     DBCallback<Account> addAccount(String email, String password);
 
     /**Method to edit existing account in database.*/
@@ -20,21 +20,21 @@ public interface DBInterface {
     DBCallback deleteAccount(Account a);
 
     /**Method to retrieve group data for one account (to list in groupActivity).*/
-    @GET("/groups")
+    //@GET("/groups")
     DBCallback<List<Group>> loadGroups(Account a);
 
     /**Method to retrieve Quiz data for one account (to list in overviewActivity).*/
-    @GET("/tests")
+    //@GET("/tests")
     DBCallback<List<Quiz>> loadQuizzes(Account a);
 
     /**Method to join group data.*/
-    @POST("/group/subscription")
+    //@POST("/group/subscription")
     DBCallback joinGroup(Group g);
 
     /**Method to edit group.*/
     DBCallback editGroup(Group g);
 
-    @DELETE("/group/subscription")
+    //@DELETE("/group/subscription")
     /**Method to leave group.*/
     DBCallback leaveGroup(Group g);
 
@@ -45,18 +45,18 @@ public interface DBInterface {
     DBCallback editQuiz(Quiz q);
 
     /**Method to delete an existing Quiz.*/
-    @DELETE("/test")
-    DBCallback deleteQuiz(@Path("test") Quiz q);
+    //@DELETE("/test")
+    DBCallback deleteQuiz(Quiz q);
 
     /**Method to submit a completed Quiz.*/
-    @POST("/test/submit")
+    //@POST("/test/submit")
     DBCallback submitQuiz(Quiz q);
 
     /**Method to request a student's test review.*/
-    @GET("/review/as_teacher?test_id=id")
+    //@GET("/review/as_teacher?test_id=id")
     DBCallback reviewStudentQuiz(Quiz q);
 
     /**Method to request a teacher's test review.*/
-    @GET("/review/as_student?test_id=id")
+    //@GET("/review/as_student?test_id=id")
     DBCallback reviewTeacherQuiz(Quiz q);
 }
