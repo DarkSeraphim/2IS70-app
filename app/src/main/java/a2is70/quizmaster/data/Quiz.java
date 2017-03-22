@@ -1,5 +1,8 @@
 package a2is70.quizmaster.data;
 import java.util.List;
+import java.util.ArrayList;
+
+import a2is70.quizmaster.database.DBInterface;
 
 /**Object to represent a Quiz.*/
 public class Quiz {
@@ -31,8 +34,8 @@ public class Quiz {
     /**Final score of a quiz (upon completion).*/
     private double score;
 
-    /**List of selected answers for the quiz (by the student).*/
-    private List<String> answers;
+    /**Database interface Object.*/
+    DBInterface dbi;
 
     public Quiz(String name, String group, String owner, List<Question> questions){
         this.name = name;
@@ -45,7 +48,7 @@ public class Quiz {
      * Should also delete quiz on database.
      */
     public void delete(){
-
+        dbi.deleteQuiz(this);
     }
 
     public void setName(String in){
@@ -90,19 +93,30 @@ public class Quiz {
 
     public double getScore(){ return score; }
 
-    public void calculateScore(){
-
-    }
-
-    public void setAnswers(List<String> a){
-        answers = a;
+    public double calculateScore(){
+        double total_score = 0, total_weight = 0;
+        for (Question q : questions) {
+            total_weight += q.getWeight();
+            if(q.isCorrect()){
+                total_score += q.getWeight();
+            }
+        }
+        score = (total_score/total_weight);
+        return score;
     }
 
     /**Method to list the answers to all questions in this Quiz.*/
-    public List<String> getAnswers(){ return answers; }
+    public List<String> getAnswers(){
+        List<String> answers = new ArrayList<String>();
+        for (Question q : questions) {
+            answers.add(q.getChosenAnswer());
+        }
+        return answers;
+    }
 
     /**Method to turn this object into a String (for file storage).*/
     public String toString(){
+        //TODO
         return "";
     }
 }

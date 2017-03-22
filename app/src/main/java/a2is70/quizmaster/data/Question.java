@@ -56,4 +56,12 @@ public class Question {
     public String getChosenAnswer(){
         return chosenAnswer;
     }
+
+    public double getWeight(){
+        return weight;
+    }
+
+    public boolean isCorrect(){
+        return chosenAnswer.equals(correctAnswer);
+    }
 }

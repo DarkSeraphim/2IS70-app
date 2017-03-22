@@ -1,6 +1,8 @@
 package a2is70.quizmaster.data;
 import java.util.List;
 
+import a2is70.quizmaster.database.DBInterface;
+
 /**Object to represent a group of users (students and teachers combined).*/
 public class Group {
     /**Name identifying this group.*/
@@ -15,6 +17,9 @@ public class Group {
     /**Access code for new users to join this group.*/
     private final String accessCode;
 
+    /**Database API object.*/
+    private DBInterface dbi;
+
     public Group(String name, int ID, String accessCode){
         this.name = name;
         this.ID = ID;
@@ -23,6 +28,7 @@ public class Group {
 
     public void setName(String in){
         name = in;
+        dbi.editGroup(this);
     }
 
     public String getName(){
