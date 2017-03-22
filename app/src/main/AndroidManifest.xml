@@ -16,25 +16,15 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
-<<<<<<< HEAD
         <intent-filter>
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
 
-        <activity android:name=".activities.OverviewActivity" />
-        <activity android:name=".activities.GroupActivity" />
-        <activity android:name=".activities.QuizActivity" />
-        <activity android:name=".activities.ReviewActivity" />
-        <activity android:name=".activities.CreateActivity">
-
-        </activity>
-=======
         <activity android:name=".activities.OverviewActivity" android:label="Quizzes" />
         <activity android:name=".activities.GroupActivity" android:label="Groups" />
         <activity android:name=".activities.QuizActivity" android:label="Quiz" />
         <activity android:name=".activities.ReviewActivity" android:label="Review" />
         <activity android:name=".activities.CreateActivity" android:label="Create"></activity>
->>>>>>> 086de1d2473e0300ab0661db6e3d17863b6a8faa
     </application>
 
 
