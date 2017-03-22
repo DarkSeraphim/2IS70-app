@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_quiz"
     android:layout_width="match_parent"
@@ -76,14 +77,34 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="17dp" />
 
+    <Button
+        android:id="@+id/button3"
+        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textView3"
+        android:onClick="yourImageView.setVisibility(View.VISIBLE);"
+        android:text="Show Image" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="180dp"
         android:text="TextView"
-        android:layout_below="@+id/progressBar"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="21dp"
         android:layout_alignParentEnd="true" />
 
+    <ImageView
+        android:id="@+id/imageViewCompass"
+        android:layout_width="wrap_content"
+        android:layout_height="180dp"
+        android:src="@drawable/test"
+        android:visibility="invisible"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>
+
+

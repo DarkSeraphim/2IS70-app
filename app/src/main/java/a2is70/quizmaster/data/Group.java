@@ -13,9 +13,9 @@ public class Group {
     private List<Account> members;
 
     /**Access code for new users to join this group.*/
-    private final long accessCode;
+    private final String accessCode;
 
-    public Group(String name, int ID, long accessCode){
+    public Group(String name, int ID, String accessCode){
         this.name = name;
         this.ID = ID;
         this.accessCode = accessCode;
@@ -29,7 +29,7 @@ public class Group {
         return name;
     }
 
-    public long getAccessCode(){
+    public String getAccessCode(){
         return accessCode;
     }
 }
