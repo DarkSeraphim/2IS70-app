@@ -7,56 +7,64 @@ public interface DBInterface {
 
     /**Method to retrieve account data for authentication.*/
     //@POST("user/login")
-    DBCallback<Account> loadAccount(String email, String password);
+    Call<Account> loadAccount(String email, String password);
 
     /**Method to add new account to database.*/
     //@POST("user/register")
-    DBCallback<Account> addAccount(String email, String password);
+    Call<Account> addAccount(String email, String password);
 
-    /**Method to edit existing account in database.*/
-    DBCallback editAccount(Account a);
+    /**Method to edit existing account in database.
+     * Possible could have.*/
+    //Call editAccount(Account a);
 
-    /**Method to delete an existing account from database.*/
-    DBCallback deleteAccount(Account a);
+    /**Method to delete the calling account from database.*/
+    Call deleteAccount();
 
     /**Method to retrieve group data for one account (to list in groupActivity).*/
     //@GET("/groups")
-    DBCallback<List<Group>> loadGroups(Account a);
+    Call<List<Group>> loadGroups(Account a);
 
     /**Method to retrieve Quiz data for one account (to list in overviewActivity).*/
     //@GET("/tests")
-    DBCallback<List<Quiz>> loadQuizzes(Account a);
+    Call<List<Quiz>> loadQuizzes(Account a);
 
     /**Method to join group data.*/
     //@POST("/group/subscription")
-    DBCallback joinGroup(Group g);
+    Call joinGroup(Group g);
 
-    /**Method to edit group.*/
-    DBCallback editGroup(Group g);
+    /**Method to edit group.
+     * Possible could have.*/
+    //Call editGroup(Group g);
 
     //@DELETE("/group/subscription")
     /**Method to leave group.*/
-    DBCallback leaveGroup(Group g);
+    Call leaveGroup(Group g);
 
     /**Method to create a new Quiz.*/
-    DBCallback addQuiz(Quiz q);
+    //@POST("/test")
+    Call addQuiz(Quiz q);
 
-    /**Method to edit an existing Quiz.*/
-    DBCallback editQuiz(Quiz q);
+    /**Method to edit an existing Quiz.
+     * Possible could have.*/
+    //Call editQuiz(Quiz q);
 
     /**Method to delete an existing Quiz.*/
     //@DELETE("/test")
-    DBCallback deleteQuiz(Quiz q);
+    Call deleteQuiz(Quiz q);
 
     /**Method to submit a completed Quiz.*/
     //@POST("/test/submit")
-    DBCallback submitQuiz(Quiz q);
+    Call submitQuiz(Quiz q);
 
     /**Method to request a student's test review.*/
     //@GET("/review/as_teacher?test_id=id")
-    DBCallback reviewStudentQuiz(Quiz q);
+    Call reviewStudentQuiz(Quiz q);
 
     /**Method to request a teacher's test review.*/
     //@GET("/review/as_student?test_id=id")
-    DBCallback reviewTeacherQuiz(Quiz q);
+    Call reviewTeacherQuiz(Quiz q);
+}
+
+/**Placeholder class so that this stuff compiles.*/
+class Call<T>{
 }

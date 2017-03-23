@@ -26,9 +26,12 @@ public class Group {
         this.accessCode = accessCode;
     }
 
+    /**Method to change name of this group.
+     * Possible could have.
+     * @param in
+     */
     public void setName(String in){
-        name = in;
-        dbi.editGroup(this);
+
     }
 
     public String getName(){

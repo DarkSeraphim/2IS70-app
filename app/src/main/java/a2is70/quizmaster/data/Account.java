@@ -43,16 +43,16 @@ public class Account {
     /**Method to delete this account from the database.
      */
     public void delete(){
-        dbi.deleteAccount(this);
+        dbi.deleteAccount();
     }
 
     /**Method to change name of Account.
+     * Possible could have.
      * Updates GUI(?)
      * @param in
      */
     public void setName(String in){
-        name = in;
-        dbi.editAccount(this);
+
     }
 
     public String getName(){
@@ -68,12 +68,12 @@ public class Account {
     }
 
     /**Method to change school affiliated with Account.
+     * Possible could have requirement.
      * Updates GUI(?)
      * @param in
      */
     public void setSchool(String in){
-        school = in;
-        dbi.editAccount(this);
+
     }
 
     public String getSchool(){
