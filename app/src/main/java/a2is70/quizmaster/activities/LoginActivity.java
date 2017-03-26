@@ -3,6 +3,8 @@ package a2is70.quizmaster.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -15,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -83,20 +86,29 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                if (id == R.id.password || id == EditorInfo.IME_NULL) {
+                    mPasswordView.requestFocus();
                     return true;
                 }
                 return false;
             }
         });
+        mPasswordView = (EditText) findViewById(R.id.password);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(findViewById(R.id.password).getWindowToken(), 0);
+                attemptLogin();
+                return true;
+            }
+        });
+
+        Button mEmailSignInButton = (Button) findViewById(R.id.sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,14 +117,14 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         });
 
         Button signUp = (Button) findViewById(R.id.login_sign_up);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        signUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 // This... doesn't work :c
                 // TODO: figure out how to switch between Fragments
                 getSupportFragmentManager().beginTransaction()
-                                            .hide(new LoginFragment())
-                                            .commit();
+                        .hide(new LoginFragment())
+                        .commit();
             }
         });
 
@@ -184,21 +196,25 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
 
         boolean cancel = false;
         View focusView = null;
-
+        /*
         // Check for a valid password, if the user entered one.
         if (Validator.PASSWORD.test(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
-
+        */
         // Check for a valid email address.
-        if (Validator.EMAIL.test(email)) {
-            mEmailView.setError(TextUtils.isEmpty(email) ?
-                                getString(R.string.error_field_required) :
-                                getString(R.string.error_invalid_email));
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
+        }else {
+            if (TextUtils.isEmpty(password)) {
+                mPasswordView.setError(getString(R.string.error_field_required));
+                focusView = mPasswordView;
+                cancel = true;
+            }
         }
 
         if (cancel) {
@@ -305,7 +321,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
             }
 
             // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
@@ -314,7 +330,9 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
             showProgress(false);
 
             if (success) {
-                finish();
+                //mEmailView.setError("Good job");
+                //mPasswordView.setError("It's correct");
+                startActivity(new Intent(LoginActivity.this, OverviewActivity.class));
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
