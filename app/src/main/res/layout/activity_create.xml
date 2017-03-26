@@ -46,7 +46,7 @@
         android:id="@+id/checkBox3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="12dp"
         android:checked="true"
         android:text="Enable Deadline"
         android:layout_below="@+id/textView9"
@@ -81,28 +81,32 @@
         android:id="@+id/editText7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editText4"
+        android:layout_marginTop="11dp"
         android:ems="10"
         android:hint="Time limit"
-        android:inputType="number"
-        android:layout_below="@+id/editText4"
-        android:layout_alignParentStart="true" />
+        android:inputType="number" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="100dp"
         tools:listitem="@layout/item_review_question"
         android:layout_below="@+id/textView10"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:id="@+id/recyclerView" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/add_question_button"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/checkBox3"
-        android:text="Add Question" />
+        android:text="Add Question"
+        android:layout_below="@+id/recyclerView"
+        android:layout_toStartOf="@+id/editText5"
+        android:layout_marginTop="15dp" />
 
     <TextView
         android:id="@+id/textView10"
