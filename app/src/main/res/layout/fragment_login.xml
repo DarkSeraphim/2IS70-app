@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/login_form"
     tools:context="a2is70.quizmaster.activities.LoginActivity">
 
 
@@ -20,6 +21,12 @@
         android:gravity="center_vertical"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notice_onboarding" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -30,22 +37,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:singleLine="true" />
-
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/editText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="textPersonName"
-                android:hint="@string/prompt_name" />
+                android:maxLines="1" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -62,50 +54,28 @@
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true" />
+                android:maxLines="1" />
 
         </android.support.design.widget.TextInputLayout>
 
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="I am a:" />
-
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:checkedButton="@+id/radioButtonStudent">
-
-            <RadioButton
-                android:id="@+id/radioButtonStudent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Student" />
-
-            <RadioButton
-                android:id="@+id/radioButtonTeacher"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Teacher" />
-
-        </RadioGroup>
-
         <Button
-            android:id="@+id/register_button"
+            android:id="@+id/email_sign_in_button"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/action_register"
+            android:text="@string/action_sign_in"
             android:textStyle="bold" />
 
+        <Button
+            android:id="@+id/login_sign_up"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/action_sign_up"
+            android:textStyle="bold" />
     </LinearLayout>
-
-
 
 </LinearLayout>

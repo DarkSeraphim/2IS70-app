@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/foobar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -14,14 +15,18 @@
 
     <!-- Swap these two fragments out dynamically in the activity-->
 
-    <fragment android:name="layout.RegisterFragment"
-        android:layout_width="match_parent"
-       android:layout_height="match_parent"
-        tools:layout="@layout/fragment_register"></fragment>
-
-    <fragment android:name="layout.RegisterFragment2"
+    <fragment
+        android:name="a2is70.quizmaster.activities.fragments.LoginFragment"
+        android:id="@+id/login_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_register2"></fragment>
+        tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:name="a2is70.quizmaster.activities.fragments.RegisterFragment"
+        android:id="@+id/register_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_register" />
 
 </LinearLayout>

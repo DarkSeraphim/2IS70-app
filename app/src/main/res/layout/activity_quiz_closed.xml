@@ -14,7 +14,7 @@
         android:id="@+id/radioButton9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="94dp"
+        android:layout_marginEnd="94dp"
         android:layout_marginStart="31dp"
         android:text="Answer A"
         android:layout_marginBottom="12dp"

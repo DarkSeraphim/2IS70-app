@@ -15,16 +15,18 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <intent-filter>
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            android:label="@string/title_activity_login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".activities.OverviewActivity" android:label="Quizzes" />
         <activity android:name=".activities.GroupActivity" android:label="Groups" />
         <activity android:name=".activities.QuizActivity" android:label="Quiz" />
         <activity android:name=".activities.ReviewActivity" android:label="Review" />
-        <activity android:name=".activities.CreateActivity" android:label="Create"></activity>
+        <activity android:name=".activities.CreateActivity" android:label="Create" />
     </application>
 
 

@@ -7,7 +7,8 @@
     <string name="prompt_password">Password</string>
     <string name="prompt_name">Name</string>
     <string name="notice_onboarding">Sign in using your QuizMaster account or register.</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Register</string>
     <string name="action_register">Create account</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>

@@ -1,4 +1,4 @@
-package a2is70.quizmaster.activities;
+package a2is70.quizmaster.activities.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
