@@ -46,13 +46,17 @@ public class Quiz {
         this.owner = owner;
         this.questions = questions;
 
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(DBInterface.server_url)
-                .addConverterFactory(GsonConverterFactory.create());
+        try {
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl(DBInterface.server_url)
+                    .addConverterFactory(GsonConverterFactory.create());
 
-        Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
+            Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
 
-        DBInterface dbi = retrofit.create(DBInterface.class);
+            DBInterface dbi = retrofit.create(DBInterface.class);
+        } catch (Exception e){
+
+        }
     }
 
     /**Method to delete this quiz.
