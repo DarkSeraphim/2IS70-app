@@ -50,7 +50,9 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
+            "Jasper@student.tue.nl:student5", "Mark@student.tue.nl:student2",
+            "Maurits@student.tue.nl:student1", "Thijs@student.tue.nl:student3",
+            "Stan@student.tue.nl:student4", "Tom@student.tue.nl:student6"
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -330,8 +332,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
             showProgress(false);
 
             if (success) {
-                //mEmailView.setError("Good job");
-                //mPasswordView.setError("It's correct");
                 startActivity(new Intent(LoginActivity.this, OverviewActivity.class));
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
