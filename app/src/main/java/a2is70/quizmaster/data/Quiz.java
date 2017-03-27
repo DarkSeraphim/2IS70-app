@@ -3,6 +3,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 import a2is70.quizmaster.database.DBInterface;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**Object to represent a Quiz.*/
 public class Quiz {
@@ -35,13 +38,21 @@ public class Quiz {
     private double score;
 
     /**Database interface Object.*/
-    DBInterface dbi;
+    private DBInterface dbi;
 
     public Quiz(String name, String group, String owner, List<Question> questions){
         this.name = name;
         this.group = group;
         this.owner = owner;
         this.questions = questions;
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(DBInterface.server_url)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
+
+        DBInterface dbi = retrofit.create(DBInterface.class);
     }
 
     /**Method to delete this quiz.
