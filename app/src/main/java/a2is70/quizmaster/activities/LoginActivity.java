@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
+            "w@tue.nl:foo",
             "Jasper@student.tue.nl:student5", "Mark@student.tue.nl:student2",
             "Maurits@student.tue.nl:student1", "Thijs@student.tue.nl:student3",
             "Stan@student.tue.nl:student4", "Tom@student.tue.nl:student6"
