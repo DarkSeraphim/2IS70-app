@@ -10,16 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="a2is70.quizmaster.OverviewActivity">
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="106dp"
-        android:background="@android:drawable/btn_dropdown" />
-
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
@@ -42,9 +32,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sort by date"
-        android:layout_alignBottom="@+id/spinner"
+        android:layout_below="@+id/textView6"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="54dp" />
+        android:layout_marginTop="11dp" />
 
     <CheckBox
         android:id="@+id/checkBox2"
@@ -64,4 +54,14 @@
         android:textSize="18sp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button7"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/checkBox2"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
 </RelativeLayout>
