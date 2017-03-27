@@ -7,7 +7,7 @@ import a2is70.quizmaster.database.DBInterface;
 public class Account {
 
     /* Unique ID given by database. */
-    private final int ID;
+    private final int id;
 
     /* Full name of user. */
     private String name;
@@ -26,8 +26,8 @@ public class Account {
 
     /** Default constructor.
      */
-    public Account(int ID, String name, AccountType type, String email, String school){
-        this.ID = ID;
+    public Account(int id, String name, AccountType type, String email, String school){
+        this.id = id;
         this.name = name;
         this.accType = type;
         this.email = email;

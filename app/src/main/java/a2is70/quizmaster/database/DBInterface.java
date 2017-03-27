@@ -1,5 +1,7 @@
 package a2is70.quizmaster.database;
 import a2is70.quizmaster.data.*;
+import retrofit2.Call;
+
 import java.util.List;
 
 /**Interface to facilitate communication with database.*/
@@ -63,8 +65,4 @@ public interface DBInterface {
     /**Method to request a teacher's test review.*/
     //@GET("/review/as_student?test_id=id")
     Call reviewTeacherQuiz(Quiz q);
-}
-
-/**Placeholder class so that this stuff compiles.*/
-class Call<T>{
 }

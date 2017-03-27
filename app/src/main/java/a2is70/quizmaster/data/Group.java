@@ -9,7 +9,7 @@ public class Group {
     private String name;
 
     /**ID identifying this group (for database).*/
-    private final int ID;
+    private final int id;
 
     /**List of all members that are part of this group.*/
     private List<Account> members;
@@ -20,10 +20,14 @@ public class Group {
     /**Database API object.*/
     private DBInterface dbi;
 
-    public Group(String name, int ID, String accessCode){
+    public Group(String name, int id, String accessCode){
         this.name = name;
-        this.ID = ID;
+        this.id = id;
         this.accessCode = accessCode;
+    }
+
+    public int getId() {
+        return id;
     }
 
     /**Method to change name of this group.

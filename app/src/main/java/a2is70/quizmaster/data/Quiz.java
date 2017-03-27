@@ -11,7 +11,9 @@ public class Quiz {
     private String name;
 
     /**String identifying which group this Quiz is aimed at.*/
-    private String group;
+    private int[] groups;
+
+    private transient Group[] groupObjects;
 
     /**String identifying the owner of this Quiz.*/
     private String owner;
@@ -37,9 +39,9 @@ public class Quiz {
     /**Database interface Object.*/
     DBInterface dbi;
 
-    public Quiz(String name, String group, String owner, List<Question> questions){
+    public Quiz(String name, Group[] groups, String owner, List<Question> questions){
         this.name = name;
-        this.group = group;
+        setGroups(groups);
         this.owner = owner;
         this.questions = questions;
     }
@@ -59,12 +61,16 @@ public class Quiz {
         return name;
     }
 
-    public void setGroup(String in){
-        group = in;
+    public void setGroups(Group[] groups){
+        this.groups = new int[groups.length];
+        for (int i = 0; i < groups.length; i++) {
+            this.groups[i] = groups[i].getId();
+        }
+        this.groupObjects = groups;
     }
 
-    public String getGroup(){
-        return group;
+    public Group[] getGroup(){
+        return this.groupObjects;
     }
 
     public void setOwner(String in){
