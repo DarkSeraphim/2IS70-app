@@ -29,9 +29,8 @@ import java.util.List;
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.fragments.LoginFragment;
 import a2is70.quizmaster.activities.fragments.RegisterFragment;
-import a2is70.quizmaster.utils.Validator;
+import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.utils.function.Consumer;
-import a2is70.quizmaster.data.AccountType;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -279,7 +278,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
     }
 
     @Override
-    public void onRegister(String email, String password, AccountType type) {
+    public void onRegister(String email, String password, Account.Type type) {
 
     }
 

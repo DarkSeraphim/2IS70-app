@@ -1,6 +1,5 @@
 package a2is70.quizmaster.data;
 import java.util.List;
-import java.util.ArrayList;
 
 import a2is70.quizmaster.database.DBInterface;
 import okhttp3.OkHttpClient;
@@ -11,46 +10,40 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Quiz {
 
     /**String identifying this Quiz.*/
-    private String name;
+    private final String name;
+
+    /**String identifying the owner of this Quiz.*/
+    private Account creator;
 
     /**String identifying which group this Quiz is aimed at.*/
     private int[] groups;
 
     private transient Group[] groupObjects;
 
-    /**String identifying the owner of this Quiz.*/
-    private String owner;
+    /**String representing this Quiz' start date.*/
+    private long startAt;
+
+    /**String representing this Quiz' due date.*/
+    private long closeAt;
+
+    /**Duration of this Quiz (in minutes).*/
+    private int timeLimit;
+
+    /**Quotient of total points required to pass this Quiz.*/
+    private int passThreshold;
 
     /**List of Questions that comprise this Quiz.*/
     private List<Question> questions;
 
-    /**String representing this Quiz' due date.*/
-    private String dueDate;
-
-    /**String representing this Quiz' start date.*/
-    private String startDate;
-
-    /**Duration of this Quiz (in minutes).*/
-    private int duration;
-
-    /**Quotient of total points required to pass this Quiz.*/
-    private double passTreshold;
-
-    /**Final score of a quiz (upon completion).*/
-    private double score;
-
-    /**Database interface Object.*/
-    private DBInterface dbi;
-
-    public Quiz(String name, Group[] groups, String owner, List<Question> questions){
+    public Quiz(String name, Group[] groups, Account owner, List<Question> questions){
         this.name = name;
         setGroups(groups);
-        this.owner = owner;
+        this.creator = owner;
         this.questions = questions;
 
         try {
             Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl(DBInterface.server_url)
+                    .baseUrl(DBInterface.SERVER_URL)
                     .addConverterFactory(GsonConverterFactory.create());
 
             Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
@@ -61,19 +54,16 @@ public class Quiz {
         }
     }
 
-    /**Method to delete this quiz.
-     * Should also delete quiz on database.
-     */
-    public void delete(){
-        dbi.deleteQuiz(this);
-    }
-
-    public void setName(String in){
-        name = in;
-    }
-
     public String getName(){
         return name;
+    }
+
+    public Account getCreator(){
+        return creator;
+    }
+
+    public Group[] getGroup(){
+        return this.groupObjects;
     }
 
     public void setGroups(Group[] groups){
@@ -84,16 +74,36 @@ public class Quiz {
         this.groupObjects = groups;
     }
 
-    public Group[] getGroup(){
-        return this.groupObjects;
+    public long getStartAt() {
+        return startAt;
     }
 
-    public void setOwner(String in){
-        owner = in;
+    public void setStartAt(long startAt) {
+        this.startAt = startAt;
     }
 
-    public String getOwner(){
-        return owner;
+    public long getCloseAt() {
+        return closeAt;
+    }
+
+    public void setCloseAt(long closeAt) {
+        this.closeAt = closeAt;
+    }
+
+    public int getTimeLimit(){
+        return timeLimit;
+    }
+
+    public void setTimeLimit(int timeLimit){
+        this.timeLimit = timeLimit;
+    }
+
+    public void setPassThreshold(int passThreshold) {
+        this.passThreshold = passThreshold;
+    }
+
+    public int getPassThreshold() {
+        return passThreshold;
     }
 
     public List<Question> getQuestions(){
@@ -102,42 +112,5 @@ public class Quiz {
 
     public void setQuestions(List<Question> in){
         questions = in;
-    }
-
-    public int getDuration(){
-        return duration;
-    }
-
-    public void setDuration(int in){
-        duration = in;
-    }
-
-    public double getScore(){ return score; }
-
-    public double calculateScore(){
-        double total_score = 0, total_weight = 0;
-        for (Question q : questions) {
-            total_weight += q.getWeight();
-            if(q.isCorrect()){
-                total_score += q.getWeight();
-            }
-        }
-        score = (total_score/total_weight);
-        return score;
-    }
-
-    /**Method to list the answers to all questions in this Quiz.*/
-    public List<String> getAnswers(){
-        List<String> answers = new ArrayList<String>();
-        for (Question q : questions) {
-            answers.add(q.getChosenAnswer());
-        }
-        return answers;
-    }
-
-    /**Method to turn this object into a String (for file storage).*/
-    public String toString(){
-        //TODO
-        return "";
     }
 }

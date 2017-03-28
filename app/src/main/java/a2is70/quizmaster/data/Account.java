@@ -12,33 +12,26 @@ public class Account {
     /* Unique ID given by database. */
     private final int id;
 
+    /* Email adress of user. Used as login identifier.*/
+    private final String email;
+
     /* Full name of user. */
     private String name;
 
-    /* Account type of user. See enum AccountType*/
-    private final AccountType accType;
-
-    /* Email adress of user. Used as login identifier.*/
-    private String email;
-
-    /* School associated with user.*/
-    private String school;
-
-    /*DataBase API object.*/
-    DBInterface dbi;
+    /* Account type of user. See enum Type*/
+    private final Type type;
 
     /** Default constructor.
      */
-    public Account(int id, String name, AccountType type, String email, String school){
+    public Account(int id, String name, Type type, String email){
         this.id = id;
         this.name = name;
-        this.accType = type;
+        this.type = type;
         this.email = email;
-        this.school = school;
 
         try {
             Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl(DBInterface.server_url)
+                    .baseUrl(DBInterface.SERVER_URL)
                     .addConverterFactory(GsonConverterFactory.create());
 
             Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
@@ -49,53 +42,34 @@ public class Account {
         }
     }
 
-    /**Method to add this account to the database (if it does not already exist).
-     */
-    public void create(String password){
-        dbi.addAccount(email, password);
+    public int getId() {
+        return id;
     }
 
-    /**Method to delete this account from the database.
-     */
-    public void delete(){
-        dbi.deleteAccount();
+    public String getEmail() {
+        return email;
     }
 
     /**Method to change name of Account.
      * Possible could have.
      * Updates GUI(?)
-     * @param in
+     * @param name
      */
-    public void setName(String in){
-
+    public void setName(String name){
+        this.name = name;
     }
 
     public String getName(){
         return name;
     }
 
-    /**Method to initiate a password reset.
-     * Probably opens a window to enter new credentials.
-     * Updates database accordingly.
-     */
-    public void resetPassword(){
-        //TODO
+
+    public Type getType(){
+        return type;
     }
 
-    /**Method to change school affiliated with Account.
-     * Possible could have requirement.
-     * Updates GUI(?)
-     * @param in
-     */
-    public void setSchool(String in){
-
-    }
-
-    public String getSchool(){
-        return school;
-    }
-
-    public AccountType getAccType(){
-        return accType;
+    public enum Type {
+        TEACHER,
+        STUDENT
     }
 }
