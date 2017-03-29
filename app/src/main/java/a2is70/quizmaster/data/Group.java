@@ -24,6 +24,9 @@ public class Group {
     /**Access code for new users to join this group.*/
     private final String accessCode;
 
+    /**Database interface object.*/
+    DBInterface dbi;
+
     public Group(int id, String name, String accessCode){
         this.name = name;
         this.id = id;
@@ -36,7 +39,7 @@ public class Group {
 
             Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
 
-            DBInterface dbi = retrofit.create(DBInterface.class);
+            dbi = retrofit.create(DBInterface.class);
         } catch (Exception e){
 
         }
@@ -54,11 +57,11 @@ public class Group {
         return accessCode;
     }
 
-    public void joinGroup(Callback c){
-        dbi.joinGroup(this).enqueue(c);
+    public void joinGroup(String accessCode, Callback c){
+        dbi.joinGroup(accessCode).enqueue(c);
     }
 
     public void leaveGroup(Callback c){
-        dbi.leaveGroup(this).enqueue(c);
+        dbi.leaveGroup(getId()).enqueue(c);
     }
 }
