@@ -28,16 +28,9 @@ public class RemoteFile implements FileManager {
         }
     }
 
-    public void create(String path, Quiz data){
+    public void create(String path, Quiz data, Callback c){
 
-        dbi.addQuiz(data).enqueue(new Callback(){
-            public void onResponse(Call c, Response r){
-
-            }
-            public void onFailure(Call c, Throwable t){
-
-            }
-        });
+        dbi.addQuiz(data).enqueue(c);
     }
 
     public File load(String path){
@@ -45,16 +38,9 @@ public class RemoteFile implements FileManager {
         return null;
     }
 
-    public void delete(String path){
+    public void delete(String path, Callback c){
 
-        dbi.deleteQuiz(new Quiz(path, null, null, null)).enqueue(new Callback(){
-            public void onResponse(Call c, Response r){
-
-            }
-            public void onFailure(Call c, Throwable t){
-
-            }
-        });
+        dbi.deleteQuiz(new Quiz(path, null, null, null)).enqueue(c);
     }
 
 }

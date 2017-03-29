@@ -60,25 +60,11 @@ public class Group {
         return accessCode;
     }
 
-    public void joinGroup(){
-        dbi.joinGroup(this).enqueue(new Callback(){
-            public void onResponse(Call c, Response r){
-
-            }
-            public void onFailure(Call c, Throwable t){
-
-            }
-        });
+    public void joinGroup(Callback c){
+        dbi.joinGroup(this).enqueue(c);
     }
 
-    public void leaveGroup(){
-        dbi.leaveGroup(this).enqueue(new Callback(){
-            public void onResponse(Call c, Response r){
-
-            }
-            public void onFailure(Call c, Throwable t){
-
-            }
-        });
+    public void leaveGroup(Callback c){
+        dbi.leaveGroup(this).enqueue(c);
     }
 }

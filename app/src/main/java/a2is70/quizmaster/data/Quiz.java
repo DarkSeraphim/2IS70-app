@@ -65,50 +65,22 @@ public class Quiz {
     /**Method to delete this quiz.
      * Should also delete quiz on database.
      */
-    public void delete(){
+    public void delete(Callback c){
         Call call = dbi.deleteQuiz(this);
 
-        call.enqueue(new Callback(){
-            public void onResponse(Call c, Response r){
-
-            }
-            public void onFailure(Call c, Throwable t){
-
-            }
-        });
+        call.enqueue(c);
     }
 
-    public void submitQuiz(){
-        dbi.submitQuiz(this).enqueue(new Callback(){
-            public void onResponse(Call c, Response r){
-
-            }
-            public void onFailure(Call c, Throwable t){
-
-            }
-        });
+    public void submitQuiz(Callback c){
+        dbi.submitQuiz(this).enqueue(c);
     }
 
-    public void reviewAsStudent(){
-        dbi.reviewStudentQuiz(this).enqueue(new Callback(){
-            public void onResponse(Call c, Response r){
-
-            }
-            public void onFailure(Call c, Throwable t){
-
-            }
-        });
+    public void reviewAsStudent(Callback c){
+        dbi.reviewStudentQuiz(this).enqueue(c);
     }
 
-    public void reviewAsTeacher(){
-        dbi.reviewTeacherQuiz(this).enqueue(new Callback(){
-            public void onResponse(Call c, Response r){
-
-            }
-            public void onFailure(Call c, Throwable t){
-
-            }
-        });
+    public void reviewAsTeacher(Callback c){
+        dbi.reviewTeacherQuiz(this).enqueue(c);
     }
 
     public void setName(String in){

@@ -54,28 +54,14 @@ public class Account {
 
     /**Method to add this account to the database (if it does not already exist).
      */
-    public void create(String password){
-        dbi.addAccount(email, password).enqueue(new Callback<Account>(){
-            public void onResponse(Call<Account> c, Response<Account> r){
-
-            }
-            public void onFailure(Call<Account> c, Throwable t){
-
-            }
-        });
+    public void create(String email, String password, Callback c){
+        dbi.addAccount(email, password).enqueue(c);
     }
 
     /**Method to delete this account from the database.
      */
-    public void delete(){
-        dbi.deleteAccount().enqueue(new Callback(){
-            public void onResponse(Call c, Response r){
-
-            }
-            public void onFailure(Call c, Throwable t){
-
-            }
-        });
+    public void delete(Callback c){
+        dbi.deleteAccount().enqueue(c);
     }
 
     /**Method to change name of Account.
