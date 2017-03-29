@@ -2,7 +2,6 @@ package a2is70.quizmaster.data;
 import a2is70.quizmaster.database.DBInterface;
 import java.io.File;
 
-import a2is70.quizmaster.data.FileManager;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -17,7 +16,7 @@ public class RemoteFile implements FileManager {
     public RemoteFile(){
         try {
             Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl(DBInterface.server_url)
+                    .baseUrl(DBInterface.SERVER_URL)
                     .addConverterFactory(GsonConverterFactory.create());
 
             Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
@@ -28,9 +27,8 @@ public class RemoteFile implements FileManager {
         }
     }
 
-    public void create(String path, Quiz data, Callback c){
-
-        dbi.addQuiz(data).enqueue(c);
+    public void create(String path, Quiz data){
+        dbi.addQuiz(data, null, null);
     }
 
     public File load(String path){
@@ -38,9 +36,8 @@ public class RemoteFile implements FileManager {
         return null;
     }
 
-    public void delete(String path, Callback c){
-
-        dbi.deleteQuiz(new Quiz(path, null, null, null)).enqueue(c);
+    public void delete(String path){
+        dbi.deleteQuiz(0);
     }
 
 }

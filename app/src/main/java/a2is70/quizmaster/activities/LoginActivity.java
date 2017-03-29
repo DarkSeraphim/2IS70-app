@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -29,9 +30,8 @@ import java.util.List;
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.fragments.LoginFragment;
 import a2is70.quizmaster.activities.fragments.RegisterFragment;
-import a2is70.quizmaster.utils.Validator;
+import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.utils.function.Consumer;
-import a2is70.quizmaster.data.AccountType;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
+            "w@tue.nl:foo",
             "Jasper@student.tue.nl:student5", "Mark@student.tue.nl:student2",
             "Maurits@student.tue.nl:student1", "Thijs@student.tue.nl:student3",
             "Stan@student.tue.nl:student4", "Tom@student.tue.nl:student6"
@@ -86,25 +87,27 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
+
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+
         populateAutoComplete();
         mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.password || id == EditorInfo.IME_NULL) {
+                if (id == R.id.login_password || id == EditorInfo.IME_NULL) {
                     mPasswordView.requestFocus();
                     return true;
                 }
                 return false;
             }
         });
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView = (EditText) findViewById(R.id.login_password);
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(findViewById(R.id.password).getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(findViewById(R.id.login_password).getWindowToken(), 0);
                 attemptLogin();
                 return true;
             }
@@ -122,11 +125,9 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         signUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // This... doesn't work :c
-                // TODO: figure out how to switch between Fragments
-                getSupportFragmentManager().beginTransaction()
-                        .hide(new LoginFragment())
-                        .commit();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.login_fragment, new RegisterFragment());
+                ft.commit();
             }
         });
 
@@ -278,7 +279,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
     }
 
     @Override
-    public void onRegister(String email, String password, AccountType type) {
+    public void onRegister(String email, String password, Account.Type type) {
 
     }
 

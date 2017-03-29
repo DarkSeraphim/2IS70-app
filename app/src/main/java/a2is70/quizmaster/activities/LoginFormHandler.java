@@ -1,6 +1,6 @@
 package a2is70.quizmaster.activities;
 
-import a2is70.quizmaster.data.AccountType;
+import a2is70.quizmaster.data.Account;
 
 /**
  * Created by s129977 on 26-3-2017.
@@ -8,5 +8,5 @@ import a2is70.quizmaster.data.AccountType;
 public interface LoginFormHandler {
     void onLogin(String email, String password);
 
-    void onRegister(String email, String password, AccountType type);
+    void onRegister(String email, String password, Account.Type type);
 }

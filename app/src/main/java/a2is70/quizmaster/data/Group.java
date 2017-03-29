@@ -1,4 +1,5 @@
 package a2is70.quizmaster.data;
+import java.util.ArrayList;
 import java.util.List;
 
 import a2is70.quizmaster.database.DBInterface;
@@ -11,29 +12,26 @@ import retrofit2.Response;
 
 /**Object to represent a group of users (students and teachers combined).*/
 public class Group {
-    /**Name identifying this group.*/
-    private String name;
-
     /**ID identifying this group (for database).*/
-    private final int ID;
+    private final int id;
+
+    /**Name identifying this group.*/
+    private final String name;
 
     /**List of all members that are part of this group.*/
-    private List<Account> members;
+    private List<Account> members = new ArrayList<>();
 
     /**Access code for new users to join this group.*/
     private final String accessCode;
 
-    /**Database API object.*/
-    private DBInterface dbi;
-
-    public Group(String name, int ID, String accessCode){
+    public Group(int id, String name, String accessCode){
         this.name = name;
-        this.ID = ID;
+        this.id = id;
         this.accessCode = accessCode;
 
         try {
             Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl(DBInterface.server_url)
+                    .baseUrl(DBInterface.SERVER_URL)
                     .addConverterFactory(GsonConverterFactory.create());
 
             Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
@@ -44,12 +42,8 @@ public class Group {
         }
     }
 
-    /**Method to change name of this group.
-     * Possible could have.
-     * @param in
-     */
-    public void setName(String in){
-
+    public int getId() {
+        return id;
     }
 
     public String getName(){
