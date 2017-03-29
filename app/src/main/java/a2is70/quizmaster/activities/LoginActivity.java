@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -69,8 +70,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
 
     private View mLoginFormView;
 
-    private RegisterFragment registerFragment = new RegisterFragment();
-
     private final ContactsLoaderCallback callback;
 
     public LoginActivity() {
@@ -86,53 +85,25 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        // Populate login frame with LoginFragment
+        if (savedInstanceState == null) {
+            LoginFragment loginFragment = new LoginFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.login_frame, loginFragment).commit();
+        }
+        View inflatedView = getLayoutInflater().inflate(R.layout.fragment_login, null);
+//        EditText noteText = (EditText) inflatedView.findViewById(R.id.write_note);
+
+
         // Set up the login form.
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
-        populateAutoComplete();
-        mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login_password || id == EditorInfo.IME_NULL) {
-                    mPasswordView.requestFocus();
-                    return true;
-                }
-                return false;
-            }
-        });
-        mPasswordView = (EditText) findViewById(R.id.login_password);
 
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(findViewById(R.id.login_password).getWindowToken(), 0);
-                attemptLogin();
-                return true;
-            }
-        });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        Button signUp = (Button) findViewById(R.id.login_sign_up);
-        signUp.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.login_fragment, new RegisterFragment());
-                ft.commit();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.email_login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mLoginFormView = inflatedView.findViewById(R.id.email_login_form);
+        mProgressView = inflatedView.findViewById(R.id.login_progress);
     }
 
     private void populateAutoComplete() {
@@ -275,7 +246,8 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
 
     @Override
     public void onLogin(String email, String password) {
-
+//    public void onLogin() {
+        attemptLogin();
     }
 
     @Override
