@@ -5,6 +5,9 @@ import a2is70.quizmaster.database.DBInterface;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**Object to represent a group of users (students and teachers combined).*/
 public class Group {
@@ -55,5 +58,27 @@ public class Group {
 
     public String getAccessCode(){
         return accessCode;
+    }
+
+    public void joinGroup(){
+        dbi.joinGroup(this).enqueue(new Callback(){
+            public void onResponse(Call c, Response r){
+
+            }
+            public void onFailure(Call c, Throwable t){
+
+            }
+        });
+    }
+
+    public void leaveGroup(){
+        dbi.leaveGroup(this).enqueue(new Callback(){
+            public void onResponse(Call c, Response r){
+
+            }
+            public void onFailure(Call c, Throwable t){
+
+            }
+        });
     }
 }

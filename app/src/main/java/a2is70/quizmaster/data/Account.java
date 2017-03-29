@@ -4,6 +4,9 @@ import a2is70.quizmaster.database.DBInterface;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /* Object to store data related to a user's account.
  */
@@ -52,13 +55,27 @@ public class Account {
     /**Method to add this account to the database (if it does not already exist).
      */
     public void create(String password){
-        dbi.addAccount(email, password);
+        dbi.addAccount(email, password).enqueue(new Callback<Account>(){
+            public void onResponse(Call<Account> c, Response<Account> r){
+
+            }
+            public void onFailure(Call<Account> c, Throwable t){
+
+            }
+        });
     }
 
     /**Method to delete this account from the database.
      */
     public void delete(){
-        dbi.deleteAccount();
+        dbi.deleteAccount().enqueue(new Callback(){
+            public void onResponse(Call c, Response r){
+
+            }
+            public void onFailure(Call c, Throwable t){
+
+            }
+        });
     }
 
     /**Method to change name of Account.
