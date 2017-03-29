@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -87,6 +88,11 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+
+        // Autoshow keyboard (does this work? I don't have a device to test on (Thijs))
+//        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
         populateAutoComplete();
         mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -122,11 +128,9 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         signUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // This... doesn't work :c
-                // TODO: figure out how to switch between Fragments
-                getSupportFragmentManager().beginTransaction()
-                        .hide(new LoginFragment())
-                        .commit();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.login_fragment, new RegisterFragment());
+                ft.commit();
             }
         });
 
