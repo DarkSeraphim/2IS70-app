@@ -1,120 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_create"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_alignParentBottom="true"
+    android:fadeScrollbars="false"
     tools:context="a2is70.quizmaster.activities.CreateActivity">
 
-    <TextView
-        android:id="@+id/add_question_text_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="Quiz name" />
-
-    <EditText
-        android:id="@+id/create_quiz_name"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/add_question_text_header"
-        android:ems="10"
-        android:hint="E.g. Math Chapter 7."
-        android:inputType="text"
-        android:singleLine="true"
-        android:textSize="12sp" />
-
-    <CheckBox
-        android:id="@+id/create_has_deadline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="Enable Deadline"
-        android:layout_below="@+id/create_quiz_name"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:id="@+id/create_deadline_date"
-        style="@style/Widget.AppCompat.AutoCompleteTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/create_has_deadline"
-        android:layout_marginEnd="145dp"
-        android:layout_marginTop="19dp"
-        android:ems="10"
-        android:inputType="date"
-        android:text="Mon, feb 20 2017" />
-
-    <EditText
-        android:id="@+id/create_deadline_time"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time"
-        android:singleLine="false"
-        android:text="22:30"
-        android:textAlignment="center"
-        android:layout_above="@+id/create_time_limit"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:id="@+id/create_time_limit"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/create_deadline_date"
-        android:layout_marginTop="11dp"
-        android:ems="10"
-        android:hint="Time limit"
-        android:inputType="number" />
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:focusableInTouchMode="true">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        tools:listitem="@layout/item_review_question"
-        android:layout_below="@+id/create_question_list_header"
-        android:layout_alignParentStart="true"
-        android:id="@+id/create_question_list" />
+        <TextView
+            android:id="@+id/add_question_text_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="Quiz name" />
 
-    <Button
-        android:id="@+id/add_question_button"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/create_question_list"
-        android:layout_alignParentStart="true"
-        android:text="Add Question" />
+        <EditText
+            android:id="@+id/create_quiz_name"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/add_question_text_header"
+            android:ems="10"
+            android:hint="E.g. Math Chapter 7."
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/create_question_list_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/create_time_limit"
-        android:layout_marginTop="29dp"
-        android:text="Questions"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/create_start_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:text="Start Date"
+            android:layout_below="@+id/create_quiz_name"
+            android:layout_alignParentStart="true" />
 
-    <Button
-        android:id="@+id/create_publish_button"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Publish Test"
-        android:layout_below="@+id/create_question_list"
-        android:layout_alignParentEnd="true" />
+        <TextView
+            android:id="@+id/create_start_date"
+            style="@style/Widget.AppCompat.AutoCompleteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:text="Sun, feb 19 2017"
+            android:layout_below="@+id/create_start_header"
+            android:layout_alignParentStart="true" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/create_start_time"
+            style="@style/Widget.AppCompat.AutoCompleteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/create_start_date"
+            android:focusable="false"
+            android:text="22:00"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/create_deadline_date" />
+
+        <CheckBox
+            android:id="@+id/create_has_deadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Enable Deadline"
+            android:layout_marginTop="12dp"
+            android:layout_below="@+id/create_start_date"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/create_deadline_date"
+            style="@style/Widget.AppCompat.AutoCompleteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:ems="10"
+            android:text="Mon, feb 20 2017"
+            android:layout_below="@+id/create_has_deadline"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/create_deadline_time"
+            style="@style/Widget.AppCompat.AutoCompleteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:layout_above="@+id/create_time_limit"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/create_has_deadline"
+            android:layout_toEndOf="@+id/create_deadline_date"
+            android:ems="10"
+            android:text="22:30"/>
+
+        <EditText
+            android:id="@+id/create_time_limit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/create_deadline_date"
+            android:layout_marginTop="31dp"
+            android:ems="10"
+            android:hint="Time limit"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/create_question_list_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/create_time_limit"
+            android:layout_marginTop="29dp"
+            android:text="Questions"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textSize="14sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/create_question_list"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/create_question_list_header"
+            tools:listitem="@layout/item_question" />
+
+        <Button
+            android:id="@+id/add_question_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/create_question_list"
+            android:text="Add Question" />
+
+        <Button
+            android:id="@+id/create_publish_button"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/create_question_list"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/create_question_list"
+            android:text="Publish Test" />
+
+    </RelativeLayout>
+</ScrollView>

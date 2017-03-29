@@ -23,7 +23,11 @@ public class Question {
     private transient Audio audio;
 
     /**Default constructor.*/
-    public Question(int id, String text, Answer[] answers, Answer correctAnswer, int weight){
+    public Question(String text, Answer[] answers, Answer correctAnswer, int weight) {
+        this(-1, text, answers, correctAnswer, weight);
+    }
+
+    public Question(int id, String text, Answer[] answers, Answer correctAnswer, int weight) {
         this.id = id;
         this.text = text;
         this.answers = answers;
@@ -79,6 +83,10 @@ public class Question {
         private final int id;
 
         private final String text;
+
+        public Answer(String text) {
+            this(-1, text);
+        }
 
         public Answer(int id, String text) {
             this.id = id;
