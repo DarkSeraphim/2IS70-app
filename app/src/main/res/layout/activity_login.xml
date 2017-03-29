@@ -21,11 +21,11 @@
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_login" />
 
-    <fragment
-        android:name="a2is70.quizmaster.activities.fragments.RegisterFragment"
-        android:id="@+id/register_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_register" />
+    <!--<fragment-->
+        <!--android:name="a2is70.quizmaster.activities.fragments.RegisterFragment"-->
+        <!--android:id="@+id/register_fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:layout="@layout/fragment_register" />-->
 
 </LinearLayout>

@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -86,7 +87,9 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
+
         mEmailView = (AutoCompleteTextView) findViewById(R.id.login_email);
+
         populateAutoComplete();
         mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -122,11 +125,9 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         signUp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // This... doesn't work :c
-                // TODO: figure out how to switch between Fragments
-                getSupportFragmentManager().beginTransaction()
-                        .hide(new LoginFragment())
-                        .commit();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.login_fragment, new RegisterFragment());
+                ft.commit();
             }
         });
 

@@ -5,6 +5,9 @@ import java.io.File;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class RemoteFile implements FileManager {
@@ -24,8 +27,8 @@ public class RemoteFile implements FileManager {
         }
     }
 
-    public void create(String path, Quiz data){
-        dbi.addQuiz(data, null, null);
+    public void create(String path, Quiz data, Callback c){
+        dbi.addQuiz(data, null, null).enqueue(c);
     }
 
     public File load(String path){
@@ -33,8 +36,8 @@ public class RemoteFile implements FileManager {
         return null;
     }
 
-    public void delete(String path){
-        dbi.deleteQuiz(0);
+    public void delete(String path, Callback c){
+        dbi.deleteQuiz(0).enqueue(c);
     }
 
 }

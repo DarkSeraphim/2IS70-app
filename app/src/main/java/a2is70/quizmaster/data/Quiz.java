@@ -5,12 +5,18 @@ import a2is70.quizmaster.database.DBInterface;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**Object to represent a Quiz.*/
 public class Quiz {
 
     /**String identifying this Quiz.*/
     private final String name;
+
+    /**ID of this Quiz.*/
+    private int ID;
 
     /**String identifying the owner of this Quiz.*/
     private Account creator;
@@ -35,11 +41,15 @@ public class Quiz {
     /**List of Questions that comprise this Quiz.*/
     private List<Question> questions;
 
+    /**Database Interface Object.*/
+    private DBInterface dbi;
+
     public Quiz(String name, Group[] groups, Account owner, List<Question> questions){
         this.name = name;
         setGroups(groups);
         this.creator = owner;
         this.questions = questions;
+        this.ID = 0;
 
         try {
             Retrofit.Builder builder = new Retrofit.Builder()
@@ -48,10 +58,29 @@ public class Quiz {
 
             Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
 
-            DBInterface dbi = retrofit.create(DBInterface.class);
+            dbi = retrofit.create(DBInterface.class);
         } catch (Exception e){
 
         }
+    }
+
+    /**Method to delete this quiz.
+     * Should also delete quiz on database.
+     */
+    public void delete(Callback c){
+        dbi.deleteQuiz(getID()).enqueue(c);
+    }
+
+    public void submitQuiz(Callback c){
+        dbi.submitQuiz(new SubmittedQuiz(this)).enqueue(c);
+    }
+
+    public void reviewAsStudent(Callback c){
+        dbi.reviewStudentQuiz(getID()).enqueue(c);
+    }
+
+    public void reviewAsTeacher(Callback c){
+        dbi.reviewTeacherQuiz(getID()).enqueue(c);
     }
 
     public String getName(){
@@ -112,5 +141,13 @@ public class Quiz {
 
     public void setQuestions(List<Question> in){
         questions = in;
+    }
+
+    public int getID(){
+        return ID;
+    }
+
+    public void setID(int id){
+        ID = id;
     }
 }
