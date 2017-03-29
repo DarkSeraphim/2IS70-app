@@ -25,7 +25,7 @@ public class RemoteFile implements FileManager {
     }
 
     public void create(String path, Quiz data){
-        dbi.addQuiz(data);
+        dbi.addQuiz(data, null, null);
     }
 
     public File load(String path){
@@ -34,7 +34,7 @@ public class RemoteFile implements FileManager {
     }
 
     public void delete(String path){
-        dbi.deleteQuiz(new Quiz(path, null, null, null));
+        dbi.deleteQuiz(0);
     }
 
 }

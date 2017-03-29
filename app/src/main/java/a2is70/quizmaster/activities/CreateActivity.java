@@ -1,6 +1,5 @@
 package a2is70.quizmaster.activities;
 
-import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,7 +50,7 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
-        Button publishButton = (Button) findViewById(R.id.button8);
+        Button publishButton = (Button) findViewById(R.id.create_publish_button);
         publishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,11 +59,11 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
-        quizName = (EditText) findViewById(R.id.editText3);
-        hasDeadline = (CheckBox) findViewById(R.id.checkBox3);
+        quizName = (EditText) findViewById(R.id.create_quiz_name);
+        hasDeadline = (CheckBox) findViewById(R.id.create_has_deadline);
 
-        date = (EditText) findViewById(R.id.editText4);
-        time = (EditText) findViewById(R.id.editText5);
+        date = (EditText) findViewById(R.id.create_deadline_date);
+        time = (EditText) findViewById(R.id.create_deadline_time);
 
         hasDeadline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -74,7 +73,7 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
-        timeLimit = (EditText) findViewById(R.id.editText7);
+        timeLimit = (EditText) findViewById(R.id.create_time_limit);
     }
 
     private void showAddQuestion() {
@@ -85,11 +84,12 @@ public class CreateActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Fetch fields
                         // Create question
+
                         String question = "";
                         String[] answers = new String[0];
                         String correct = "";
                         double weight = 0;
-                        CreateActivity.this.questions.add(new Question(question, answers, correct, weight));
+                        //CreateActivity.this.questions.add(new Question(question, answers, correct, weight));
                     }
                 })
                 .setNegativeButton("Cancel", null)
@@ -117,8 +117,6 @@ public class CreateActivity extends AppCompatActivity {
                         Toast.makeText(CreateActivity.this, "Quiz published", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(CreateActivity.this, OverviewActivity.class);
                         Group[] groups = enabled.toArray(new Group[enabled.size()]);
-                        getApplicationContext();
-                        Application a;
                         Quiz quiz = new Quiz(quizName.getText().toString(), groups, null, questions);
                         intent.putExtra("questions", new Gson().toJson(quiz));
                         startActivity(intent);

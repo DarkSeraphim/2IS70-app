@@ -10,7 +10,7 @@
 
 
     <EditText
-        android:id="@+id/editGroupName"
+        android:id="@+id/edit_group_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -20,21 +20,21 @@
         android:text="Group name" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/edit_group_access_code_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editGroupName"
+        android:layout_below="@id/edit_group_name"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="Access code"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/edit_group_access_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView4"
-        android:layout_below="@+id/textView4"
+        android:layout_alignStart="@+id/edit_group_access_code_header"
+        android:layout_below="@+id/edit_group_access_code_header"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:fontFamily="monospace"
         android:text="TextView"
@@ -44,18 +44,18 @@
         tools:text="5TA04B" />
 
     <Button
-        android:id="@+id/buttonDeleteGroup"
+        android:id="@+id/edit_group_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete group"
-        android:layout_below="@+id/textView5"
+        android:layout_below="@+id/edit_group_access_code"
         android:layout_alignParentRight="true"/>
 
     <TextView
-        android:id="@+id/membersSubhead"
+        android:id="@+id/edit_group_members_list_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonDeleteGroup"
+        android:layout_below="@id/edit_group_delete"
         android:text="Members"
         android:textAllCaps="false"
         android:textAppearance="@android:style/TextAppearance.Material.Subhead"
@@ -64,7 +64,7 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/membersSubhead"
+        android:layout_below="@id/edit_group_members_list_header"
         android:scrollbars="vertical"
         tools:listitem="@layout/item_member" />
 

@@ -12,27 +12,28 @@
     tools:context="a2is70.quizmaster.activities.CreateActivity">
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/add_question_answer1_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Answer 1"
-        android:layout_above="@+id/editText9"
+        android:layout_above="@+id/add_question_answer2"
+        android:layout_below="@+id/add_question_radio_open"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/editText10"
+        android:id="@+id/add_question_answer1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint='"E.g. Cow"'
         android:inputType="text"
         android:textSize="12sp"
-        android:layout_above="@+id/textView20"
+        android:layout_above="@+id/add_question_answer3_header"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="28dp" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/add_question_text_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -41,12 +42,12 @@
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/add_question_text"
         style="@style/Widget.AppCompat.EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView7"
+        android:layout_below="@+id/add_question_text_header"
         android:ems="10"
         android:hint='E.g. "What is 1+1?"'
         android:inputType="text"
@@ -56,63 +57,63 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:checkedButton="@+id/radioButtonStudent">
+        android:checkedButton="@+id/register_type_student">
 
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/add_question_answer2_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Answer 2"
-        android:layout_above="@+id/editText10"
+        android:layout_above="@+id/add_question_answer1"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/editText9"
+        android:id="@+id/add_question_answer2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint='"E.g 2"'
         android:inputType="text"
         android:textSize="12sp"
-        android:layout_above="@+id/textView12"
+        android:layout_above="@+id/add_question_answer2_header"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="22dp" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/add_question_answer3_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Answer 3"
-        android:layout_above="@+id/editText15"
+        android:layout_above="@+id/add_question_answer3"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/editText15"
+        android:id="@+id/add_question_answer3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint='"E.g yes"'
         android:inputType="text"
         android:textSize="12sp"
-        android:layout_above="@+id/textView21"
+        android:layout_above="@+id/add_question_answer4_header"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="25dp" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/add_question_answer4_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Answer 4"
-        android:layout_above="@+id/editText16"
+        android:layout_above="@+id/add_question_answer4"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/editText16"
+        android:id="@+id/add_question_answer4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button4"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="34dp"
         android:ems="10"
@@ -120,32 +121,23 @@
         android:inputType="text"
         android:textSize="12sp" />
 
-    <Button
-        android:id="@+id/button4"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Submit Question" />
-
     <RadioButton
-        android:id="@+id/radioButton3"
+        android:id="@+id/add_question_radio_open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText3"
+        android:layout_below="@+id/add_question_text"
         android:layout_marginTop="14dp"
         android:text="Open" />
 
     <RadioButton
-        android:id="@+id/radioButton4"
+        android:id="@+id/add_question_radio_closed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="Closed"
-        android:layout_alignBaseline="@+id/radioButton3"
-        android:layout_alignBottom="@+id/radioButton3"
+        android:layout_alignBaseline="@+id/add_question_radio_open"
+        android:layout_alignBottom="@+id/add_question_radio_open"
         android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

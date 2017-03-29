@@ -86,25 +86,25 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.login_email);
         populateAutoComplete();
         mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.password || id == EditorInfo.IME_NULL) {
+                if (id == R.id.login_password || id == EditorInfo.IME_NULL) {
                     mPasswordView.requestFocus();
                     return true;
                 }
                 return false;
             }
         });
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView = (EditText) findViewById(R.id.login_password);
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(findViewById(R.id.password).getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(findViewById(R.id.login_password).getWindowToken(), 0);
                 attemptLogin();
                 return true;
             }

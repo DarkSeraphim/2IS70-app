@@ -12,7 +12,7 @@
     >
 
     <TextView
-        android:id="@+id/group_member_count"
+        android:id="@+id/member_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -20,7 +20,7 @@
         tools:text="John Smith" />
 
     <TextView
-        android:id="@+id/group_name"
+        android:id="@+id/member_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/group_member_count"
@@ -29,7 +29,7 @@
 
     <ImageView
         android:alpha=".26"
-        android:id="@+id/imageButton"
+        android:id="@+id/member_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
