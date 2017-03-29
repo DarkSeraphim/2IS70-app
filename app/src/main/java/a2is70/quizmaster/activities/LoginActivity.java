@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         setContentView(R.layout.activity_login);
         // Set up the login form.
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.login_email);
 
         populateAutoComplete();
         mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
