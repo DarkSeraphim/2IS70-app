@@ -15,7 +15,7 @@ public class OverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        Button mAddQuizButton = (Button) findViewById(R.id.button7);
+        Button mAddQuizButton = (Button) findViewById(R.id.overview_add_quiz);
         mAddQuizButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

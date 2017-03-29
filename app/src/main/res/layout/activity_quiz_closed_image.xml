@@ -12,27 +12,27 @@
     tools:context="a2is70.quizmaster.activities.QuizActivity">
 
     <RadioButton
-        android:id="@+id/radioButton9"
+        android:id="@+id/question_closed_A"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="94dp"
         android:layout_marginStart="31dp"
         android:text="Answer A"
         android:layout_marginBottom="12dp"
-        android:layout_above="@+id/radioButton5"
+        android:layout_above="@+id/question_closed_C"
         android:layout_alignParentStart="true" />
 
     <RadioButton
-        android:id="@+id/radioButton10"
+        android:id="@+id/question_closed_B"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Answer B"
         android:layout_marginBottom="11dp"
-        android:layout_above="@+id/radioButton6"
-        android:layout_alignEnd="@+id/radioButton5" />
+        android:layout_above="@+id/question_closed_D"
+        android:layout_alignEnd="@+id/question_closed_C" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/question_closed_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,26 +40,26 @@
         android:layout_alignParentStart="true" />
 
     <RadioButton
-        android:id="@+id/radioButton5"
+        android:id="@+id/question_closed_C"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="94dp"
         android:text="Answer A"
         android:layout_marginBottom="11dp"
-        android:layout_above="@+id/radioButton10"
-        android:layout_alignStart="@+id/radioButton9" />
+        android:layout_above="@+id/question_closed_B"
+        android:layout_alignStart="@+id/question_closed_A" />
 
     <RadioButton
-        android:id="@+id/radioButton6"
+        android:id="@+id/question_closed_D"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Answer B"
         android:layout_marginBottom="82dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/radioButton10" />
+        android:layout_alignStart="@+id/question_closed_B" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/question_closed_next"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
         android:layout_marginEnd="18dp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/question_closed_previous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="previous question"
@@ -83,12 +83,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/question_closed_text"
         android:onClick="yourImageView.setVisibility(View.VISIBLE);"
         android:text="Show Image" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/question_closed_text"
         android:layout_width="wrap_content"
         android:layout_height="180dp"
         android:text="TextView"
