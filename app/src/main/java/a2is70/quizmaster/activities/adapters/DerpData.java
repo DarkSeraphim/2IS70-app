@@ -46,4 +46,19 @@ public class DerpData {
         }
         return comples;
     }
+
+    public static boolean[] getCorrect(){
+        List<Question> data = getListData();
+        boolean[] comples = new boolean[data.size()];
+
+        for (int x=0; x< data.size();x++){
+            if(data.get(x)==q1){
+                comples[x]=true;
+            }
+            if(data.get(x)==q2){
+                comples[x]=false;
+            }
+        }
+        return comples;
+    }
 }

@@ -16,25 +16,26 @@ import java.util.List;
 
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.ReviewActivity;
+import a2is70.quizmaster.data.Account;
+import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Question;
 
 /**
  * Created by Jasper on 01/04/2017.
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.questionHolder>{
+public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.questionHolder>{
 
     private List<Question> listData;
     private LayoutInflater inflater;
     private int[] compData;
+    private Account.Type acc = Account.Type.STUDENT;
 
-    public RecyclerAdapter (List<Question> listData,int[] compData,Context c){
+    public TeacherAdapter (List<Question> listData,int[] compData,Context c){
         this.inflater = LayoutInflater.from(c);
         this.listData = listData;
         this.compData = compData;
     }
-
-
 
     @Override
     public questionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -50,29 +51,28 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.questi
         holder.title.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                new AlertDialog.Builder(holder.itemView.getContext())
-                        .setTitle("Question "+(position+1))
-                        .setMessage(
-                                "\""
-                                +quest.getText()
-                                +"\""
-                                +System.lineSeparator()
-                                +System.lineSeparator()
-                                +"Correct answer:"
-                                +System.lineSeparator()
-                                +quest.getCorrectAnswer().getText()
-                                +System.lineSeparator()
-                                +System.lineSeparator()
-                                + "Completion rate: "
-                                +compData[position]
-                                +"%"
-                        )
-                        .setPositiveButton("terug",new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which){
+                    new AlertDialog.Builder(holder.itemView.getContext())
+                            .setTitle("Question " + (position + 1))
+                            .setMessage("\""
+                                            + quest.getText()
+                                            + "\""
+                                            + System.lineSeparator()
+                                            + System.lineSeparator()
+                                            + "Correct answer:"
+                                            + System.lineSeparator()
+                                            + quest.getCorrectAnswer().getText()
+                                            + System.lineSeparator()
+                                            + System.lineSeparator()
+                                            + "Completion rate: "
+                                            + compData[position]
+                                            + "%"
+                            )
+                            .setPositiveButton("terug", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                })
-                .show();
+                                }
+                            })
+                            .show();
             }
         });
     }

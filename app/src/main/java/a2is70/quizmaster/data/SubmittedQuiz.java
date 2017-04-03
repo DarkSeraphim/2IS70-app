@@ -22,6 +22,8 @@ public class SubmittedQuiz {
         this.answers.remove(answer);
     }
 
+    public Set<Answer> getAnswers(){ return answers;}
+
     public class Answer {
         private final int id;
 
@@ -53,5 +55,7 @@ public class SubmittedQuiz {
         public String getAnswerText() {
             return answerText;
         }
+
+        public Question getQuestion (){return question;}
     }
 }
