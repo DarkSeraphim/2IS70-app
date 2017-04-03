@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.adapters.DerpData;
@@ -22,7 +23,7 @@ public class ReviewActivity extends AppCompatActivity {
         recView = (RecyclerView)findViewById(R.id.rec_view);
         recView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new RecyclerAdapter(DerpData.getListData(),this);
+        adapter = new RecyclerAdapter(DerpData.getListData(),DerpData.getCompletionRate(),this);
         recView.setAdapter(adapter);
 
     }
