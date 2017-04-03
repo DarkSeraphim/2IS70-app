@@ -27,6 +27,15 @@
         </android.support.design.widget.TextInputLayout>
 
 
+        <EditText
+            android:id="@+id/editText"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Type Acces Token"
+            android:inputType="text" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -54,8 +63,8 @@
         <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:checkedButton="@+id/register_type_student">
+            android:checkedButton="@+id/register_type_student"
+            android:orientation="vertical">
 
         </RadioGroup>
 
