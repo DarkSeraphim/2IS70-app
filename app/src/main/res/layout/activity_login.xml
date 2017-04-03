@@ -14,12 +14,19 @@
     <!-- Login progress -->
 
     <!-- Swap these two fragments out dynamically in the activity-->
-    <fragment
-        android:name="a2is70.quizmaster.activities.fragments.LoginFragment"
-        android:id="@+id/login_fragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_login" />
+        android:id="@+id/login_frame">
+    </FrameLayout>
+
+
+    <!--<fragment-->
+        <!--android:name="a2is70.quizmaster.activities.fragments.LoginFragment"-->
+        <!--android:id="@+id/login_fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:layout="@layout/fragment_login" />-->
 
     <!--<fragment-->
         <!--android:name="a2is70.quizmaster.activities.fragments.RegisterFragment"-->
