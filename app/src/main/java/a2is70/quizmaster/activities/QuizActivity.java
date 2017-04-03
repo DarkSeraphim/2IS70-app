@@ -66,6 +66,7 @@ public class QuizActivity extends AppCompatActivity {
         if (extras != null) {
             //key of json moet met 'quiz' string gepassed worden
             quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
+
             questions = quiz.getQuestions();
 
             //first question
