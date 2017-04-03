@@ -3,6 +3,7 @@ package a2is70.quizmaster.activities.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +17,17 @@ import a2is70.quizmaster.activities.LoginFormHandler;
 import a2is70.quizmaster.data.Account;
 
 public class RegisterFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
 
     // TODO: Rename and change types of parameters
     private String email;
-
     private String password;
-
+    private EditText mRegisterName;
     private AutoCompleteTextView mRegisterEmail;
-
     private EditText mRegisterPassword;
-
     private LoginFormHandler mListener;
-
     private RadioButton mRegisterStudentType;
 
     public RegisterFragment() {
@@ -46,7 +42,6 @@ public class RegisterFragment extends Fragment {
      * @param password Parameter 2.
      * @return A new instance of fragment RegisterFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static RegisterFragment newInstance(String email, String password) {
         RegisterFragment fragment = new RegisterFragment();
         Bundle args = new Bundle();
@@ -72,15 +67,16 @@ public class RegisterFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
+        mRegisterName = (EditText) view.findViewById(R.id.register_name);
         mRegisterEmail = (AutoCompleteTextView) view.findViewById(R.id.register_email);
         mRegisterPassword = (EditText) view.findViewById(R.id.register_password);
         mRegisterStudentType = (RadioButton) view.findViewById(R.id.register_type_student);
 
-        Button button = (Button) view.findViewById(R.id.register_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button registerButton = (Button) view.findViewById(R.id.register_button);
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doRegister();
+                attemptRegister();
             }
         });
 
@@ -88,8 +84,7 @@ public class RegisterFragment extends Fragment {
             email = getArguments().getString(EMAIL);
             password = getArguments().getString(PASSWORD);
 
-
-            // fill email field with value
+            // fill email field with values from LoginActivity
             mRegisterEmail.setText(email);
             mRegisterPassword.setText(password);
         }
@@ -99,12 +94,46 @@ public class RegisterFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void doRegister() {
-        if (mListener != null) {
-            String email = mRegisterEmail.getText().toString();
-            String password = mRegisterPassword.getText().toString();
-            Account.Type type = mRegisterStudentType.isChecked() ? Account.Type.STUDENT : Account.Type.TEACHER;
-            mListener.onRegister(email, password, type);
+    public void attemptRegister() {
+        // Reset errors
+        mRegisterName.setError(null);
+        mRegisterEmail.setError(null);
+        mRegisterPassword.setError(null);
+        mRegisterStudentType.setError(null);
+
+        // Store values at the time of the login attempt.
+        String name = mRegisterName.getText().toString();
+        String email = mRegisterEmail.getText().toString();
+        String password = mRegisterPassword.getText().toString();
+        Account.Type type = mRegisterStudentType.isChecked() ? Account.Type.STUDENT : Account.Type.TEACHER;
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check if text fields are valid
+        if(TextUtils.isEmpty(name)) {
+            mRegisterName.setError(getString(R.string.error_field_required));
+            focusView = mRegisterName;
+            cancel = true;
+        } else if (TextUtils.isEmpty(email)) {
+            mRegisterEmail.setError(getString(R.string.error_field_required));
+            focusView = mRegisterEmail;
+            cancel = true;
+        } else if (TextUtils.isEmpty(password)) {
+            mRegisterPassword.setError(getString(R.string.error_field_required));
+            focusView = mRegisterPassword;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Pass the submitted values to the listener to check them
+            if (mListener != null) {
+                mListener.onRegister(email, password, type);
+            }
         }
     }
 

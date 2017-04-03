@@ -12,6 +12,14 @@
     tools:context="a2is70.quizmaster.activities.LoginActivity">
 
     <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <!-- Swap these two fragments out dynamically in the activity-->
     <FrameLayout
