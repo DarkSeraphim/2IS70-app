@@ -41,6 +41,10 @@ public class SubmittedQuiz {
         public int getId() {
             return id;
         }
+        
+        public boolean isCorrect() {
+            return this.answer != null && this.answer.getId() == this.question.getCorrectAnswer().getId();
+        }
 
         public Question.Answer getAnswer() {
             return answer;
