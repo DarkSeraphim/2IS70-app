@@ -87,7 +87,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         // Populate login frame with LoginFragment
         if (savedInstanceState == null) {
             LoginFragment loginFragment = new LoginFragment();

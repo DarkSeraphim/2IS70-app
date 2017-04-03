@@ -6,6 +6,9 @@ import a2is70.quizmaster.database.DBInterface;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**Object to represent a group of users (students and teachers combined).*/
 public class Group {
@@ -21,6 +24,9 @@ public class Group {
     /**Access code for new users to join this group.*/
     private final String accessCode;
 
+    /**Database interface object.*/
+    DBInterface dbi;
+
     public Group(int id, String name, String accessCode){
         this.name = name;
         this.id = id;
@@ -33,7 +39,7 @@ public class Group {
 
             Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
 
-            DBInterface dbi = retrofit.create(DBInterface.class);
+            dbi = retrofit.create(DBInterface.class);
         } catch (Exception e){
 
         }
@@ -49,5 +55,13 @@ public class Group {
 
     public String getAccessCode(){
         return accessCode;
+    }
+
+    public void joinGroup(String accessCode, Callback c){
+        dbi.joinGroup(accessCode).enqueue(c);
+    }
+
+    public void leaveGroup(Callback c){
+        dbi.leaveGroup(getId()).enqueue(c);
     }
 }
