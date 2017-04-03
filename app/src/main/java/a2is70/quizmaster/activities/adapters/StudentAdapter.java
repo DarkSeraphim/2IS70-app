@@ -23,8 +23,6 @@ import a2is70.quizmaster.data.SubmittedQuiz;
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.questionHolder>{
     private List<SubmittedQuiz.Answer> listData;
     private LayoutInflater inflater;
-    private boolean[] correctOrNah;
-    private Account.Type acc = Account.Type.STUDENT;
 
     public StudentAdapter (SubmittedQuiz quiz, Context c){
         this.inflater = LayoutInflater.from(c);
@@ -48,9 +46,9 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.question
         }else if(quest==DerpData.q2) {
             holder.yourAnswer.setText("Zwaartekracht");
         }
-        if(correctOrNah[position]) {
+        if(listData.get(position).isCorrect()) {
             holder.correctOrNah.setImageResource(R.drawable.ic_correct_color_20dp);
-        }else if(!correctOrNah[position]) {
+        }else if(!listData.get(position).isCorrect()) {
             holder.correctOrNah.setImageResource(R.drawable.ic_incorrect_color_20dp);
         }
     }
