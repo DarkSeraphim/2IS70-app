@@ -15,6 +15,7 @@ import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.fragments.LoginFragment;
 import a2is70.quizmaster.activities.fragments.RegisterFragment;
 import a2is70.quizmaster.data.Account;
+import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.utils.function.Consumer;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -106,7 +107,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -115,11 +116,18 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+                    if(pieces[1].equals(mPassword)){
+
+                        // @todo Replace dummy account with the real deal
+                        Account dummyAccount = new Account(666, "John Doe", Account.Type.STUDENT, pieces[0]);
+                        AppContext.getInstance().setAccount(dummyAccount);
+                        return true;
+                    }
                 }
             }
 
             // TODO: register the new account here.
+
             return false;
         }
 
