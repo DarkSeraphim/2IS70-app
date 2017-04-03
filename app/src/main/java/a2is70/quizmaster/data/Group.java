@@ -32,17 +32,7 @@ public class Group {
         this.id = id;
         this.accessCode = accessCode;
 
-        try {
-            Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl(DBInterface.SERVER_URL)
-                    .addConverterFactory(GsonConverterFactory.create());
-
-            Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
-
-            dbi = retrofit.create(DBInterface.class);
-        } catch (Exception e){
-
-        }
+        dbi = AppContext.getInstance().getDBI();
     }
 
     public int getId() {

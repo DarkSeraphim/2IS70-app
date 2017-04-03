@@ -51,17 +51,7 @@ public class Quiz {
         this.questions = questions;
         this.ID = 0;
 
-        try {
-            Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl(DBInterface.SERVER_URL)
-                    .addConverterFactory(GsonConverterFactory.create());
-
-            Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
-
-            dbi = retrofit.create(DBInterface.class);
-        } catch (Exception e){
-
-        }
+        dbi = AppContext.getInstance().getDBI();
     }
 
     /**Method to delete this quiz.

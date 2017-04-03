@@ -14,17 +14,7 @@ public class RemoteFile implements FileManager {
     DBInterface dbi;
 
     public RemoteFile(){
-        try {
-            Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl(DBInterface.SERVER_URL)
-                    .addConverterFactory(GsonConverterFactory.create());
-
-            Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
-
-            DBInterface dbi = retrofit.create(DBInterface.class);
-        } catch (Exception e){
-
-        }
+        dbi = AppContext.getInstance().getDBI();
     }
 
     public void create(String path, Quiz data, Callback c){
