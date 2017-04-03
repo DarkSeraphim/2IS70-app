@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -252,7 +253,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
 
     @Override
     public void onRegister(String email, String password, Account.Type type) {
-
+        // TODO: do register
     }
 
     /**

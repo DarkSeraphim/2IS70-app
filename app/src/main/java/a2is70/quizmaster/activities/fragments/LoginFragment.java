@@ -5,13 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,17 +17,20 @@ import android.widget.TextView;
 
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.LoginFormHandler;
+import a2is70.quizmaster.data.Account;
 
 public class LoginFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String EMAIL = "param1";
+    private static final String PASSWORD = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String email;
 
+    private String password;
+
+    private Account.Type type;
 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -53,8 +54,8 @@ public class LoginFragment extends Fragment {
     public static LoginFragment newInstance(String param1, String param2) {
         LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(EMAIL, param1);
+        args.putString(PASSWORD, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,8 +64,8 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            email = getArguments().getString(EMAIL);
+            password = getArguments().getString(PASSWORD);
         }
     }
 
@@ -112,8 +113,6 @@ public class LoginFragment extends Fragment {
                 // Store values at the time of the login attempt.
                 String email = mEmailView.getText().toString();
                 String password = mPasswordView.getText().toString();
-
-                Log.d("tag", "hoi");
 
                 RegisterFragment nextFragment = RegisterFragment.newInstance(email, password);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
