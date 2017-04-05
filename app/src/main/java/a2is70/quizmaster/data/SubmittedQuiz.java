@@ -14,6 +14,8 @@ public class SubmittedQuiz {
         this.quiz = quiz;
     }
 
+    public Quiz getQuiz(){return quiz;}
+
     public void addAnswer(Answer answer) {
         this.answers.add(answer);
     }
