@@ -37,7 +37,8 @@ public class QuizActivity extends AppCompatActivity {
     SubmittedQuiz submission;
     SubmittedQuiz.Answer[] submittedAnswers;
     RadioGroup answerbuttons;
-
+    Boolean giventimelimit;
+    ProgressBar prgrbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,17 +97,19 @@ public class QuizActivity extends AppCompatActivity {
             answerC.setText(answers[2].getText());
             answerD.setText(answers[3].getText());
 
-            //TODO configure progress bar
-            //if-else on timelimit given
-
             //progress bar
-            ProgressBar prgrbar = (ProgressBar) findViewById(R.id.question_closed_progress);
-            if(quiz.getTimeLimit() < 0){ //no time limit means it's set to -1
+            prgrbar = (ProgressBar) findViewById(R.id.question_closed_progress);
 
+            //TODO configure progress bar
+            if(quiz.getTimeLimit() < 0){ //no time limit means it's set to -1
+                giventimelimit = false;
+                prgrbar.setMax(quiz.getQuestions().size());
+                prgrbar.setProgress(track);
             } else { //time limit given
+                giventimelimit = true;
                 int timelimit = quiz.getTimeLimit();
                 prgrbar.setMax(timelimit);
-
+                prgrbar.setProgress(0);
             }
         } else {
             //no data; pop up to go back to overview activity
@@ -217,6 +220,11 @@ public class QuizActivity extends AppCompatActivity {
 
         //uncheck all boxes
         answerbuttons.clearCheck();
+
+        //update progress bar if no time limit is given
+        if (!giventimelimit){
+            prgrbar.setProgress(track);
+        }
     }
 
     private void toResults(){
@@ -227,5 +235,11 @@ public class QuizActivity extends AppCompatActivity {
         //submit finalquiz to DB
         DBInterface dbi = AppContext.getInstance().getDBI();
         dbi.submitQuiz(finalQuiz);
+
+        //go to results activity
+        //pass submittedquiz as extra
+        Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
+        intent.putExtra("quiz", new Gson().toJson(finalQuiz));
+        startActivity(intent);
     }
 }
