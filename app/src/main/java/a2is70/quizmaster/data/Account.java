@@ -24,6 +24,9 @@ public class Account {
     /* Account type of user. See enum Type*/
     private final Type type;
 
+    /* Database Interface object.*/
+    DBInterface dbi;
+
     /** Default constructor.
      */
     public Account(int id, String name, Type type, String email){
@@ -32,17 +35,7 @@ public class Account {
         this.type = type;
         this.email = email;
 
-        try {
-            Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl(DBInterface.SERVER_URL)
-                    .addConverterFactory(GsonConverterFactory.create());
-
-            Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
-
-            DBInterface dbi = retrofit.create(DBInterface.class);
-        } catch (Exception e){
-
-        }
+        dbi = AppContext.getInstance().getDBI();
     }
 
     public int getId() {
