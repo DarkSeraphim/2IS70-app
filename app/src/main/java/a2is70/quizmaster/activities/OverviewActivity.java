@@ -14,6 +14,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import a2is70.quizmaster.R;
+import a2is70.quizmaster.data.Account;
+import a2is70.quizmaster.data.AppContext;
 
 public class OverviewActivity extends AppCompatActivity {
 
@@ -26,13 +28,23 @@ public class OverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        Button mAddQuizButton = (Button) findViewById(R.id.overview_add_quiz);
-        mAddQuizButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(OverviewActivity.this, CreateActivity.class));
-            }
-        });
+        final Button mAddQuizButton = (Button) findViewById(R.id.overview_add_quiz);
+        if(AppContext.getInstance().getAccount().getType()== Account.Type.TEACHER) {
+            mAddQuizButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mAddQuizButton.setText("%$#{HACKED}%$#%@");
+                    startActivity(new Intent(OverviewActivity.this, ReviewActivity.class));
+                }
+            });
+        }else{
+            mAddQuizButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(OverviewActivity.this, CreateActivity.class));
+                }
+            });
+        }
 
 
         recyclerView = (RecyclerView) findViewById(R.id.overview_quizzes);
