@@ -11,20 +11,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import a2is70.quizmaster.R;
+import a2is70.quizmaster.activities.adapters.DerpData;
 import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
+import a2is70.quizmaster.data.Quiz;
 
 public class OverviewActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private TextView emptyView;
-    private List quizzes;
+    private List<Quiz> quizzes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // @todo replace with actual quizzes
+        // create a quizzes list
+        DerpData dd = new DerpData();
+        quizzes = new ArrayList<Quiz>();
+        quizzes.add(dd.getQuizje1());
+        quizzes.add(dd.getQuizje2());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 

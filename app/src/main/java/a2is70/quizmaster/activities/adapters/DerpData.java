@@ -19,8 +19,6 @@ public class DerpData {
     static Account account2 = new Account(2,"Thijs", Account.Type.TEACHER,"Thijs@tue.nl");
     static Group groepje1 = new Group(1,"Vet mooi groepje 1","GR1EP");
     static Group groepje2 = new Group(1,"Vet mooi groepje 2","GR2EP");
-    static Quiz quizje1 = new Quiz("Quiz 1",new Group[]{groepje1},account1,getListData());
-    static Quiz quizje2 = new Quiz("Quiz 2",new Group[]{groepje2},account2,getListData2());
     static Question.Answer[] a = new Question.Answer[]{new Question.Answer("met Kalium")};
     static Question q1 = new Question("Hoe werken bananen?",a,new Question.Answer("met Kalium"),1);
     static Question q2 = new Question("Hoe werken appels?",a,new Question.Answer("met Cyanide"),1);
@@ -31,6 +29,9 @@ public class DerpData {
 
     private static final Question[] questions = new Question[]{q1,q2};
     private static final Question[] questions2 = new Question[]{q2,q3};
+
+    static Quiz quizje1 = new Quiz("Quiz 1",new Group[]{groepje1},account1,getListData());
+    static Quiz quizje2 = new Quiz("Quiz 2",new Group[]{groepje2},account2,getListData2());
 
     public static Quiz getQuizje1(){
         return quizje1;
