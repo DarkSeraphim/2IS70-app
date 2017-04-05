@@ -17,6 +17,11 @@ public class TeacherReview {
         return null;
     }
 
+    public int gimmeOverallCompletionPls(){
+        //TODO: give me the OverallCompletonRate
+        return 99;
+    }
+
     public int gimmeMaxPls(){
         //TODO: give me the highest grade that has been achieved in this test
         return 10;
