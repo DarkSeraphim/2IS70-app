@@ -15,6 +15,9 @@ import a2is70.quizmaster.data.Group;
 import java.util.List;
 import java.util.ArrayList;
 import android.widget.TextView;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.widget.EditText;
 
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.database.DBInterface;
@@ -66,12 +69,72 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (AppContext.getInstance().getAccount().getType() == Account.Type.STUDENT){
-                    //TODO open JoinGroupDialog.
+                    openJoinDialog();
                 }   else {
-                    //TODO open CreateGroupDialog.
+                    openCreateDialog();
                 }
             }
         });
+    }
+
+    public void openEditDialog(){
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Edit existing group.")
+                .setPositiveButton("Save", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which){
+
+                    }})
+                .setNegativeButton(("Discard"), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which){
+
+                    }})
+                .setView(R.layout.dialog_edit_group).create();
+    }
+
+    public void openJoinDialog(){
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Join a new group.")
+                .setPositiveButton("Join", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface d, int which){
+                        dbi.joinGroup(((EditText)findViewById(R.id.editTextCode)).getText().toString())
+                        .enqueue(new Callback<Group>() {
+                            @Override
+                            public void onResponse(Call<Group> call, Response<Group> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<Group> call, Throwable t) {
+
+                            }
+                        });
+                        d.dismiss();
+                    }})
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface d, int which) {
+                        d.dismiss();
+                    }})
+                .setView(R.layout.dialog_join_group).create();
+    }
+
+    public void openCreateDialog(){
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Create a new group.")
+                .setPositiveButton("Join", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which){
+
+                    }})
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which){
+
+                    }})
+                .setView(R.layout.dialog_create_group).create();
     }
 
     class GroupAdapter extends RecyclerView.Adapter<GroupHolder> {
