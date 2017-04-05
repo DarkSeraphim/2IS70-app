@@ -54,4 +54,6 @@ public class Group {
     public void leaveGroup(Callback c){
         dbi.leaveGroup(getId()).enqueue(c);
     }
+
+    public int getSize(){ return members.size();}
 }
