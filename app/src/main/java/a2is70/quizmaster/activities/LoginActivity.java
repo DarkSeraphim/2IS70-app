@@ -29,10 +29,10 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "w@tue.nl:foo",
-            "Jasper@student.tue.nl:student5", "Mark@student.tue.nl:student2",
-            "Maurits@student.tue.nl:student1", "Thijs@student.tue.nl:student3",
-            "Stan@student.tue.nl:student4", "Tom@student.tue.nl:student6"
+            "w@tue.nl:foo:s",
+            "Jasper@tue.nl:teacher2:t", "Mark@student.tue.nl:student2:s",
+            "Maurits@student.tue.nl:student1:s", "Thijs@student.tue.nl:student3:s",
+            "Stan@student.tue.nl:student4:s", "Tom@student.tue.nl:student6:s"
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -119,8 +119,16 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
                     if(pieces[1].equals(mPassword)){
 
                         // @todo Replace dummy account with the real deal
-                        Account dummyAccount = new Account(666, "John Doe", Account.Type.STUDENT, pieces[0]);
-                        AppContext.getInstance().setAccount(dummyAccount);
+                        switch (pieces[2]) {
+                            case "s":
+                                Account dummyAccountS = new Account(666, "John Doe The Student", Account.Type.STUDENT, pieces[0]);
+                                AppContext.getInstance().setAccount(dummyAccountS);
+                                break;
+                            case "t":
+                                Account dummyAccountT = new Account(666, "John Doe The Teacher", Account.Type.TEACHER, pieces[0]);
+                                AppContext.getInstance().setAccount(dummyAccountT);
+                                break;
+                        }
                         return true;
                     }
                 }
