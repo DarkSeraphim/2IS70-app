@@ -29,7 +29,7 @@ public class ReviewActivity extends AppCompatActivity {
         recView.setLayoutManager(new LinearLayoutManager(this));
 
         tAdapter = new TeacherAdapter(DerpData.getListData(),DerpData.getCompletionRate(),this);
-        sAdapter = new StudentAdapter(DerpData.getListData(),DerpData.getCorrect(),this);
+//        sAdapter = new StudentAdapter(DerpData.getListData(),DerpData.getCorrect(),this);
         switch (typ) {
             case STUDENT:
                 recView.setAdapter(sAdapter);

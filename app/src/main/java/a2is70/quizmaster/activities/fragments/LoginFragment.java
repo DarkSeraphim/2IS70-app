@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,17 +25,6 @@ import a2is70.quizmaster.data.Account;
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String EMAIL = "param1";
-    private static final String PASSWORD = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String email;
-
-    private String password;
-
-    private Account.Type type;
 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -45,31 +35,9 @@ public class LoginFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putString(EMAIL, param1);
-        args.putString(PASSWORD, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            email = getArguments().getString(EMAIL);
-            password = getArguments().getString(PASSWORD);
-        }
     }
 
     @Override
@@ -80,8 +48,6 @@ public class LoginFragment extends Fragment {
 
         mEmailView = (AutoCompleteTextView) view.findViewById(R.id.login_email);
 
-        //@todo fixme
-//        populateAutoComplete();
         mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -97,10 +63,7 @@ public class LoginFragment extends Fragment {
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-//@todo fixme
-//                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(findViewById(R.id.login_password).getWindowToken(), 0);
-//                attemptLogin();
+                attemptLogin();
                 return true;
             }
         });
@@ -131,7 +94,6 @@ public class LoginFragment extends Fragment {
                 attemptLogin();
             }
         });
-
 
         return view;
     }
