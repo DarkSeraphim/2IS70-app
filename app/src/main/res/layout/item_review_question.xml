@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
+    android:id="@+id/review_question_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
+    android:orientation="horizontal"
     android:paddingBottom="10dp"
-    >
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/review_question_text"
@@ -25,13 +24,12 @@
         tools:text="53%" />
 
     <ImageView
-        android:alpha=".26"
         android:id="@+id/review_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:alpha=".26"
         android:paddingLeft="8dp"
         app:srcCompat="@drawable/ic_info_black_24dp" />
-
 
 
 </LinearLayout>
