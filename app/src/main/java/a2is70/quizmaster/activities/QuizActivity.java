@@ -3,6 +3,7 @@ package a2is70.quizmaster.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -108,8 +109,7 @@ public class QuizActivity extends AppCompatActivity {
             } else { //time limit given
                 giventimelimit = true;
                 int timelimit = quiz.getTimeLimit();
-                prgrbar.setMax(timelimit);
-                prgrbar.setProgress(0);
+                prgrbar.setMax(timelimit * 60);
             }
         } else {
             //no data; pop up to go back to overview activity
@@ -241,5 +241,41 @@ public class QuizActivity extends AppCompatActivity {
         Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
         intent.putExtra("quiz", new Gson().toJson(finalQuiz));
         startActivity(intent);
+    }
+
+    class myTask extends AsyncTask<Void, Void, Void>{
+        int currentProgress = 0;
+        int maxProgress;
+
+        @Override
+        protected void onPreExecute() {
+            maxProgress = prgrbar.getMax();
+            prgrbar.setProgress(0);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            do{
+                //update progress bar : onprogressupdate
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            currentProgress++;
+            publishProgress();
+        } while (currentProgress < maxProgress);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            prgrbar.setProgress(currentProgress);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            toResults();
+        }
     }
 }
