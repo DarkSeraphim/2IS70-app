@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_groups"
+        android:icon="@drawable/ic_group_white_24dp"
+        android:title="Groups"
+        app:showAsAction="ifRoom">
+
+    </item>
+
+    <item android:id="@+id/action_sort"
+        android:icon="@drawable/ic_sort_white_24dp"
+        android:title="Sort"
+        app:showAsAction="ifRoom">
+        <!-- "file" submenu -->
+        <menu>
+            <item android:id="@+id/action_sort_date"
+                android:icon="@drawable/ic_date_range_black_24dp"
+                android:title="Sort by date" />
+            <item android:id="@+id/action_sort_group"
+                android:icon="@drawable/ic_group_black_24dp"
+                android:title="Sort by group" />
+        </menu>
+    </item>
+</menu>

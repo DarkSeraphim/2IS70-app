@@ -16,7 +16,7 @@ public class SubmittedQuiz {
     }
 
     public Quiz getQuiz(){return quiz;}
-    
+
     public void addAnswer(Answer answer) {
         this.answers.add(answer);
     }
@@ -33,6 +33,7 @@ public class SubmittedQuiz {
     public Set<Answer> getAnswers(){ return answers;}
 
     public static class Answer {
+
         private final int id;
 
         private final Question question;
@@ -63,5 +64,7 @@ public class SubmittedQuiz {
         public String getAnswerText() {
             return answerText;
         }
+
+        public Question getQuestion (){return question;}
     }
 }
