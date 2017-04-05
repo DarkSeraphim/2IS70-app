@@ -19,22 +19,13 @@ public class OverviewActivity extends AppCompatActivity {
 
 
         Button mAddQuizButton = (Button) findViewById(R.id.overview_add_quiz);
-        if (AppContext.getInstance().getAccount().getType() == Account.Type.TEACHER) {
-            mAddQuizButton.setText("%$#{HACKED}%#$@%");
-            mAddQuizButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(OverviewActivity.this, ReviewActivity.class));
-                }
-            });
-        } else {
-            mAddQuizButton.setOnClickListener(new View.OnClickListener() {
+        mAddQuizButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(OverviewActivity.this, CreateActivity.class));
                 }
             });
-        }
+
     }
     /*TODO pass Quiz object to QuizActivity through intents
     * Intent i = new Intent(getApplicationContext(), QuizActivity.class);
