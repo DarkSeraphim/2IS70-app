@@ -4,17 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.LoginFormHandler;
@@ -76,33 +72,11 @@ public class RegisterFragment extends Fragment {
         mRegisterPassword = (EditText) view.findViewById(R.id.register_password);
         mRegisterStudentType = (RadioButton) view.findViewById(R.id.register_type_student);
 
-        // Set focus on name field and show keyboard
-        mRegisterName.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-
-
         Button registerButton = (Button) view.findViewById(R.id.register_button);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attemptRegister();
-            }
-        });
-
-        // After password view, focus on radio buttons and hide keyboard
-        mRegisterPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_NULL || id == EditorInfo.IME_ACTION_NEXT) {
-                    mRegisterStudentType.requestFocus();
-
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mRegisterPassword.getWindowToken(), 0);
-
-                    return true;
-                }
-                return false;
             }
         });
 
@@ -119,6 +93,7 @@ public class RegisterFragment extends Fragment {
 
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
     public void attemptRegister() {
         // Reset errors
         mRegisterName.setError(null);

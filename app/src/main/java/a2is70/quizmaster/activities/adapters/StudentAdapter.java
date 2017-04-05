@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,9 +25,10 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.question
     private List<SubmittedQuiz.Answer> listData;
     private LayoutInflater inflater;
 
-    public StudentAdapter (SubmittedQuiz quiz, Context c){
+    public StudentAdapter (List<Question> questions/*SubmittedQuiz quiz*/, Context c){
+
         this.inflater = LayoutInflater.from(c);
-        List<SubmittedQuiz.Answer> listData=new ArrayList(quiz.getAnswers());
+        //List<SubmittedQuiz.Answer> listData=new ArrayList(quiz.getAnswers());
         this.listData = listData;
     }
 

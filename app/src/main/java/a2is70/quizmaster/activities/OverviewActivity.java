@@ -85,7 +85,6 @@ public class OverviewActivity extends AppCompatActivity {
 
         }
     }
-
     /*TODO pass Quiz object to QuizActivity through intents
     * Intent i = new Intent(getApplicationContext(), QuizActivity.class);
     * i.putExtra("quiz",new Gson().toJson(Quiz Object));
