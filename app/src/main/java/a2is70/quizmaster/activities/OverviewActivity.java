@@ -53,6 +53,14 @@ public class OverviewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.overview, menu);
+
+        // Check if there are quiz items; if not disable the menu option
+        if (quizzes == null || quizzes.isEmpty()) {
+            MenuItem item = menu.findItem(R.id.action_sort);
+            item.setEnabled(false);
+            item.getIcon().setAlpha(130);
+
+        }
         return true;
     }
 
