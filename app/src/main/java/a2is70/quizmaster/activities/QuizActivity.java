@@ -110,6 +110,7 @@ public class QuizActivity extends AppCompatActivity {
                 giventimelimit = true;
                 int timelimit = quiz.getTimeLimit();
                 prgrbar.setMax(timelimit * 60);
+                new ProgressTask().execute();
             }
         } else {
             //no data; pop up to go back to overview activity
@@ -243,7 +244,7 @@ public class QuizActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    class myTask extends AsyncTask<Void, Void, Void>{
+    class ProgressTask extends AsyncTask<Void, Void, Void>{
         int currentProgress = 0;
         int maxProgress;
 
@@ -258,7 +259,7 @@ public class QuizActivity extends AppCompatActivity {
             do{
                 //update progress bar : onprogressupdate
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
