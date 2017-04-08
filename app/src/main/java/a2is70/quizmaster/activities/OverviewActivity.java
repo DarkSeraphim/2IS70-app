@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Quiz;
+import a2is70.quizmaster.data.SubmittedQuiz;
 
 public class OverviewActivity extends AppCompatActivity {
 
@@ -47,15 +49,10 @@ public class OverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_overview);
 
         final Button mAddQuizButton = (Button) findViewById(R.id.overview_add_quiz);
+
+        // Only show Add quiz button when a teacher is logged in
         if(AppContext.getInstance().getAccount().getType()== Account.Type.TEACHER) {
-            mAddQuizButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mAddQuizButton.setText("%$#{HACKED}%$#%@");
-                    startActivity(new Intent(OverviewActivity.this, ReviewActivity.class));
-                }
-            });
-        }else{
+            mAddQuizButton.setVisibility(View.VISIBLE);
             mAddQuizButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -63,7 +60,6 @@ public class OverviewActivity extends AppCompatActivity {
                 }
             });
         }
-
 
         mRecyclerView = (RecyclerView) findViewById(R.id.overview_quizzes);
         emptyView = (TextView) findViewById(R.id.empty_view);
@@ -89,17 +85,6 @@ public class OverviewActivity extends AppCompatActivity {
         // Set layout manager to position the items
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // That's all!
-//
-//
-//
-//        // use a linear layout manager
-//        mLayoutManager = new LinearLayoutManager(this);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//
-//        // specify an adapter (see also next example)
-//        mAdapter = new QuizAdapter(quizzes);
-//        mRecyclerView.setAdapter(mAdapter);
-
     }
 
     @Override
@@ -160,6 +145,7 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
         public TextView quizNameView;
         public TextView quizGroupView;
         public TextView quizDeadlineView;
+        public ImageView quizButton;
 //        public Button messageButton;
 
         // We also create a constructor that accepts the entire item row
@@ -172,7 +158,7 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
             quizNameView = (TextView) itemView.findViewById(R.id.quiz_name);
             quizGroupView = (TextView) itemView.findViewById(R.id.quiz_group);
             quizDeadlineView = (TextView) itemView.findViewById(R.id.quiz_deadline);
-//            messageButton = (Button) itemView.findViewById(R.id.message_button);
+            quizButton = (ImageView) itemView.findViewById(R.id.quiz_button);
         }
     }
 
@@ -226,6 +212,24 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
         String deadline = String.valueOf(quiz.getCloseAt());
         quizDeadlineView.setText(deadline);
 
+        // Event handler for info button
+        ImageView quizButton = holder.quizButton;
+        quizButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Open Review activity for teacher OR student
+                // @TODO pass info to the intent about which quiz is clicked
+                if(AppContext.getInstance().getAccount().getType()== Account.Type.TEACHER) {
+                    getContext().startActivity(new Intent(getContext(), ReviewActivity.class));
+                } else {
+                    // Make the quiz
+                    getContext().startActivity(new Intent(getContext(), QuizActivity.class));
+                    // @TODO if/else structure that detects whether test has been taken
+                    // if so, show review instead
+                }
+            }
+        });
 
 //        Button button = viewHolder.messageButton;
 //        button.setText("Message");

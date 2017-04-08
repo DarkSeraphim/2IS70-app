@@ -38,7 +38,7 @@
 
     <ImageView
         android:alpha=".26"
-        android:id="@+id/quiz_action"
+        android:id="@+id/quiz_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
