@@ -1,5 +1,6 @@
 package a2is70.quizmaster.data;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -10,9 +11,11 @@ public class SubmittedQuiz {
 
     private Set<Answer> answers = new LinkedHashSet<>();
 
-    SubmittedQuiz(Quiz quiz) {
+    public SubmittedQuiz(Quiz quiz) {
         this.quiz = quiz;
     }
+
+    public Quiz getQuiz(){return quiz;}
 
     public void addAnswer(Answer answer) {
         this.answers.add(answer);
@@ -22,9 +25,15 @@ public class SubmittedQuiz {
         this.answers.remove(answer);
     }
 
+    public void setAnswers(SubmittedQuiz.Answer[] in){
+        Set<Answer> newIn = new LinkedHashSet<Answer>(Arrays.asList(in));
+        this.answers = newIn;
+    }
+
     public Set<Answer> getAnswers(){ return answers;}
 
-    public class Answer {
+    public static class Answer {
+
         private final int id;
 
         private final Question question;
