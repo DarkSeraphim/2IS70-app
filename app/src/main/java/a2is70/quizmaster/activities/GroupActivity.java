@@ -3,6 +3,7 @@ package a2is70.quizmaster.activities;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,7 +36,7 @@ public class GroupActivity extends AppCompatActivity {
 
     private LayoutInflater inflater;
 
-    private List<Group> groupList;
+    private List<Group> groupList = new ArrayList();
 
     private DBInterface dbi;
 
@@ -43,11 +44,28 @@ public class GroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
-        recycler = (RecyclerView) findViewById(R.id.rec_view);
-        addButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        recycler = (RecyclerView) findViewById(R.id.group_recycler_view);
+        addButton = (FloatingActionButton) findViewById(R.id.group_add_button);
         inflater = LayoutInflater.from(this);
         adapter = new GroupAdapter();
         recycler.setAdapter(adapter);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+
+        //Dummy data.
+        groupList = new ArrayList<Group>();
+        List<Account> membersList = new ArrayList<Account>();
+        membersList.add(new Account(-1,"Jasper",Account.Type.STUDENT,"jasper@tue.nl"));
+        Group g1 = new Group(-1, "Group1", "12345");
+        g1.setMembers(membersList);
+        groupList.add(g1);
+        groupList.add(new Group(-2, "Group2", "23456"));
+        groupList.add(new Group(-3, "Group3", "34567"));
+        groupList.add(new Group(-4, "Group4", "45678"));
+        groupList.add(new Group(-5, "Group5", "56789"));
+        adapter.notifyDataSetChanged();
+        AppContext.getInstance().setAccount(new Account(-1, "Test",Account.Type.TEACHER, "email"));
+        //End Dummy data.
+
         //TODO: Uncomment Database connection.
         /*dbi = AppContext.getInstance().getDBI();
 
@@ -64,13 +82,6 @@ public class GroupActivity extends AppCompatActivity {
                 //Stuff went wrong.
             }
         });*/
-
-        //Dummy data.
-        groupList = new ArrayList<Group>();
-        groupList.add(new Group(-1, "Group1", "12345"));
-        groupList.add(new Group(-2, "Group2", "23456"));
-        groupList.add(new Group(-3, "Group3", "34567"));
-
 
         recycler.addOnItemTouchListener(new GroupListener());
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -96,24 +107,25 @@ public class GroupActivity extends AppCompatActivity {
         final RecyclerView rv;
         final RecyclerView.Adapter adapter;
         final LayoutInflater inf;
+        final View view = inflater.inflate(R.layout.dialog_edit_group, null);
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Edit existing group.")
                 .setPositiveButton("Save", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface d, int which){
-                        //TODO: Save Changes.
+                        //TODO: Save Changes on database.
                     }})
                 .setNegativeButton(("Discard"), new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface d, int which){
                         d.dismiss();
                     }})
-                .setView(R.layout.dialog_edit_group).create();
+                .setView(view).create();
         //Populate fields with relevant information (group name, group access code).
-        ((TextView)dialog.findViewById(R.id.edit_group_name)).setText(g.getName());
-        ((TextView)dialog.findViewById(R.id.edit_group_access_code)).setText(g.getAccessCode());
+        ((EditText)view.findViewById(R.id.edit_group_groupname)).setText(g.getName());
+        ((EditText)view.findViewById(R.id.edit_group_accesscode)).setText(g.getAccessCode());
         //Populate recyclerview with group data.
-        rv = ((RecyclerView)dialog.findViewById(R.id.edit_group_recyclerview));
+        rv = ((RecyclerView)view.findViewById(R.id.edit_group_recyclerview));
         inf = LayoutInflater.from(this);
         adapter = new RecyclerView.Adapter(){
             public void onBindViewHolder(RecyclerView.ViewHolder vh, int position){
@@ -139,6 +151,9 @@ public class GroupActivity extends AppCompatActivity {
 
         };
         rv.setAdapter(adapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+
+        dialog.show();
     }
 
     /**
@@ -171,6 +186,7 @@ public class GroupActivity extends AppCompatActivity {
                         d.dismiss();
                     }})
                 .setView(R.layout.dialog_join_group).create();
+        dialog.show();
     }
 
     /**
@@ -190,6 +206,7 @@ public class GroupActivity extends AppCompatActivity {
 
                     }})
                 .setView(R.layout.dialog_create_group).create();
+        dialog.show();
     }
 
     /**
@@ -198,10 +215,11 @@ public class GroupActivity extends AppCompatActivity {
      */
     class GroupAdapter extends RecyclerView.Adapter<GroupHolder> {
         public void onBindViewHolder(GroupHolder gh, int position){
+            //Sets data for one RecyclerView element at index @param position.
             Group g = groupList.get(position);
             ((TextView) gh.itemView.findViewById(R.id.group_name)).setText(g.getName());
             ((TextView) gh.itemView.findViewById(R.id.group_member_count)).setText(
-                    g.getSize()==1? g.getSize()+" member.": g.getSize()+" members.");
+                    g.getSize()==1 ? g.getSize()+" member" : g.getSize()+" members");
         }
 
         public int getItemCount(){
@@ -225,8 +243,20 @@ public class GroupActivity extends AppCompatActivity {
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
             View position = rv.findChildViewUnder(e.getX(), e.getY());
-            Group g = groupList.get(rv.getChildAdapterPosition(position));
-            openEditDialog(g);
+            Group g;
+            try {
+                g = groupList.get(rv.getChildAdapterPosition(position));
+            } catch(ArrayIndexOutOfBoundsException ex){
+                //user clicked on non-existent view element.
+                return false;
+            }
+            if (AppContext.getInstance().getAccount().getType() == Account.Type.TEACHER){
+                //User is a TEACHER.
+                openEditDialog(g);
+            }   else {
+                //User is a STUDENT.
+                //TODO: Should clicking a group do anything for a student?
+            }
             return false;
         }
 

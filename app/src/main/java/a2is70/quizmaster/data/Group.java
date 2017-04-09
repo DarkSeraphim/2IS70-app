@@ -61,4 +61,7 @@ public class Group {
         return members;
     }
 
+    public void setMembers(List<Account> m){
+        members = m;
+    }
 }
