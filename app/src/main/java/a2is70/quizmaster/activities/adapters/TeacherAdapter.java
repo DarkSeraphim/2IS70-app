@@ -19,6 +19,7 @@ import a2is70.quizmaster.activities.ReviewActivity;
 import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Question;
+import a2is70.quizmaster.data.Quiz;
 
 /**
  * Created by Jasper on 01/04/2017.
@@ -28,13 +29,12 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.question
 
     private List<Question> listData;
     private LayoutInflater inflater;
-    private int[] compData;
-    private Account.Type acc = Account.Type.STUDENT;
+    private int[] succData;
 
-    public TeacherAdapter (List<Question> listData,int[] compData,Context c){
+    public TeacherAdapter (Quiz quiz, int[] succData, Context c){
         this.inflater = LayoutInflater.from(c);
-        this.listData = listData;
-        this.compData = compData;
+        this.listData = quiz.getQuestions();
+        this.succData = succData;
     }
 
     @Override
@@ -47,8 +47,13 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.question
     public void onBindViewHolder(final questionHolder holder, final int position) {
         final Question quest = listData.get(position);
         holder.title.setText(quest.getText());
-        holder.compRate.setText(""+compData[position]+"%");
-        holder.title.setOnClickListener(new View.OnClickListener(){
+        holder.succRate.setText(""+succData[position]+"%");
+        if(succData[position]>50) {
+            holder.check.setImageResource(R.drawable.ic_correct_color_20dp);
+        }else if(succData[position]<50) {
+            holder.check.setImageResource(R.drawable.ic_incorrect_color_20dp);
+        }
+        holder.layout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                     new AlertDialog.Builder(holder.itemView.getContext())
@@ -63,8 +68,8 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.question
                                             + quest.getCorrectAnswer().getText()
                                             + System.lineSeparator()
                                             + System.lineSeparator()
-                                            + "Completion rate: "
-                                            + compData[position]
+                                            + "Succes rate: "
+                                            + succData[position]
                                             + "%"
                             )
                             .setPositiveButton("terug", new DialogInterface.OnClickListener() {
@@ -84,12 +89,16 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.question
 
     class questionHolder extends RecyclerView.ViewHolder {
         private TextView title;
-        private TextView compRate;
+        private TextView succRate;
+        private ImageView check;
+        private LinearLayout layout;
 
         public questionHolder(View itemView) {
             super(itemView);
+            layout = (LinearLayout)itemView.findViewById(R.id.review_question_layout);
             title=(TextView)itemView.findViewById(R.id.review_question_text);
-            compRate = (TextView)itemView.findViewById(R.id.review_success_rate);
+            succRate = (TextView)itemView.findViewById(R.id.review_success_rate);
+            check = (ImageView)itemView.findViewById(R.id.review_image);
         }
     }
 

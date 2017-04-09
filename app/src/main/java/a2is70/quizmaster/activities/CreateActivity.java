@@ -36,6 +36,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import a2is70.quizmaster.R;
+import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Question;
 import a2is70.quizmaster.data.Quiz;
@@ -159,8 +160,9 @@ public class CreateActivity extends AppCompatActivity {
                 publish();
             }
         });
-
+        int groupId = -1;
         quizName = (EditText) findViewById(R.id.create_quiz_name);
+        questionList = (RecyclerView) findViewById(R.id.create_question_list);
         hasDeadline = (CheckBox) findViewById(R.id.create_has_deadline);
 
         final TextView startDate = (TextView) findViewById(R.id.create_start_date);
@@ -278,10 +280,11 @@ public class CreateActivity extends AppCompatActivity {
                 .setPositiveButton("Publish", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Account accountje = new Account(2,"jan", Account.Type.TEACHER," ");
                         Toast.makeText(CreateActivity.this, "Quiz published", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(CreateActivity.this, OverviewActivity.class);
                         Group[] groups = enabled.toArray(new Group[enabled.size()]);
-                        Quiz quiz = new Quiz(quizName.getText().toString(), groups, null, questions);
+                        Quiz quiz = new Quiz(quizName.getText().toString(), groups, accountje, questions);
                         intent.putExtra("questions", new Gson().toJson(quiz));
                         startActivity(intent);
 

@@ -10,41 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="a2is70.quizmaster.activities.OverviewActivity">
 
-    <TextView
-        android:id="@+id/overview_quiz_list_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="13dp"
-        android:fontFamily="sans-serif"
-        android:lineSpacingExtra="8sp"
-        android:text="Your Quizzes"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/colorAccent"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:typeface="monospace" />
-
-    <CheckBox
-        android:id="@+id/overview_sort_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sort by date"
-        android:layout_below="@+id/overview_quiz_list_header"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="11dp" />
-
-    <CheckBox
-        android:id="@+id/overview_sort_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sort by group"
-        android:layout_alignBaseline="@+id/overview_sort_date"
-        android:layout_alignBottom="@+id/overview_sort_date"
-        android:layout_alignParentEnd="true" />
-
     <Button
         android:id="@+id/overview_add_quiz"
         style="@style/Widget.AppCompat.Button.Colored"
@@ -54,15 +19,23 @@
         android:textSize="18sp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/overview_quizzes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/overview_add_quiz"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/overview_sort_group"
         android:scrollbars="vertical"
         tools:listitem="@layout/support_simple_spinner_dropdown_item" />
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="You have no quizzes yet." />
 
 </RelativeLayout>
