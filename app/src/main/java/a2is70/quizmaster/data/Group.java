@@ -56,4 +56,9 @@ public class Group {
     }
 
     public int getSize(){ return members.size();}
+
+    public List getMembers(){
+        return members;
+    }
+
 }
