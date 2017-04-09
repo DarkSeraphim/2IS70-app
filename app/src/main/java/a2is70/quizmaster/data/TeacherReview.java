@@ -12,8 +12,8 @@ public class TeacherReview {
         return null;
     }
 
-    public int[] gimmeCompletionRatesPls(){
-        //TODO: insert something to give me an array of completion rates
+    public int[] gimmeSuccesRatesPls(){
+        //TODO: insert something to give me an array of Succes rates matching the questions
         return null;
     }
 

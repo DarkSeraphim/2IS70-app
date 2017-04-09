@@ -23,8 +23,8 @@ public class DerpData {
     static Question q1 = new Question("Hoe werken bananen?",a,new Question.Answer("met Kalium"),1);
     static Question q2 = new Question("Hoe werken appels?",a,new Question.Answer("met Cyanide"),1);
     static Question q3 = new Question("Hoe werken magneten",a,new Question.Answer("Zuigen"),1);
-    static int compRate1 = 56;
-    static int compRate2 = 33;
+    static int succRate1 = 56;
+    static int succRate2 = 33;
 
 
     private static final Question[] questions = new Question[]{q1,q2};
@@ -66,16 +66,16 @@ public class DerpData {
         return data;
     }
 
-    public static int[] getCompletionRate(){
+    public static int[] getSuccRate(){
         List<Question> data = getListData();
         int[] comples = new int[data.size()];
 
         for (int x=0; x< data.size();x++){
             if(data.get(x)==q1){
-                comples[x]=compRate1;
+                comples[x]=succRate1;
             }
             if(data.get(x)==q2){
-                comples[x]=compRate2;
+                comples[x]=succRate2;
             }
         }
         return comples;

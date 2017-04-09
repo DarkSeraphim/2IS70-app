@@ -14,6 +14,7 @@ import a2is70.quizmaster.activities.adapters.StudentAdapter;
 import a2is70.quizmaster.activities.adapters.TeacherAdapter;
 import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
+import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.SubmittedQuiz;
 
 public class ReviewActivity extends AppCompatActivity {
@@ -21,9 +22,9 @@ public class ReviewActivity extends AppCompatActivity {
     private RecyclerView recView;
     private TeacherAdapter tAdapter;
     private StudentAdapter sAdapter;
-    //private SubmittedQuiz quiz;
+    private SubmittedQuiz subQuiz;
+    private Quiz quiz;
     private Account.Type typ = AppContext.getInstance().getAccount().getType();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +33,15 @@ public class ReviewActivity extends AppCompatActivity {
         RelativeLayout rLay = (RelativeLayout)findViewById(R.id.activity_review);
         TextView title = (TextView)findViewById(R.id.review_title);
 
+        quiz = QuizAdapter.getQuiz();
+
         recView = (RecyclerView)findViewById(R.id.rec_view);
         recView.setLayoutManager(new LinearLayoutManager(this));
 
-        tAdapter = new TeacherAdapter(DerpData.getListData(),DerpData.getCompletionRate(),this);
+        tAdapter = new TeacherAdapter(quiz,DerpData.getSuccRate(),this);
         sAdapter = new StudentAdapter(DerpData.getListData(),this);
         //title.setText(quiz.getQuiz().getName());
-        title.setText("Vet cool quizje maat");
+        title.setText(quiz.getName());
         switch (typ) {
             case STUDENT:
                 recView.setAdapter(sAdapter);

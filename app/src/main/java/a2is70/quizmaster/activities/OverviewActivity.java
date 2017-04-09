@@ -135,6 +135,10 @@ public class OverviewActivity extends AppCompatActivity {
 class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
     private List<Quiz> mQuizzes;
     private Context mContext;
+    private static Quiz clickedQuiz;
+    public static Quiz getQuiz(){
+        return  clickedQuiz;
+    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -191,7 +195,8 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // Get the data model based on position
-        Quiz quiz = mQuizzes.get(position);
+        final Quiz quiz = mQuizzes.get(position);
+
 
         // Set item views based on your views and data model
         TextView quizNameView = holder.quizNameView;
@@ -221,6 +226,7 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
                 // Open Review activity for teacher OR student
                 // @TODO pass info to the intent about which quiz is clicked
                 if(AppContext.getInstance().getAccount().getType()== Account.Type.TEACHER) {
+                    clickedQuiz = quiz;
                     getContext().startActivity(new Intent(getContext(), ReviewActivity.class));
                 } else {
                     // Make the quiz
@@ -230,6 +236,8 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
                 }
             }
         });
+
+
 
 //        Button button = viewHolder.messageButton;
 //        button.setText("Message");
