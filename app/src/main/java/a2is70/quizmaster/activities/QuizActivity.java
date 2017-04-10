@@ -25,8 +25,8 @@ import a2is70.quizmaster.database.DBInterface;
 
 public class QuizActivity extends AppCompatActivity {
 
-    Quiz quiz;
-    List<Question> questions;
+    Quiz quiz = QuizAdapter.getQuiz();
+    List<Question> questions=quiz.getQuestions();
     int track;
     int prevTrack;
     RadioButton answerA;
@@ -36,10 +36,11 @@ public class QuizActivity extends AppCompatActivity {
     TextView questiontext;
     Question currentQ;
     SubmittedQuiz submission;
-    SubmittedQuiz.Answer[] submittedAnswers;
+    SubmittedQuiz.Answer[] submittedAnswers = new SubmittedQuiz.Answer[questions.size()];
     RadioGroup answerbuttons;
     Boolean giventimelimit;
     ProgressBar prgrbar;
+    int[] checkedAnswers = new int[questions.size()];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +79,11 @@ public class QuizActivity extends AppCompatActivity {
         //Quiz data comes from overview activity
         Bundle extras = getIntent().getExtras();
 
-        if (extras != null) { //if quiz was passed
+        if (quiz != null) { //if quiz was passed
             //key of json moet met 'quiz' string gepassed worden
-            quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
+            //quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
 
-            questions = quiz.getQuestions();
+            //questions = quiz.getQuestions();
 
             //first question
             track = 0;
@@ -94,10 +95,16 @@ public class QuizActivity extends AppCompatActivity {
             Question.Answer[] answers = currentQ.getAnswers();
 
             answerA.setText(answers[0].getText());
-            answerB.setText(answers[1].getText());
-            answerC.setText(answers[2].getText());
-            answerD.setText(answers[3].getText());
-
+            if(answers.length>1) {
+                answerB.setText(answers[1].getText());
+                if (answers.length>2) {
+                    answerC.setText(answers[2].getText());
+                    if(answers.length>3){
+                    answerD.setText(answers[3].getText());
+                }
+            }
+            }
+            /*
             //progress bar
             prgrbar = (ProgressBar) findViewById(R.id.question_closed_progress);
 
@@ -112,6 +119,7 @@ public class QuizActivity extends AppCompatActivity {
                 prgrbar.setMax(timelimit * 60);
                 new ProgressTask().execute();
             }
+            */
         } else {
             //no data; pop up to go back to overview activity
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -199,13 +207,17 @@ public class QuizActivity extends AppCompatActivity {
     private void reload(){
         //save the current answer to array
         int checkedAnswer = answerbuttons.getCheckedRadioButtonId();
+        checkedAnswers[prevTrack]=checkedAnswer;
         RadioButton checkedButton = (RadioButton) findViewById(checkedAnswer);
-        for (Question.Answer answer : currentQ.getAnswers()){
-            if (answer.getText().equals(checkedButton.getText())){
-                submittedAnswers[prevTrack] = new SubmittedQuiz.Answer(answer.getId(), currentQ, answer, answer.getText());
-                break;
+        if(checkedButton != null) {
+            for (Question.Answer answer : currentQ.getAnswers()) {
+                if (answer.getText().equals(checkedButton.getText())) {
+                    submittedAnswers[prevTrack] = new SubmittedQuiz.Answer(1, currentQ, answer, answer.getText());
+                    break;
+                }
             }
         }
+
         //reload everything with new data
         currentQ = questions.get(track);
 
@@ -215,17 +227,43 @@ public class QuizActivity extends AppCompatActivity {
         Question.Answer[] answers = currentQ.getAnswers();
 
         answerA.setText(answers[0].getText());
-        answerB.setText(answers[1].getText());
-        answerC.setText(answers[2].getText());
-        answerD.setText(answers[3].getText());
+        if(answers.length>1) {
+            answerB.setText(answers[1].getText());
+            if (answers.length>2) {
+                answerC.setText(answers[2].getText());
+                if(answers.length>3){
+                    answerD.setText(answers[3].getText());
+                }
+            }
+        }
 
         //uncheck all boxes
         answerbuttons.clearCheck();
 
+        //recheck if already answered
+        if(checkedAnswers[track]!=0) {
+            switch (checkedAnswers[track]) {
+                case R.id.question_closed_A:
+                    answerA.setChecked(true);
+                    break;
+                case R.id.question_closed_B:
+                    answerB.setChecked(true);
+                    break;
+                case R.id.question_closed_C:
+                    answerC.setChecked(true);
+                    break;
+                case R.id.question_closed_D:
+                    answerD.setChecked(true);
+                    break;
+            }
+        }
+
         //update progress bar if no time limit is given
+        /*
         if (!giventimelimit){
             prgrbar.setProgress(track);
         }
+        */
     }
 
     private void toResults(){

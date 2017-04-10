@@ -7,6 +7,7 @@ import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Question;
 import a2is70.quizmaster.data.Quiz;
+import a2is70.quizmaster.data.SubmittedQuiz;
 
 /**
  * Created by Jasper on 01/04/2017.
@@ -19,10 +20,10 @@ public class DerpData {
     static Account account2 = new Account(2,"Thijs", Account.Type.TEACHER,"Thijs@tue.nl");
     static Group groepje1 = new Group(1,"Vet mooi groepje 1","GR1EP");
     static Group groepje2 = new Group(1,"Vet mooi groepje 2","GR2EP");
-    static Question.Answer[] a = new Question.Answer[]{new Question.Answer("met Kalium")};
+    static Question.Answer[] a = new Question.Answer[]{new Question.Answer("met Kalium"),new Question.Answer("Met Cyanide"),new Question.Answer("Magie"),new Question.Answer("met liefde")};
     static Question q1 = new Question("Hoe werken bananen?",a,new Question.Answer("met Kalium"),1);
     static Question q2 = new Question("Hoe werken appels?",a,new Question.Answer("met Cyanide"),1);
-    static Question q3 = new Question("Hoe werken magneten",a,new Question.Answer("Zuigen"),1);
+    static Question q3 = new Question("Hoe werken magneten",a,new Question.Answer("Magie"),1);
     static int succRate1 = 56;
     static int succRate2 = 33;
 
@@ -39,6 +40,8 @@ public class DerpData {
     public static Quiz getQuizje2(){
         return quizje2;
     }
+
+    public SubmittedQuiz subQuizje;
 
     public static List<Question> getListData2(){
         List<Question> data = new ArrayList<>();

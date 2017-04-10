@@ -222,11 +222,10 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
         quizButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                clickedQuiz = quiz;
                 // Open Review activity for teacher OR student
                 // @TODO pass info to the intent about which quiz is clicked
                 if(AppContext.getInstance().getAccount().getType()== Account.Type.TEACHER) {
-                    clickedQuiz = quiz;
                     getContext().startActivity(new Intent(getContext(), ReviewActivity.class));
                 } else {
                     // Make the quiz
