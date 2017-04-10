@@ -28,12 +28,17 @@ import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.SubmittedQuiz;
+import a2is70.quizmaster.database.DBInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OverviewActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private DBInterface dbi;
 
     private TextView emptyView;
     private List<Quiz> quizzes;
@@ -42,10 +47,32 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // @todo replace with actual quizzes
         // create a quizzes list
+
+        quizzes = Collections.emptyList();
+
+        /* @todo uncomment this section when DBI is ready
+        dbi = AppContext.getInstance().getDBI();
+        dbi.getQuizzes().enqueue(new Callback<List<Quiz>>() {
+            @Override
+            public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
+                quizzes = response.body();
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Quiz>> call, Throwable t) {
+//                quizzes = new List<Quiz>();
+            }
+        });
+
+        *\/
+
         DerpData dd = new DerpData();
         quizzes = new ArrayList<Quiz>();
         quizzes.add(dd.getQuizje1());
         quizzes.add(dd.getQuizje2());
+
+        */
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
