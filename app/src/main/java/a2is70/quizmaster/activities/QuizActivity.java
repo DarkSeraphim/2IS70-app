@@ -111,7 +111,7 @@ public class QuizActivity extends AppCompatActivity {
                 }
             }
             }
-            /*
+
             //progress bar
             prgrbar = (ProgressBar) findViewById(R.id.question_closed_progress);
 
@@ -126,7 +126,7 @@ public class QuizActivity extends AppCompatActivity {
                 prgrbar.setMax(timelimit * 60);
                 new ProgressTask().execute();
             }
-            */
+
         } else {
             //no data; pop up to go back to overview activity
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -276,11 +276,10 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         //update progress bar if no time limit is given
-        /*
+
         if (!giventimelimit){
             prgrbar.setProgress(track);
         }
-        */
     }
 
     private void toResults(){
