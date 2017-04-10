@@ -25,8 +25,8 @@ import a2is70.quizmaster.database.DBInterface;
 
 public class QuizActivity extends AppCompatActivity {
 
-    Quiz quiz = QuizAdapter.getQuiz();
-    List<Question> questions=quiz.getQuestions();
+    Quiz quiz;
+    List<Question> questions;
     int track;
     int prevTrack;
     RadioButton answerA;
@@ -36,11 +36,11 @@ public class QuizActivity extends AppCompatActivity {
     TextView questiontext;
     Question currentQ;
     SubmittedQuiz submission;
-    SubmittedQuiz.Answer[] submittedAnswers = new SubmittedQuiz.Answer[questions.size()];
+    SubmittedQuiz.Answer[] submittedAnswers;
     RadioGroup answerbuttons;
     Boolean giventimelimit;
     ProgressBar prgrbar;
-    int[] checkedAnswers = new int[questions.size()];
+    int[] checkedAnswers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +62,10 @@ public class QuizActivity extends AppCompatActivity {
                 previousQuestion();
             }
         });
+        prevQuestionButton.setVisibility(View.GONE);
 
-        //if image/audio: differentiate
+
+        //@TODO if image/audio: differentiate
 
         //radiogroup
         answerbuttons = (RadioGroup) findViewById(R.id.answer_buttons);
@@ -79,11 +81,16 @@ public class QuizActivity extends AppCompatActivity {
         //Quiz data comes from overview activity
         Bundle extras = getIntent().getExtras();
 
-        if (quiz != null) { //if quiz was passed
+        if (extras != null) { //if extras were passed
             //key of json moet met 'quiz' string gepassed worden
-            //quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
+            quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
 
-            //questions = quiz.getQuestions();
+            System.out.println(extras.getString("quiz"));
+
+            questions = quiz.getQuestions();
+
+            submittedAnswers = new SubmittedQuiz.Answer[questions.size()];
+            checkedAnswers = new int[questions.size()];
 
             //first question
             track = 0;
@@ -205,6 +212,16 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void reload(){
+        //if this is not the first question, make previousQuestionButton appear again.
+        if (track == 0) {
+            Button prevQuestionButton = (Button) findViewById(R.id.question_closed_previous);
+            prevQuestionButton.setVisibility(View.GONE);
+        } else {
+            Button prevQuestionButton = (Button) findViewById(R.id.question_closed_previous);
+            prevQuestionButton.setVisibility(View.VISIBLE);
+        }
+
+
         //save the current answer to array
         int checkedAnswer = answerbuttons.getCheckedRadioButtonId();
         checkedAnswers[prevTrack]=checkedAnswer;

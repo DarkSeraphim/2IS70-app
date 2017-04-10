@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -183,6 +185,7 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
     private List<Quiz> mQuizzes;
     private Context mContext;
     private static Quiz clickedQuiz;
+
     public static Quiz getQuiz(){
         return  clickedQuiz;
     }
@@ -276,7 +279,10 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
                     getContext().startActivity(new Intent(getContext(), ReviewActivity.class));
                 } else {
                     // Make the quiz
-                    getContext().startActivity(new Intent(getContext(), QuizActivity.class));
+                    Intent intent = new Intent(getContext(), QuizActivity.class);
+                    intent.putExtra("quiz", new Gson().toJson(clickedQuiz));
+                    getContext().startActivity(intent);
+
                     // @TODO if/else structure that detects whether test has been taken
                     // if so, show review instead
                 }
