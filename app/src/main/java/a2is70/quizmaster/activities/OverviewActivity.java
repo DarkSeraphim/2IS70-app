@@ -65,14 +65,14 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
-        *\/
+        /**/
 
         DerpData dd = new DerpData();
         quizzes = new ArrayList<Quiz>();
         quizzes.add(dd.getQuizje1());
         quizzes.add(dd.getQuizje2());
 
-        */
+        /**/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
