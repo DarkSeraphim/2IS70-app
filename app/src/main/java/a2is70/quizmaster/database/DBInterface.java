@@ -58,13 +58,21 @@ public interface DBInterface {
     @POST("/group/subscription")
     Call<Group> joinGroup(@Field("access_code") String accessCode);
 
-    /**Method to edit group.
-     * Possible could have.*/
-    //Call editGroup(Group g);
+    /**Method to create a new group.*/
+    @POST("/group")
+    Call<Void> createGroup(@Body Group g);
+
+    /**Method to kick a student from a group.*/
+    @DELETE("/group/subscription")
+    Call<Void> kickMember(@Query("group_id") int group_id, @Query("account_id") int acc_id);
 
     /**Method to leave group.*/
     @DELETE("/group/subscription")
     Call<Void> leaveGroup(@Query("group_id") int id);
+
+    /**Method to completely delete a group.*/
+    @DELETE("/group")
+    Call<Void> deleteGroup(@Query("group_id") int id);
 
     /**Method to create a new Quiz.*/
     @POST("/quiz")

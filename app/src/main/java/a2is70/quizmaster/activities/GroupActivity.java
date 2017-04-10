@@ -1,5 +1,6 @@
 package a2is70.quizmaster.activities;
 
+import android.app.Dialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.EditText;
+import android.widget.Button;
 
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.database.DBInterface;
@@ -113,7 +115,7 @@ public class GroupActivity extends AppCompatActivity {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface d, int which){
-                        //TODO: Save Changes on database.
+                        //Currently editing name/code is not implemented.
                     }})
                 .setNegativeButton(("Discard"), new DialogInterface.OnClickListener(){
                     @Override
@@ -128,14 +130,26 @@ public class GroupActivity extends AppCompatActivity {
         rv = ((RecyclerView)view.findViewById(R.id.edit_group_recyclerview));
         inf = LayoutInflater.from(this);
         adapter = new RecyclerView.Adapter(){
-            public void onBindViewHolder(RecyclerView.ViewHolder vh, int position){
+            public void onBindViewHolder(RecyclerView.ViewHolder vh, final int position){
                 //Populate item_member with relevant data.
                 ((TextView)vh.itemView.findViewById(R.id.member_name)).setText(((Account)g.getMembers().get(position)).getName());
                 ((TextView)vh.itemView.findViewById(R.id.member_email)).setText(((Account)g.getMembers().get(position)).getEmail());
                 vh.itemView.findViewById(R.id.member_image).setOnClickListener(
                         new View.OnClickListener(){
                             public void onClick(View v){
-                                //TODO: Remove this member from the group.
+                                //TODO: Uncomment database stuff.
+                                /*dbi.kickMember(g.getId(), ((Account) g.getMembers().get(position)).getId()).enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        g.getMembers().remove(position);
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+
+                                    }
+                                });*/
                             }
                 });
             }
@@ -152,6 +166,39 @@ public class GroupActivity extends AppCompatActivity {
         };
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
+
+        view.findViewById(R.id.edit_group_delete).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                //Delete this group from the list and database.
+                final AlertDialog confirm = new AlertDialog.Builder(null)
+                        .setTitle("Confirm deleting Group.")
+                        .setMessage("Really delete this group?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Actually delete it. TODO: uncomment database stuff.
+                                /*dbi.deleteGroup(g.getId()).enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        groupList.remove(g);
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+
+                                    }
+                                })*/
+                            }})
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }})
+                        .create();
+                confirm.show();
+            }
+        });
 
         dialog.show();
     }
@@ -178,12 +225,12 @@ public class GroupActivity extends AppCompatActivity {
 
                             }
                         });*/
-                        d.dismiss();
+                        d.cancel();
                     }})
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface d, int which) {
-                        d.dismiss();
+                        d.cancel();
                     }})
                 .setView(R.layout.dialog_join_group).create();
         dialog.show();
@@ -193,17 +240,34 @@ public class GroupActivity extends AppCompatActivity {
      * Dialog to create a new Group. Only to be accessed by Teachers.
      */
     public void openCreateDialog(){
+        final View v = inflater.inflate(R.layout.dialog_create_group, null);
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Create a new group.")
-                .setPositiveButton("Join", new DialogInterface.OnClickListener(){
+                .setPositiveButton("Create", new DialogInterface.OnClickListener(){
                     @Override
-                    public void onClick(DialogInterface dialog, int which){
+                    public void onClick(final DialogInterface dialog, int which){
+                        String name = ((EditText)v.findViewById(R.id.create_group_name)).getText().toString();
+                        String code = ((EditText)v.findViewById(R.id.create_group_code)).getText().toString();
+                        if (name.equals("") || code.equals("")){
+                            //If we want to do input checking.
+                        }
+                        //TODO: uncomment database stuff.
+                        /*dbi.createGroup(new Group(-1, name, code)).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                dialog.cancel();
+                            }
 
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                //Stuff went wrong.
+                            }
+                        });*/
                     }})
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
-
+                        dialog.cancel();
                     }})
                 .setView(R.layout.dialog_create_group).create();
         dialog.show();
@@ -255,7 +319,30 @@ public class GroupActivity extends AppCompatActivity {
                 openEditDialog(g);
             }   else {
                 //User is a STUDENT.
-                //TODO: Should clicking a group do anything for a student?
+                final AlertDialog leave = new AlertDialog.Builder(null)
+                        .setTitle("Leave Group")
+                        .setMessage("Leave this Group?")
+                        .setPositiveButton("Leave", new DialogInterface.OnClickListener(){
+                            public void onClick(final DialogInterface d, int which){
+                                //TODO: uncomment database stuff.
+                                /*dbi.leaveGroup(AppContext.getInstance().getAccount().getId()).enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        d.cancel();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                        //You can never leave.
+                                    }
+                                });*/
+                            }})
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+                            public void onClick(final DialogInterface d, int which){
+                                d.cancel();
+                            }})
+                        .create();
+                leave.show();
             }
             return false;
         }
