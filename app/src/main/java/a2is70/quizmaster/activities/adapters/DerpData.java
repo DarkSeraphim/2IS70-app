@@ -35,9 +35,11 @@ public class DerpData {
     static Quiz quizje2 = new Quiz("Quiz 2",new Group[]{groepje2},account2,getListData2());
 
     public static Quiz getQuizje1(){
+        quizje1.setCloseAt(123);
         return quizje1;
     }
     public static Quiz getQuizje2(){
+        quizje2.setCloseAt(456);
         return quizje2;
     }
 

@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import a2is70.quizmaster.R;
@@ -112,8 +114,26 @@ public class OverviewActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_sort_date:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+                Collections.sort(quizzes, new Comparator<Quiz>() {
+                    // Takes the first group encountered and sorts by that
+                    @Override
+                    public int compare(Quiz lhs, Quiz rhs) {
+                        Long diff = lhs.getCloseAt() - rhs.getCloseAt();
+                        return diff.intValue();
+                    }
+                });
+                mAdapter.notifyDataSetChanged();
+                return true;
+
+            case R.id.action_sort_group:
+                Collections.sort(quizzes, new Comparator<Quiz>() {
+                    // Takes the first group encountered and sorts by that
+                    @Override
+                    public int compare(Quiz lhs, Quiz rhs) {
+                        return lhs.getGroup()[0].getName().compareTo(rhs.getGroup()[0].getName());
+                    }
+                });
+                mAdapter.notifyDataSetChanged();
                 return true;
 
             default:
