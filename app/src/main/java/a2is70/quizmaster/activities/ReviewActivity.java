@@ -39,11 +39,10 @@ public class ReviewActivity extends AppCompatActivity {
         //Quiz data comes from Quiz activity
         Bundle extras = getIntent().getExtras();
 
-        subQuiz = QuizActivity.getSubmission();
 
         if (extras != null) { //if extras were passed
-            //subQuiz = new Gson().fromJson(extras.getString("subQuiz"), SubmittedQuiz.class);
-            //quiz = new Gson().fromJson(extras.getString("quiz"),Quiz.class);
+            subQuiz = new Gson().fromJson(extras.getString("subQuiz"), SubmittedQuiz.class);
+            quiz = new Gson().fromJson(extras.getString("quiz"),Quiz.class);
         } else {
             //@todo fill
             quiz = QuizAdapter.getQuiz();
