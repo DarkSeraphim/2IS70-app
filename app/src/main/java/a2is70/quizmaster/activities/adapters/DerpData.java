@@ -51,7 +51,7 @@ public class DerpData {
     public static List<Question> getListData2(){
         List<Question> data = new ArrayList<>();
 
-        for(int x=0;x<10;x++){
+        for(int x=0;x<2;x++){
 
             for(int i=0; i <questions2.length;i++){
                 data.add(questions2[i]);
@@ -64,7 +64,7 @@ public class DerpData {
     public static List<Question> getListData(){
         List<Question> data = new ArrayList<>();
 
-        for(int x=0;x<10;x++){
+        for(int x=0;x<2;x++){
 
             for(int i=0; i <questions.length;i++){
                 data.add(questions[i]);
