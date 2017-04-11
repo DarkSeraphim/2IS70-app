@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,16 +35,18 @@ public class ReviewActivity extends AppCompatActivity {
         TextView title = (TextView)findViewById(R.id.review_title);
 
         quiz = QuizAdapter.getQuiz();
+        SubmittedQuiz subQuiz = DerpData.subQuizje;
 
         recView = (RecyclerView)findViewById(R.id.rec_view);
         recView.setLayoutManager(new LinearLayoutManager(this));
 
-        tAdapter = new TeacherAdapter(quiz,DerpData.getSuccRate(),this);
-        sAdapter = new StudentAdapter(DerpData.getListData(),this);
-        //title.setText(quiz.getQuiz().getName());
-        title.setText(quiz.getName());
+
+
+
         switch (typ) {
             case STUDENT:
+                sAdapter = new StudentAdapter(subQuiz,this);
+                title.setText(subQuiz.getQuiz().getName());
                 recView.setAdapter(sAdapter);
                 rLay.removeView(findViewById(R.id.textViewCompletedLabel));
                 rLay.removeView(findViewById(R.id.textViewAverageLabel));
@@ -53,8 +56,11 @@ public class ReviewActivity extends AppCompatActivity {
                 rLay.removeView(findViewById(R.id.textViewAverage));
                 rLay.removeView(findViewById(R.id.textViewMaximum));
                 rLay.removeView(findViewById(R.id.textViewMinimum));
+                Log.d("akjsgd",""+sAdapter.getItemCount());
                 break;
             case TEACHER:
+                tAdapter = new TeacherAdapter(quiz,DerpData.getSuccRate(),this);
+                title.setText(quiz.getName());
                 recView.setAdapter(tAdapter);
                 TextView temp0 = (TextView)findViewById(R.id.textViewCompleted);
                 temp0.setText("10%");

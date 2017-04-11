@@ -25,10 +25,9 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.question
     private List<SubmittedQuiz.Answer> listData;
     private LayoutInflater inflater;
 
-    public StudentAdapter (List<Question> questions/*SubmittedQuiz quiz*/, Context c){
-
+    public StudentAdapter (SubmittedQuiz quiz, Context c){
         this.inflater = LayoutInflater.from(c);
-        //List<SubmittedQuiz.Answer> listData=new ArrayList(quiz.getAnswers());
+        List<SubmittedQuiz.Answer> listData=new ArrayList(quiz.getAnswers());
         this.listData = listData;
     }
 
@@ -41,13 +40,10 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.question
     @Override
     public void onBindViewHolder(final StudentAdapter.questionHolder holder, final int position) {
         final Question quest = listData.get(position).getQuestion();
+        final SubmittedQuiz.Answer answ = listData.get(position);
         holder.title.setText(quest.getText());
         holder.correctAnswer.setText(quest.getCorrectAnswer().getText());
-        if(quest==DerpData.q1) {
-            holder.yourAnswer.setText(quest.getCorrectAnswer().getText());
-        }else if(quest==DerpData.q2) {
-            holder.yourAnswer.setText("Zwaartekracht");
-        }
+        holder.yourAnswer.setText(answ.getAnswerText());
         if(listData.get(position).isCorrect()) {
             holder.correctOrNah.setImageResource(R.drawable.ic_correct_color_20dp);
         }else if(!listData.get(position).isCorrect()) {
