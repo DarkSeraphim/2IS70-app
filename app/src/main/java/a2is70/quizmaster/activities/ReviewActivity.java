@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.adapters.DerpData;
 import a2is70.quizmaster.activities.adapters.StudentAdapter;
@@ -34,9 +36,20 @@ public class ReviewActivity extends AppCompatActivity {
         RelativeLayout rLay = (RelativeLayout)findViewById(R.id.activity_review);
         TextView title = (TextView)findViewById(R.id.review_title);
 
+<<<<<<< HEAD
         quiz = QuizAdapter.getQuiz();
         SubmittedQuiz subQuiz = DerpData.subQuizje;
+=======
+        //Quiz data comes from Quiz activity
+        Bundle extras = getIntent().getExtras();
+>>>>>>> origin/master
 
+        if (extras != null) { //if extras were passed
+            quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
+        } else {
+            //@todo fill
+            quiz = QuizAdapter.getQuiz();
+        }
         recView = (RecyclerView)findViewById(R.id.rec_view);
         recView.setLayoutManager(new LinearLayoutManager(this));
 

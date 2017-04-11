@@ -16,7 +16,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import a2is70.quizmaster.R;
@@ -26,12 +30,17 @@ import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.SubmittedQuiz;
+import a2is70.quizmaster.database.DBInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OverviewActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private DBInterface dbi;
 
     private TextView emptyView;
     private List<Quiz> quizzes;
@@ -40,10 +49,32 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // @todo replace with actual quizzes
         // create a quizzes list
+
+        quizzes = Collections.emptyList();
+
+        /* @todo uncomment this section when DBI is ready
+        dbi = AppContext.getInstance().getDBI();
+        dbi.getQuizzes().enqueue(new Callback<List<Quiz>>() {
+            @Override
+            public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
+                quizzes = response.body();
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Quiz>> call, Throwable t) {
+//                quizzes = new List<Quiz>();
+            }
+        });
+
+        /**/
+
         DerpData dd = new DerpData();
         quizzes = new ArrayList<Quiz>();
         quizzes.add(dd.getQuizje1());
         quizzes.add(dd.getQuizje2());
+
+        /**/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
@@ -112,8 +143,26 @@ public class OverviewActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_sort_date:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+                Collections.sort(quizzes, new Comparator<Quiz>() {
+                    // Takes the first group encountered and sorts by that
+                    @Override
+                    public int compare(Quiz lhs, Quiz rhs) {
+                        Long diff = lhs.getCloseAt() - rhs.getCloseAt();
+                        return diff.intValue();
+                    }
+                });
+                mAdapter.notifyDataSetChanged();
+                return true;
+
+            case R.id.action_sort_group:
+                Collections.sort(quizzes, new Comparator<Quiz>() {
+                    // Takes the first group encountered and sorts by that
+                    @Override
+                    public int compare(Quiz lhs, Quiz rhs) {
+                        return lhs.getGroup()[0].getName().compareTo(rhs.getGroup()[0].getName());
+                    }
+                });
+                mAdapter.notifyDataSetChanged();
                 return true;
 
             default:
@@ -136,6 +185,7 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
     private List<Quiz> mQuizzes;
     private Context mContext;
     private static Quiz clickedQuiz;
+
     public static Quiz getQuiz(){
         return  clickedQuiz;
     }
@@ -229,7 +279,10 @@ class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
                     getContext().startActivity(new Intent(getContext(), ReviewActivity.class));
                 } else {
                     // Make the quiz
-                    getContext().startActivity(new Intent(getContext(), QuizActivity.class));
+                    Intent intent = new Intent(getContext(), QuizActivity.class);
+                    intent.putExtra("quiz", new Gson().toJson(clickedQuiz));
+                    getContext().startActivity(intent);
+
                     // @TODO if/else structure that detects whether test has been taken
                     // if so, show review instead
                 }

@@ -32,7 +32,8 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
             "w@tue.nl:foo:s",
             "Jasper@tue.nl:teacher2:t", "Mark@student.tue.nl:student2:s",
             "Maurits@student.tue.nl:student1:s", "Thijs@student.tue.nl:student3:s",
-            "Stan@student.tue.nl:student4:s", "Tom@student.tue.nl:student6:s"
+            "Stan@student.tue.nl:student4:s", "Tom@student.tue.nl:student6:s",
+            "a:a:t"
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
