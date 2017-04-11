@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -85,10 +86,9 @@ public class QuizActivity extends AppCompatActivity {
             //key of json moet met 'quiz' string gepassed worden
             quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
 
-            System.out.println(extras.getString("quiz"));
+            Log.d("kei mooi",extras.getString("quiz"));
 
             questions = quiz.getQuestions();
-
             submittedAnswers = new SubmittedQuiz.Answer[questions.size()];
             checkedAnswers = new int[questions.size()];
 
@@ -282,21 +282,25 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void toResults(){
         //create submittedquiz objects with given answers
-        SubmittedQuiz finalQuiz = new SubmittedQuiz(quiz);
-        finalQuiz.setAnswers(submittedAnswers);
+        submission = new SubmittedQuiz(quiz);
+        submission.setAnswers(submittedAnswers);
 
         //submit finalquiz to DB
-        DBInterface dbi = AppContext.getInstance().getDBI();
-        dbi.submitQuiz(finalQuiz);
+        //DBInterface dbi = AppContext.getInstance().getDBI();
+        //dbi.submitQuiz(submission);
 
         //go to results activity
         //pass submittedquiz as extra
         Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
-        intent.putExtra("quiz", new Gson().toJson(finalQuiz));
+        intent.putExtra("subQuiz", new Gson().toJson(submission));
         startActivity(intent);
     }
+
+
 
     class ProgressTask extends AsyncTask<Void, Void, Void>{
         int currentProgress = 0;

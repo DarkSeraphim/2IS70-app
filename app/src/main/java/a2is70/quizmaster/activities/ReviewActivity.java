@@ -36,16 +36,14 @@ public class ReviewActivity extends AppCompatActivity {
         RelativeLayout rLay = (RelativeLayout)findViewById(R.id.activity_review);
         TextView title = (TextView)findViewById(R.id.review_title);
 
-<<<<<<< HEAD
-        quiz = QuizAdapter.getQuiz();
-        SubmittedQuiz subQuiz = DerpData.subQuizje;
-=======
         //Quiz data comes from Quiz activity
         Bundle extras = getIntent().getExtras();
->>>>>>> origin/master
+
+        subQuiz = QuizActivity.getSubmission();
 
         if (extras != null) { //if extras were passed
-            quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
+            //subQuiz = new Gson().fromJson(extras.getString("subQuiz"), SubmittedQuiz.class);
+            //quiz = new Gson().fromJson(extras.getString("quiz"),Quiz.class);
         } else {
             //@todo fill
             quiz = QuizAdapter.getQuiz();
