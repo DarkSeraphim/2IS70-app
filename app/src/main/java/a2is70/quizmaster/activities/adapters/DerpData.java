@@ -20,10 +20,10 @@ public class DerpData {
     static Account account2 = new Account(2,"Thijs", Account.Type.TEACHER,"Thijs@tue.nl");
     static Group groepje1 = new Group(1,"Vet mooi groepje 1","GR1EP");
     static Group groepje2 = new Group(1,"Vet mooi groepje 2","GR2EP");
-    static Question.Answer[] a = new Question.Answer[]{new Question.Answer("met Kalium"),new Question.Answer("Met Cyanide"),new Question.Answer("Magie"),new Question.Answer("met liefde")};
-    static Question q1 = new Question("Hoe werken bananen?",a,new Question.Answer("met Kalium"),1);
-    static Question q2 = new Question("Hoe werken appels?",a,new Question.Answer("met Cyanide"),1);
-    static Question q3 = new Question("Hoe werken magneten",a,new Question.Answer("Magie"),1);
+    static Question.Answer[] a = new Question.Answer[]{new Question.Answer(1,"Met Kalium"),new Question.Answer(2,"Met Cyanide"),new Question.Answer(3,"Magie"),new Question.Answer(4,"Met liefde")};
+    static Question q1 = new Question("Hoe werken bananen?",a,new Question.Answer(1,"Met Kalium"),1);
+    static Question q2 = new Question("Hoe werken appels?",a,new Question.Answer(2,"Met Cyanide"),1);
+    static Question q3 = new Question("Hoe werken magneten",a,new Question.Answer(3,"Magie"),1);
     static int succRate1 = 56;
     static int succRate2 = 33;
 

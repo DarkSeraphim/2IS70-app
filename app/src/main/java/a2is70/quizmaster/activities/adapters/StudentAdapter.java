@@ -42,8 +42,8 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.question
         final Question quest = listData.get(position).getQuestion();
         final SubmittedQuiz.Answer answ = listData.get(position);
         holder.title.setText(quest.getText());
-        holder.correctAnswer.setText(quest.getCorrectAnswer().getText());
-        holder.yourAnswer.setText(answ.getAnswerText());
+        holder.correctAnswer.setText("Correct answer: "+quest.getCorrectAnswer().getText());
+        holder.yourAnswer.setText("Your answer: "+answ.getAnswerText());
         if(listData.get(position).isCorrect()) {
             holder.correctOrNah.setImageResource(R.drawable.ic_correct_color_20dp);
         }else if(!listData.get(position).isCorrect()) {

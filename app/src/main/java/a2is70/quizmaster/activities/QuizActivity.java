@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import a2is70.quizmaster.R;
@@ -38,6 +40,7 @@ public class QuizActivity extends AppCompatActivity {
     Question currentQ;
     SubmittedQuiz submission;
     SubmittedQuiz.Answer[] submittedAnswers;
+    List<SubmittedQuiz.Answer> subAnswers = new ArrayList<>();
     RadioGroup answerbuttons;
     Boolean giventimelimit;
     ProgressBar prgrbar;
@@ -156,6 +159,9 @@ public class QuizActivity extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             //save data and submit to DB, refer to results activity
+                            prevTrack=track;
+                            track++;
+                            reload();
                             toResults();
                         }
                     });
@@ -229,14 +235,21 @@ public class QuizActivity extends AppCompatActivity {
         if(checkedButton != null) {
             for (Question.Answer answer : currentQ.getAnswers()) {
                 if (answer.getText().equals(checkedButton.getText())) {
-                    submittedAnswers[prevTrack] = new SubmittedQuiz.Answer(1, currentQ, answer, answer.getText());
+                    //submittedAnswers[prevTrack] = new SubmittedQuiz.Answer(1, currentQ, answer, answer.getText());
+                    subAnswers.add(prevTrack,new SubmittedQuiz.Answer(1, currentQ, answer, answer.getText()));
                     break;
                 }
             }
+        }else{
+            subAnswers.add(prevTrack,new SubmittedQuiz.Answer(1, currentQ, null, "You didn't answer this one"));
         }
 
         //reload everything with new data
-        currentQ = questions.get(track);
+        if(!(track>(questions.size()-1))) {
+            currentQ = questions.get(track);
+        }else{
+            currentQ = questions.get(prevTrack);
+        }
 
         //set all text
         questiontext.setText(currentQ.getText());
@@ -258,20 +271,22 @@ public class QuizActivity extends AppCompatActivity {
         answerbuttons.clearCheck();
 
         //recheck if already answered
-        if(checkedAnswers[track]!=0) {
-            switch (checkedAnswers[track]) {
-                case R.id.question_closed_A:
-                    answerA.setChecked(true);
-                    break;
-                case R.id.question_closed_B:
-                    answerB.setChecked(true);
-                    break;
-                case R.id.question_closed_C:
-                    answerC.setChecked(true);
-                    break;
-                case R.id.question_closed_D:
-                    answerD.setChecked(true);
-                    break;
+        if(!(track>(questions.size()-1))) {
+            if (checkedAnswers[track] != 0) {
+                switch (checkedAnswers[track]) {
+                    case R.id.question_closed_A:
+                        answerA.setChecked(true);
+                        break;
+                    case R.id.question_closed_B:
+                        answerB.setChecked(true);
+                        break;
+                    case R.id.question_closed_C:
+                        answerC.setChecked(true);
+                        break;
+                    case R.id.question_closed_D:
+                        answerD.setChecked(true);
+                        break;
+                }
             }
         }
 
@@ -287,7 +302,7 @@ public class QuizActivity extends AppCompatActivity {
     private void toResults(){
         //create submittedquiz objects with given answers
         submission = new SubmittedQuiz(quiz);
-        submission.setAnswers(submittedAnswers);
+        submission.setAnswers(subAnswers);
 
         //submit finalquiz to DB
         //DBInterface dbi = AppContext.getInstance().getDBI();
