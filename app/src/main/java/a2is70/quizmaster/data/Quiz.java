@@ -45,6 +45,7 @@ public class Quiz {
     private DBInterface dbi;
 
     public Quiz(String name, Group[] groups, Account owner, List<Question> questions){
+        //@todo should timeLimit have a default value?
         this.name = name;
         setGroups(groups);
         this.creator = owner;

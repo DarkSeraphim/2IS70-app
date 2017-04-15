@@ -72,7 +72,7 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.question
                                             + succData[position]
                                             + "%"
                             )
-                            .setPositiveButton("terug", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("Go back", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 
                                 }

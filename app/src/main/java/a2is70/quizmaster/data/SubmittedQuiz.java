@@ -1,7 +1,9 @@
 package a2is70.quizmaster.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SubmittedQuiz {
@@ -25,8 +27,8 @@ public class SubmittedQuiz {
         this.answers.remove(answer);
     }
 
-    public void setAnswers(SubmittedQuiz.Answer[] in){
-        Set<Answer> newIn = new LinkedHashSet<Answer>(Arrays.asList(in));
+    public void setAnswers(List<Answer> in){
+        Set<Answer> newIn = new LinkedHashSet<Answer>(in);
         this.answers = newIn;
     }
 
