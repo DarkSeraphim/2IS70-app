@@ -1,6 +1,5 @@
 package a2is70.quizmaster.activities;
 
-import android.app.Dialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,20 +9,21 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Button;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Group;
-import java.util.List;
-import java.util.ArrayList;
-import android.widget.TextView;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.widget.EditText;
-import android.widget.Button;
-
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.database.DBInterface;
+
+import java.util.List;
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
