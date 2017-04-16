@@ -1,6 +1,7 @@
 package a2is70.quizmaster.data;
 
 import java.util.List;
+import java.util.Collection;
 
 public class TeacherReview {
     public class QuestionStatistics {
@@ -27,10 +28,10 @@ public class TeacherReview {
          * @return the percentage of correct answers, within range 0.0-1.0
          */
         public double getCorrectRate() {
-            if (question.getWeight()) {
+            if (question.getWeight() == 0) {
                 return 0;
             }
-            return (double) ((points / question.getWeight()) / answers;
+            return (double) ((points / question.getWeight()) / answers);
         }
     }
 
@@ -47,7 +48,8 @@ public class TeacherReview {
     private int maxScore;
     
     public List<QuestionStatistics> getStatistics() {
-        return Collection.unmodifiableList(this.statistics);
+        //return new Collection.unmodifiableList(this.statistics);
+        return null;
     }
     
     public List<Question> gimmeQuestionsPls() {
@@ -55,7 +57,7 @@ public class TeacherReview {
     }
 
     public int[] gimmeSuccesRatesPls(){
-        int[] temp = int[statistics.size()];
+        int[] temp = new int[statistics.size()];
         for (int i = 0; i < temp.length; i++) {
             temp[i] = (int) Math.round(statistics.get(i).getCorrectRate());
         }

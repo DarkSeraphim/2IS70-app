@@ -69,7 +69,7 @@ public class GroupActivity extends AppCompatActivity {
         //End Dummy data.
 
         //TODO: Uncomment Database connection.
-        /*dbi = AppContext.getInstance().getDBI();
+        dbi = AppContext.getInstance().getDBI();
 
         //Pull group data from database.
         dbi.getGroups().enqueue(new Callback<List<Group>>() {
@@ -83,7 +83,7 @@ public class GroupActivity extends AppCompatActivity {
             public void onFailure(Call<List<Group>> call, Throwable t) {
                 //Stuff went wrong.
             }
-        });*/
+        });
 
         recycler.addOnItemTouchListener(new GroupListener());
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -124,8 +124,14 @@ public class GroupActivity extends AppCompatActivity {
                     }})
                 .setView(view).create();
         //Populate fields with relevant information (group name, group access code).
-        ((EditText)view.findViewById(R.id.edit_group_groupname)).setText(g.getName());
-        ((EditText)view.findViewById(R.id.edit_group_accesscode)).setText(g.getAccessCode());
+        EditText groupName = ((EditText)view.findViewById(R.id.edit_group_groupname));
+        EditText groupCode = ((EditText)view.findViewById(R.id.edit_group_accesscode));
+        groupName.setText(g.getName());
+        groupCode.setText(g.getAccessCode());
+        //These values can not be changed by the user (not implemented).
+        groupName.setFocusable(false);
+        groupCode.setFocusable(false);
+
         //Populate recyclerview with group data.
         rv = ((RecyclerView)view.findViewById(R.id.edit_group_recyclerview));
         inf = LayoutInflater.from(this);
@@ -137,8 +143,7 @@ public class GroupActivity extends AppCompatActivity {
                 vh.itemView.findViewById(R.id.member_image).setOnClickListener(
                         new View.OnClickListener(){
                             public void onClick(View v){
-                                //TODO: Uncomment database stuff.
-                                /*dbi.kickMember(g.getId(), ((Account) g.getMembers().get(position)).getId()).enqueue(new Callback<Void>() {
+                                dbi.kickMember(g.getId(), ((Account) g.getMembers().get(position)).getId()).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                         g.getMembers().remove(position);
@@ -149,7 +154,7 @@ public class GroupActivity extends AppCompatActivity {
                                     public void onFailure(Call<Void> call, Throwable t) {
 
                                     }
-                                });*/
+                                });
                             }
                 });
             }
@@ -167,7 +172,7 @@ public class GroupActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        view.findViewById(R.id.edit_group_delete).setOnClickListener(new Button.OnClickListener(){
+        view.findViewById(R.id.dialog_edit_delete).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 //Delete this group from the list and database.
                 final AlertDialog confirm = new AlertDialog.Builder(null)
@@ -176,8 +181,8 @@ public class GroupActivity extends AppCompatActivity {
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //Actually delete it. TODO: uncomment database stuff.
-                                /*dbi.deleteGroup(g.getId()).enqueue(new Callback<Void>() {
+                                //Actually delete it.
+                                dbi.deleteGroup(g.getId()).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                         groupList.remove(g);
@@ -188,7 +193,7 @@ public class GroupActivity extends AppCompatActivity {
                                     public void onFailure(Call<Void> call, Throwable t) {
 
                                     }
-                                })*/
+                                });
                             }})
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                             @Override
@@ -199,7 +204,6 @@ public class GroupActivity extends AppCompatActivity {
                 confirm.show();
             }
         });
-
         dialog.show();
     }
 
@@ -212,19 +216,21 @@ public class GroupActivity extends AppCompatActivity {
                 .setPositiveButton("Join", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface d, int which){
-                        //TODO: Uncomment database stuff.
-                        /*dbi.joinGroup(((EditText)findViewById(R.id.join_group_access_code)).getText().toString())
+                        dbi.joinGroup(((EditText)findViewById(R.id.join_group_access_code)).getText().toString())
                         .enqueue(new Callback<Group>() {
                             @Override
                             public void onResponse(Call<Group> call, Response<Group> response) {
-
+                                groupList.add(response.body());
+                                adapter.notifyDataSetChanged();
                             }
 
                             @Override
                             public void onFailure(Call<Group> call, Throwable t) {
-
+                                final AlertDialog fail = new AlertDialog.Builder(GroupActivity.this)
+                                .setMessage("Could not join group with this access code.").create();
+                                fail.show();
                             }
-                        });*/
+                        });
                         d.cancel();
                     }})
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -251,8 +257,7 @@ public class GroupActivity extends AppCompatActivity {
                         if (name.equals("") || code.equals("")){
                             //If we want to do input checking.
                         }
-                        //TODO: uncomment database stuff.
-                        /*dbi.createGroup(new Group(-1, name, code)).enqueue(new Callback<Void>() {
+                        dbi.createGroup(new Group(-1, name, code)).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 dialog.cancel();
@@ -262,7 +267,7 @@ public class GroupActivity extends AppCompatActivity {
                             public void onFailure(Call<Void> call, Throwable t) {
                                 //Stuff went wrong.
                             }
-                        });*/
+                        });
                     }})
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                     @Override
@@ -324,8 +329,7 @@ public class GroupActivity extends AppCompatActivity {
                         .setMessage("Leave this Group?")
                         .setPositiveButton("Leave", new DialogInterface.OnClickListener(){
                             public void onClick(final DialogInterface d, int which){
-                                //TODO: uncomment database stuff.
-                                /*dbi.leaveGroup(AppContext.getInstance().getAccount().getId()).enqueue(new Callback<Void>() {
+                                dbi.leaveGroup(AppContext.getInstance().getAccount().getId()).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                         d.cancel();
@@ -335,7 +339,7 @@ public class GroupActivity extends AppCompatActivity {
                                     public void onFailure(Call<Void> call, Throwable t) {
                                         //You can never leave.
                                     }
-                                });*/
+                                });
                             }})
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                             public void onClick(final DialogInterface d, int which){

@@ -22,7 +22,7 @@ import retrofit2.http.Query;
 public interface DBInterface {
 
     /**URL of the server to connect to.*/
-    String SERVER_URL = "";
+    String SERVER_URL = "http://quizmaster.darkseraphim.net:8000/";
 
     String JSON_CONTENT = "Content-Type: application/json";
 
