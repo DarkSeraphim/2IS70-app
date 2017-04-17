@@ -53,7 +53,7 @@ public class GroupActivity extends AppCompatActivity {
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
-        /* Dummy data.
+        //Dummy data.
         groupList = new ArrayList<Group>();
         List<Account> membersList = new ArrayList<Account>();
         membersList.add(new Account(-1,"Jasper",Account.Type.STUDENT,"jasper@tue.nl"));
@@ -66,7 +66,7 @@ public class GroupActivity extends AppCompatActivity {
         groupList.add(new Group(-5, "Group5", "56789"));
         adapter.notifyDataSetChanged();
         AppContext.getInstance().setAccount(new Account(-1, "Test",Account.Type.TEACHER, "email"));
-        //End Dummy data.*/
+        //End Dummy data.
 
         dbi = AppContext.getInstance().getDBI();
 
@@ -158,43 +158,45 @@ public class GroupActivity extends AppCompatActivity {
             }
 
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e){
-                final View position = rv.findChildViewUnder(e.getX(), e.getY());
-                final Account a;
-                try {
-                    a = (Account) g.getMembers().get(rv.getChildAdapterPosition(position));
-                }   catch (IndexOutOfBoundsException ex){
-                    //User clicked non-existent element.
-                    return false;
+                if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                    final View position = rv.findChildViewUnder(e.getX(), e.getY());
+                    final Account a;
+                    try {
+                        a = (Account) g.getMembers().get(rv.getChildAdapterPosition(position));
+                    } catch (IndexOutOfBoundsException ex) {
+                        //User clicked non-existent element.
+                        return false;
+                    }
+                    final AlertDialog confirm = new AlertDialog.Builder(GroupActivity.this)
+                            .setTitle("Really kick this member?")
+                            .setPositiveButton("Kick", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dbi.kickMember(g.getId(), a.getId()).enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call, Response<Void> response) {
+                                            g.getMembers().remove(position);
+                                            adapter.notifyDataSetChanged();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call, Throwable t) {
+
+                                        }
+                                    });
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create();
+                    confirm.show();
                 }
-                final AlertDialog confirm = new AlertDialog.Builder(GroupActivity.this)
-                        .setTitle("Really kick this member?")
-                        .setPositiveButton("Kick", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dbi.kickMember(g.getId(), a.getId()).enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(Call<Void> call, Response<Void> response) {
-                                        g.getMembers().remove(position);
-                                        adapter.notifyDataSetChanged();
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<Void> call, Throwable t) {
-
-                                    }
-                                });
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                confirm.show();
-                return false;
+                    return false;
             }
 
             public void onTouchEvent(RecyclerView rv, MotionEvent e){
@@ -347,42 +349,46 @@ public class GroupActivity extends AppCompatActivity {
 
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View position = rv.findChildViewUnder(e.getX(), e.getY());
-            Group g;
-            try {
-                g = groupList.get(rv.getChildAdapterPosition(position));
-            } catch(ArrayIndexOutOfBoundsException ex){
-                //user clicked on non-existent view element.
-                return false;
-            }
-            if (AppContext.getInstance().getAccount().getType() == Account.Type.TEACHER){
-                //User is a TEACHER.
-                openEditDialog(g);
-            }   else {
-                //User is a STUDENT.
-                final AlertDialog leave = new AlertDialog.Builder(null)
-                        .setTitle("Leave Group")
-                        .setMessage("Leave this Group?")
-                        .setPositiveButton("Leave", new DialogInterface.OnClickListener(){
-                            public void onClick(final DialogInterface d, int which){
-                                dbi.leaveGroup(AppContext.getInstance().getAccount().getId()).enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(Call<Void> call, Response<Void> response) {
-                                        d.cancel();
-                                    }
+            if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                View position = rv.findChildViewUnder(e.getX(), e.getY());
+                Group g;
+                try {
+                    g = groupList.get(rv.getChildAdapterPosition(position));
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    //user clicked on non-existent view element.
+                    return false;
+                }
+                if (AppContext.getInstance().getAccount().getType() == Account.Type.TEACHER) {
+                    //User is a TEACHER.
+                    openEditDialog(g);
+                } else {
+                    //User is a STUDENT.
+                    final AlertDialog leave = new AlertDialog.Builder(null)
+                            .setTitle("Leave Group")
+                            .setMessage("Leave this Group?")
+                            .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
+                                public void onClick(final DialogInterface d, int which) {
+                                    dbi.leaveGroup(AppContext.getInstance().getAccount().getId()).enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call, Response<Void> response) {
+                                            d.cancel();
+                                        }
 
-                                    @Override
-                                    public void onFailure(Call<Void> call, Throwable t) {
-                                        //You can never leave.
-                                    }
-                                });
-                            }})
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-                            public void onClick(final DialogInterface d, int which){
-                                d.cancel();
-                            }})
-                        .create();
-                leave.show();
+                                        @Override
+                                        public void onFailure(Call<Void> call, Throwable t) {
+                                            //You can never leave.
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(final DialogInterface d, int which) {
+                                    d.cancel();
+                                }
+                            })
+                            .create();
+                    leave.show();
+                }
             }
             return false;
         }
