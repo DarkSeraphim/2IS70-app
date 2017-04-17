@@ -68,7 +68,6 @@ public class GroupActivity extends AppCompatActivity {
         AppContext.getInstance().setAccount(new Account(-1, "Test",Account.Type.TEACHER, "email"));
         //End Dummy data.*/
 
-        //TODO: Uncomment Database connection.
         dbi = AppContext.getInstance().getDBI();
 
         //Pull group data from database.
