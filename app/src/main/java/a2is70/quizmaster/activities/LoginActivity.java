@@ -9,14 +9,24 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+
+import java.util.List;
+import java.util.zip.Inflater;
+
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.fragments.LoginFragment;
 import a2is70.quizmaster.activities.fragments.RegisterFragment;
 import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
+import a2is70.quizmaster.data.Group;
+import a2is70.quizmaster.database.DBInterface;
 import a2is70.quizmaster.utils.function.Consumer;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -39,10 +49,10 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
-
+    private DBInterface dbi;
     private View mProgressView;
     private View mLoginFormView;
+    private LayoutInflater inflater;
 
     public LoginActivity() {
         // Empty constructor
@@ -52,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        dbi=AppContext.getInstance().getDBI();
 
         // Populate login frame with LoginFragment
         if (savedInstanceState == null) {
@@ -71,19 +82,34 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
             return;
         }
         showProgress(true);
-        mAuthTask = new LoginActivity.UserLoginTask(email, password, passwordView);
+        mAuthTask = new LoginActivity.UserLoginTask(email, password,passwordView);
         mAuthTask.execute((Void) null);
     }
 
     @Override
-    public void onRegister(String email, String password, Account.Type type) {
+    public void onRegister(final String email, final String password, Account.Type type) {
         if (mAuthTask != null) {
             return;
         }
         showProgress(true);
 
-        // TODO: have an actual registration here
-        return;
+        dbi.addAccount(email,password).enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                mAuthTask = new LoginActivity.UserLoginTask(email, password,null);
+                mAuthTask.execute((Void) null);
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+                final View view = inflater.inflate(R.layout.fragment_register,null);
+                EditText v;
+                v = (EditText)view.findViewById(R.id.register_name);
+                v.setError("Could not register");
+            }
+        });
+
+
     }
 
     /**
@@ -91,21 +117,52 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
         private final String mEmail;
         private final String mPassword;
         private EditText mPasswordView;
 
-        UserLoginTask(String email, String password, EditText passwordView) {
+        UserLoginTask(String email, String password, EditText e) {
             mEmail = email;
             mPassword = password;
-            mPasswordView = passwordView;
+            mPasswordView = e;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            final Responseboolean rb = new Responseboolean();
+            final Object lock = new Object();
             // TODO: attempt authentication against a network service.
+            dbi.loadAccount(mEmail,mPassword).enqueue(new Callback<Account>(){
 
+                @Override
+                public void onResponse(Call<Account> c,Response<Account> r ){
+                    AppContext.getInstance().setAccount(r.body());
+                    rb.result = true;
+                    synchronized(lock){
+                        lock.notify();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Account> call, Throwable t) {
+                    //Stuff went wrong.
+                    rb.result = false;
+                    lock.notify();
+                }
+
+            });
+
+            try {
+                synchronized(lock){
+                    lock.wait();
+                }
+            }catch (Exception e){
+
+            }
+
+            return rb.result;
+
+            /*
             try {
                 // Simulate network access.
                 Thread.sleep(1000);
@@ -134,11 +191,13 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
                     }
                 }
             }
+            */
 
             // TODO: register the new account here.
 
-            return false;
+
         }
+
 
         @Override
         protected void onPostExecute(final Boolean success) {
@@ -147,9 +206,13 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
 
             if (success) {
                 startActivity(new Intent(LoginActivity.this, OverviewActivity.class));
-            } else {
+            } else if(mPasswordView!=null){
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
+            }else if(mPasswordView==null){
+                final View view = inflater.inflate(R.layout.fragment_register,null);
+                mPasswordView = (EditText)view.findViewById(R.id.register_name);
+                mPasswordView.setError("Could not login");
             }
         }
 
@@ -167,6 +230,11 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    public class Responseboolean{
+        public boolean result;
+
     }
 
 }
