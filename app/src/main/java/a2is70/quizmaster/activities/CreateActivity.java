@@ -1,15 +1,20 @@
 package a2is70.quizmaster.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +31,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,8 +46,10 @@ import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Question;
 import a2is70.quizmaster.data.Quiz;
+import a2is70.quizmaster.utils.MediaCreator;
+import a2is70.quizmaster.utils.function.Consumer;
 
-public class CreateActivity extends AppCompatActivity {
+public class CreateActivity extends AppCompatActivity implements MediaCreator.ResultListener {
 
     private static class DateTimeHolder {
         private static final DateFormat DATE_FORMAT = new SimpleDateFormat("EEE, d MMM yyyy", Locale.US);
@@ -124,6 +132,10 @@ public class CreateActivity extends AppCompatActivity {
         }
     }
 
+    private int requestId;
+
+    private SparseArray<Consumer<Result>> resultHandlers = new SparseArray<>();
+
     private List<Question> questions = new ArrayList<>();
 
     private EditText quizName;
@@ -140,10 +152,15 @@ public class CreateActivity extends AppCompatActivity {
 
     private RecyclerView questionList;
 
+    private boolean recordPermissionGranted;
+
+    private static final String[] PERMISSIONS = {Manifest.permission.RECORD_AUDIO};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+        ActivityCompat.requestPermissions(this, PERMISSIONS, 0);
         Button addQuestionButton = (Button) findViewById(R.id.add_question_button);
         addQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,6 +210,42 @@ public class CreateActivity extends AppCompatActivity {
         questionListAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void startActivityForResult(Intent intent, Consumer<Result> resultConsumer) {
+        int theId = requestId++;
+        this.resultHandlers.put(theId, resultConsumer);
+        this.startActivityForResult(intent, theId);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Consumer<Result> resultConsumer = resultHandlers.get(requestCode);
+        if (resultConsumer == null) {
+            return;
+        }
+        resultHandlers.remove(requestCode);
+        resultConsumer.accept(new Result(resultCode, data));
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != 0) {
+            return;
+        }
+
+        boolean result = true;
+        for (int i = 0; i < grantResults.length; i++) {
+            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                result = false;
+                Log.w("Mark", "Missing permission: " + permissions[i]);
+            }
+        }
+        recordPermissionGranted = result;
+    }
+
     private void addQuestion(Question question) {
         this.questions.add(question);
         questionListAdapter.setItems(this.questions);
@@ -234,7 +287,6 @@ public class CreateActivity extends AppCompatActivity {
                         }
                         Question.Answer correct = answers[0];
                         EditText weightText = (EditText) view.findViewById(R.id.add_question_weight);
-                        String weightStr = (weightText).getText().toString();
                         int weight;
                         try {
                             weight = Integer.parseInt(weightText.getText().toString());
@@ -249,7 +301,18 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
         dialog.show();
-        View view = dialog.findViewById(R.id.fragment_add_question);
+
+        ((Button) dialog.findViewById(R.id.add_question_image_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MediaCreator.PhotoCreator.of(CreateActivity.this, new Consumer<File>() {
+                    @Override
+                    public void accept(File value) {
+
+                    }
+                }).start();
+            }
+        });
         ((RadioGroup) dialog.findViewById(R.id.add_question_radio_group_openclose))
                 .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
