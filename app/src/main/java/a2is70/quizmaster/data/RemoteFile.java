@@ -29,11 +29,11 @@ public class RemoteFile implements FileManager {
             Question question = questions.get(i);
             // TODO: sort out files
             if (question.getImage() != null) {
-                File file = null;
+                File file = question.getImage().getFile(null);
                 resources.put("question-" + i + "-image", RequestBody.create(MediaType.parse("image/jpeg"), file));
             }
             if (question.getAudio() != null) {
-                File file = null;
+                File file = question.getAudio().getFile(null);
                 resources.put("question-" + i + "-audio", RequestBody.create(MediaType.parse("audio/mp3"), file));
             }
         }

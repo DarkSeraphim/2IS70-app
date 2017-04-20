@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,17 +70,30 @@ public abstract class MediaCreator {
 
     public static class AudioRecorder extends MediaCreator {
 
+        public State getState() {
+            return state;
+        }
+
+        public enum State {
+            EMPTY, RECORDING, DONE
+        }
+
+        private State state = State.EMPTY;
+
         private File audioPath;
 
         private MediaRecorder recorder;
 
-        public AudioRecorder(Activity activity) {
+        private Consumer<File> fileConsumer;
+
+        public AudioRecorder(Activity activity, Consumer<File> result) {
             super(activity);
+            this.fileConsumer = result;
         }
 
         @Override
         public void start() {
-            if (recorder == null) {
+            if (state != State.RECORDING) {
 
                 try {
                     audioPath = createAudioFile();
@@ -105,8 +119,13 @@ public abstract class MediaCreator {
                     return;
                 }
                 recorder.start();
+                Toast.makeText(activity, "Recording audio...", Toast.LENGTH_LONG).show();
+                state = State.RECORDING;
             } else {
+                state = State.DONE;
                 recorder.stop();
+                Toast.makeText(activity, "Added audio to question", Toast.LENGTH_SHORT).show();
+                this.fileConsumer.accept(this.audioPath);
             }
         }
 
@@ -147,6 +166,7 @@ public abstract class MediaCreator {
                             Log.w("Mark", "That was not good");
                         } else {
                             imageConsumer.accept(imagePath);
+                            Toast.makeText(activity, "Added image to question", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

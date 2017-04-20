@@ -70,6 +70,8 @@ public class OverviewActivity extends AppCompatActivity {
                     startActivity(new Intent(OverviewActivity.this, CreateActivity.class));
                 }
             });
+        } else {
+            mAddQuizButton.setVisibility(View.GONE);
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.overview_quizzes);

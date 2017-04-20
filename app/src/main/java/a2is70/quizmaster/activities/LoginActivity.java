@@ -5,10 +5,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.concurrent.Semaphore;
 
 import a2is70.quizmaster.R;
@@ -110,6 +112,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
                 return;
             }
             showProgress(true);
+            DBInterface dbi = AppContext.getInstance().getDBI();
             dbi.addAccount(name, email, password, type).enqueue(new Callback<Account>() {
                 @Override
                 public void onResponse(Call<Account> call, Response<Account> response) {

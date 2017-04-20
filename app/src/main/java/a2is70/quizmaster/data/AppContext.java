@@ -1,6 +1,8 @@
 package a2is70.quizmaster.data;
 
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import a2is70.quizmaster.database.DBInterface;
@@ -29,8 +31,8 @@ public class AppContext {
 
         try {
             // hacky hacky session cookies
-            OkHttpClient client = new OkHttpClient();
-            client.interceptors().add(new Interceptor() {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request request = chain.request();
@@ -49,17 +51,16 @@ public class AppContext {
 
                     return response;
                 }
-            });
+            }).build();
             Retrofit.Builder builder = new Retrofit.Builder()
                     .baseUrl(DBInterface.SERVER_URL)
-                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create());
 
-            Retrofit retrofit = builder.client(new OkHttpClient.Builder().build()).build();
+            Retrofit retrofit = builder.client(client).build();
 
             dbi = retrofit.create(DBInterface.class);
         } catch (Exception e){
-
+            throw new RuntimeException(e);
         }
     }
 
