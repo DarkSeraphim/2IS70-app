@@ -86,7 +86,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
                         default:
                             throw new RuntimeException("Failed to log in: HTTP " + r.code() + " returned");
                     }
-                    showProgress(false);
                 }
 
                 @Override
@@ -165,6 +164,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
         AppContext.getInstance().getDBI().getGroups().enqueue(new Callback<List<Group>>() {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                showProgress(false);
                 if (response.code() == 200) {
                     String groups = new Gson().toJson(response.body());
                     Intent intent = new Intent(LoginActivity.this, OverviewActivity.class);
