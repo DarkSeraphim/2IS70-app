@@ -9,19 +9,21 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Button;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Group;
-import java.util.List;
-import java.util.ArrayList;
-import android.widget.TextView;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.widget.EditText;
-
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.database.DBInterface;
+
+import java.util.List;
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,8 +68,7 @@ public class GroupActivity extends AppCompatActivity {
         AppContext.getInstance().setAccount(new Account(-1, "Test",Account.Type.TEACHER, "email"));
         //End Dummy data.
 
-        //TODO: Uncomment Database connection.
-        /*dbi = AppContext.getInstance().getDBI();
+        dbi = AppContext.getInstance().getDBI();
 
         //Pull group data from database.
         dbi.getGroups().enqueue(new Callback<List<Group>>() {
@@ -81,7 +82,7 @@ public class GroupActivity extends AppCompatActivity {
             public void onFailure(Call<List<Group>> call, Throwable t) {
                 //Stuff went wrong.
             }
-        });*/
+        });
 
         recycler.addOnItemTouchListener(new GroupListener());
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +114,7 @@ public class GroupActivity extends AppCompatActivity {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface d, int which){
-                        //TODO: Save Changes on database.
+                        //Currently editing name/code is not implemented.
                     }})
                 .setNegativeButton(("Discard"), new DialogInterface.OnClickListener(){
                     @Override
@@ -122,22 +123,22 @@ public class GroupActivity extends AppCompatActivity {
                     }})
                 .setView(view).create();
         //Populate fields with relevant information (group name, group access code).
-        ((EditText)view.findViewById(R.id.edit_group_groupname)).setText(g.getName());
-        ((EditText)view.findViewById(R.id.edit_group_accesscode)).setText(g.getAccessCode());
+        EditText groupName = ((EditText)view.findViewById(R.id.edit_group_groupname));
+        EditText groupCode = ((EditText)view.findViewById(R.id.edit_group_accesscode));
+        groupName.setText(g.getName());
+        groupCode.setText(g.getAccessCode());
+        //These values can not be changed by the user (not implemented).
+        groupName.setFocusable(false);
+        groupCode.setFocusable(false);
+
         //Populate recyclerview with group data.
         rv = ((RecyclerView)view.findViewById(R.id.edit_group_recyclerview));
         inf = LayoutInflater.from(this);
         adapter = new RecyclerView.Adapter(){
-            public void onBindViewHolder(RecyclerView.ViewHolder vh, int position){
+            public void onBindViewHolder(RecyclerView.ViewHolder vh, final int position){
                 //Populate item_member with relevant data.
                 ((TextView)vh.itemView.findViewById(R.id.member_name)).setText(((Account)g.getMembers().get(position)).getName());
                 ((TextView)vh.itemView.findViewById(R.id.member_email)).setText(((Account)g.getMembers().get(position)).getEmail());
-                vh.itemView.findViewById(R.id.member_image).setOnClickListener(
-                        new View.OnClickListener(){
-                            public void onClick(View v){
-                                //TODO: Remove this member from the group.
-                            }
-                });
             }
 
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup vg, int position){
@@ -150,9 +151,97 @@ public class GroupActivity extends AppCompatActivity {
             }
 
         };
+        rv.addOnItemTouchListener(new RecyclerView.OnItemTouchListener(){
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e){
+                if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                    final View position = rv.findChildViewUnder(e.getX(), e.getY());
+                    final Account a;
+                    try {
+                        a = (Account) g.getMembers().get(rv.getChildAdapterPosition(position));
+                    } catch (IndexOutOfBoundsException ex) {
+                        //User clicked non-existent element.
+                        return false;
+                    }
+                    final AlertDialog confirm = new AlertDialog.Builder(GroupActivity.this)
+                            .setTitle("Really kick this member?")
+                            .setPositiveButton("Kick", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dbi.kickMember(g.getId(), a.getId()).enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call, Response<Void> response) {
+                                            g.getMembers().remove(position);
+                                            adapter.notifyDataSetChanged();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call, Throwable t) {
+
+                                        }
+                                    });
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create();
+                    confirm.show();
+                }
+                    return false;
+            }
+
+            public void onTouchEvent(RecyclerView rv, MotionEvent e){
+
+            }
+        });
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
+        view.findViewById(R.id.dialog_edit_delete).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                //Delete this group from the list and database.
+                final AlertDialog confirm = new AlertDialog.Builder(GroupActivity.this)
+                        .setTitle("Confirm deleting Group.")
+                        .setMessage("Really delete this group?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface d, int which) {
+                                //Actually delete it.
+                                dbi.deleteGroup(g.getId()).enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        groupList.remove(g);
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+
+                                    }
+                                });
+                                dialog.dismiss();
+                                //Reload the Activity.
+                                finish();
+                                startActivity(getIntent());
+                            }})
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface d, int which) {
+                                d.cancel();
+                            }})
+                        .create();
+                confirm.show();
+            }
+        });
         dialog.show();
     }
 
@@ -165,25 +254,27 @@ public class GroupActivity extends AppCompatActivity {
                 .setPositiveButton("Join", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface d, int which){
-                        //TODO: Uncomment database stuff.
-                        /*dbi.joinGroup(((EditText)findViewById(R.id.join_group_access_code)).getText().toString())
+                        dbi.joinGroup(((EditText)findViewById(R.id.join_group_access_code)).getText().toString())
                         .enqueue(new Callback<Group>() {
                             @Override
                             public void onResponse(Call<Group> call, Response<Group> response) {
-
+                                groupList.add(response.body());
+                                adapter.notifyDataSetChanged();
                             }
 
                             @Override
                             public void onFailure(Call<Group> call, Throwable t) {
-
+                                final AlertDialog fail = new AlertDialog.Builder(GroupActivity.this)
+                                .setMessage("Could not join group with this access code.").create();
+                                fail.show();
                             }
-                        });*/
-                        d.dismiss();
+                        });
+                        d.cancel();
                     }})
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface d, int which) {
-                        d.dismiss();
+                        d.cancel();
                     }})
                 .setView(R.layout.dialog_join_group).create();
         dialog.show();
@@ -193,17 +284,33 @@ public class GroupActivity extends AppCompatActivity {
      * Dialog to create a new Group. Only to be accessed by Teachers.
      */
     public void openCreateDialog(){
+        final View v = inflater.inflate(R.layout.dialog_create_group, null);
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Create a new group.")
-                .setPositiveButton("Join", new DialogInterface.OnClickListener(){
+                .setPositiveButton("Create", new DialogInterface.OnClickListener(){
                     @Override
-                    public void onClick(DialogInterface dialog, int which){
+                    public void onClick(final DialogInterface dialog, int which){
+                        String name = ((EditText)v.findViewById(R.id.create_group_name)).getText().toString();
+                        String code = ((EditText)v.findViewById(R.id.create_group_code)).getText().toString();
+                        if (name.equals("") || code.equals("")){
+                            //If we want to do input checking.
+                        }
+                        dbi.createGroup(new Group(-1, name, code)).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                dialog.cancel();
+                            }
 
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                //Stuff went wrong.
+                            }
+                        });
                     }})
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
-
+                        dialog.cancel();
                     }})
                 .setView(R.layout.dialog_create_group).create();
         dialog.show();
@@ -242,20 +349,46 @@ public class GroupActivity extends AppCompatActivity {
 
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View position = rv.findChildViewUnder(e.getX(), e.getY());
-            Group g;
-            try {
-                g = groupList.get(rv.getChildAdapterPosition(position));
-            } catch(ArrayIndexOutOfBoundsException ex){
-                //user clicked on non-existent view element.
-                return false;
-            }
-            if (AppContext.getInstance().getAccount().getType() == Account.Type.TEACHER){
-                //User is a TEACHER.
-                openEditDialog(g);
-            }   else {
-                //User is a STUDENT.
-                //TODO: Should clicking a group do anything for a student?
+            if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                View position = rv.findChildViewUnder(e.getX(), e.getY());
+                Group g;
+                try {
+                    g = groupList.get(rv.getChildAdapterPosition(position));
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    //user clicked on non-existent view element.
+                    return false;
+                }
+                if (AppContext.getInstance().getAccount().getType() == Account.Type.TEACHER) {
+                    //User is a TEACHER.
+                    openEditDialog(g);
+                } else {
+                    //User is a STUDENT.
+                    final AlertDialog leave = new AlertDialog.Builder(null)
+                            .setTitle("Leave Group")
+                            .setMessage("Leave this Group?")
+                            .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
+                                public void onClick(final DialogInterface d, int which) {
+                                    dbi.leaveGroup(AppContext.getInstance().getAccount().getId()).enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call, Response<Void> response) {
+                                            d.cancel();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call, Throwable t) {
+                                            //You can never leave.
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(final DialogInterface d, int which) {
+                                    d.cancel();
+                                }
+                            })
+                            .create();
+                    leave.show();
+                }
             }
             return false;
         }

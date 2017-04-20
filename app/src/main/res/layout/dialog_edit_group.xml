@@ -25,13 +25,27 @@
         android:layout_height="wrap_content"
         android:text="Access Code:" />
 
-    <EditText
-        android:id="@+id/edit_group_accesscode"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="12345"
-        tools:focusable="false" />
+        android:layout_height="59dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_group_accesscode"
+            android:layout_width="134dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:text="12345"
+            tools:focusable="false" />
+
+        <Button
+            android:id="@+id/dialog_edit_delete"
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:text="Delete Group" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

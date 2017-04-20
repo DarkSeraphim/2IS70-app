@@ -4,18 +4,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import a2is70.quizmaster.R;
-import a2is70.quizmaster.activities.adapters.DerpData;
 import a2is70.quizmaster.activities.adapters.StudentAdapter;
 import a2is70.quizmaster.activities.adapters.TeacherAdapter;
 import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.SubmittedQuiz;
+import a2is70.quizmaster.data.TeacherReview;
 
 public class ReviewActivity extends AppCompatActivity {
 
@@ -33,17 +35,22 @@ public class ReviewActivity extends AppCompatActivity {
         RelativeLayout rLay = (RelativeLayout)findViewById(R.id.activity_review);
         TextView title = (TextView)findViewById(R.id.review_title);
 
-        quiz = QuizAdapter.getQuiz();
+        //Quiz data comes from Quiz activity
+        Bundle extras = getIntent().getExtras();
+
+
+        if (extras != null) { //if extras were passed
+            subQuiz = new Gson().fromJson(extras.getString("subQuiz"), SubmittedQuiz.class);
+            quiz = new Gson().fromJson(extras.getString("quiz"),Quiz.class);
+        }
 
         recView = (RecyclerView)findViewById(R.id.rec_view);
         recView.setLayoutManager(new LinearLayoutManager(this));
 
-        tAdapter = new TeacherAdapter(quiz,DerpData.getSuccRate(),this);
-        sAdapter = new StudentAdapter(DerpData.getListData(),this);
-        //title.setText(quiz.getQuiz().getName());
-        title.setText(quiz.getName());
         switch (typ) {
             case STUDENT:
+                sAdapter = new StudentAdapter(subQuiz,this);
+                title.setText(subQuiz.getQuiz().getName());
                 recView.setAdapter(sAdapter);
                 rLay.removeView(findViewById(R.id.textViewCompletedLabel));
                 rLay.removeView(findViewById(R.id.textViewAverageLabel));
@@ -53,17 +60,22 @@ public class ReviewActivity extends AppCompatActivity {
                 rLay.removeView(findViewById(R.id.textViewAverage));
                 rLay.removeView(findViewById(R.id.textViewMaximum));
                 rLay.removeView(findViewById(R.id.textViewMinimum));
+                Log.d("akjsgd",""+sAdapter.getItemCount());
                 break;
             case TEACHER:
+                String json = getIntent().getExtras().getString("statistics");
+                TeacherReview review = new Gson().fromJson(json, TeacherReview.class);
+                tAdapter = new TeacherAdapter(quiz, review.getCorrectRate(),this);
+                title.setText(quiz.getName());
                 recView.setAdapter(tAdapter);
                 TextView temp0 = (TextView)findViewById(R.id.textViewCompleted);
-                temp0.setText("10%");
+                temp0.setText(review.getOverallCompletionRate() + "%");
                 TextView temp1 = (TextView)findViewById(R.id.textViewAverage);
-                temp1.setText("1.0");
+                temp1.setText(review.getAverageScore());
                 TextView temp2 = (TextView)findViewById(R.id.textViewMinimum);
-                temp2.setText("0.1");
+                temp2.setText(review.getMinScore());
                 TextView temp3 = (TextView)findViewById(R.id.textViewMaximum);
-                temp3.setText("10.0");
+                temp3.setText(review.getMaxScore());
 
                 break;
         }

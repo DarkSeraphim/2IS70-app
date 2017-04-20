@@ -1,6 +1,7 @@
 package a2is70.quizmaster.activities.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,7 +21,9 @@ import android.widget.TextView;
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.LoginActivity;
 import a2is70.quizmaster.activities.LoginFormHandler;
+import a2is70.quizmaster.activities.OverviewActivity;
 import a2is70.quizmaster.data.Account;
+import a2is70.quizmaster.utils.function.Consumer;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -135,7 +138,17 @@ public class LoginFragment extends Fragment {
             focusView.requestFocus();
         } else {
             // Pass the submitted values to the listener to check them
-            mListener.onLogin(email, password, mPasswordView);
+            mListener.onLogin(email, password, new Consumer<Account>() {
+                @Override
+                public void accept(Account value) {
+                    if (value != null) {
+                        startActivity(new Intent(((LoginActivity) mListener), OverviewActivity.class));
+                    } else {
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        mPasswordView.requestFocus();
+                    }
+                }
+            });
         }
     }
 

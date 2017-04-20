@@ -5,7 +5,7 @@ import retrofit2.Callback;
 public interface FileManager {
 
     /**Method to create a file.*/
-    public void create(String path, Quiz data, Callback c);
+    public void create(String path, Quiz data, Callback<Quiz> c);
 
     /**Method to load a file.*/
     public File load(String path);

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import a2is70.quizmaster.R;
@@ -25,8 +28,8 @@ import a2is70.quizmaster.database.DBInterface;
 
 public class QuizActivity extends AppCompatActivity {
 
-    Quiz quiz = QuizAdapter.getQuiz();
-    List<Question> questions=quiz.getQuestions();
+    Quiz quiz;
+    List<Question> questions;
     int track;
     int prevTrack;
     RadioButton answerA;
@@ -36,11 +39,12 @@ public class QuizActivity extends AppCompatActivity {
     TextView questiontext;
     Question currentQ;
     SubmittedQuiz submission;
-    SubmittedQuiz.Answer[] submittedAnswers = new SubmittedQuiz.Answer[questions.size()];
+    SubmittedQuiz.Answer[] submittedAnswers;
+    List<SubmittedQuiz.Answer> subAnswers = new ArrayList<>();
     RadioGroup answerbuttons;
     Boolean giventimelimit;
     ProgressBar prgrbar;
-    int[] checkedAnswers = new int[questions.size()];
+    int[] checkedAnswers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +66,10 @@ public class QuizActivity extends AppCompatActivity {
                 previousQuestion();
             }
         });
+        prevQuestionButton.setVisibility(View.GONE);
 
-        //if image/audio: differentiate
+
+        //@TODO if image/audio: differentiate
 
         //radiogroup
         answerbuttons = (RadioGroup) findViewById(R.id.answer_buttons);
@@ -79,11 +85,15 @@ public class QuizActivity extends AppCompatActivity {
         //Quiz data comes from overview activity
         Bundle extras = getIntent().getExtras();
 
-        if (quiz != null) { //if quiz was passed
+        if (extras != null) { //if extras were passed
             //key of json moet met 'quiz' string gepassed worden
-            //quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
+            quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
 
-            //questions = quiz.getQuestions();
+            Log.d("kei mooi",extras.getString("quiz"));
+
+            questions = quiz.getQuestions();
+            submittedAnswers = new SubmittedQuiz.Answer[questions.size()];
+            checkedAnswers = new int[questions.size()];
 
             //first question
             track = 0;
@@ -104,7 +114,7 @@ public class QuizActivity extends AppCompatActivity {
                 }
             }
             }
-            /*
+
             //progress bar
             prgrbar = (ProgressBar) findViewById(R.id.question_closed_progress);
 
@@ -119,7 +129,7 @@ public class QuizActivity extends AppCompatActivity {
                 prgrbar.setMax(timelimit * 60);
                 new ProgressTask().execute();
             }
-            */
+
         } else {
             //no data; pop up to go back to overview activity
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -149,6 +159,9 @@ public class QuizActivity extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             //save data and submit to DB, refer to results activity
+                            prevTrack=track;
+                            track++;
+                            reload();
                             toResults();
                         }
                     });
@@ -205,6 +218,16 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void reload(){
+        //if this is not the first question, make previousQuestionButton appear again.
+        if (track == 0) {
+            Button prevQuestionButton = (Button) findViewById(R.id.question_closed_previous);
+            prevQuestionButton.setVisibility(View.GONE);
+        } else {
+            Button prevQuestionButton = (Button) findViewById(R.id.question_closed_previous);
+            prevQuestionButton.setVisibility(View.VISIBLE);
+        }
+
+
         //save the current answer to array
         int checkedAnswer = answerbuttons.getCheckedRadioButtonId();
         checkedAnswers[prevTrack]=checkedAnswer;
@@ -212,14 +235,21 @@ public class QuizActivity extends AppCompatActivity {
         if(checkedButton != null) {
             for (Question.Answer answer : currentQ.getAnswers()) {
                 if (answer.getText().equals(checkedButton.getText())) {
-                    submittedAnswers[prevTrack] = new SubmittedQuiz.Answer(1, currentQ, answer, answer.getText());
+                    //submittedAnswers[prevTrack] = new SubmittedQuiz.Answer(1, currentQ, answer, answer.getText());
+                    subAnswers.add(prevTrack,new SubmittedQuiz.Answer(1, currentQ, answer, answer.getText()));
                     break;
                 }
             }
+        }else{
+            subAnswers.add(prevTrack,new SubmittedQuiz.Answer(1, currentQ, null, "You didn't answer this one"));
         }
 
         //reload everything with new data
-        currentQ = questions.get(track);
+        if(!(track>(questions.size()-1))) {
+            currentQ = questions.get(track);
+        }else{
+            currentQ = questions.get(prevTrack);
+        }
 
         //set all text
         questiontext.setText(currentQ.getText());
@@ -241,46 +271,51 @@ public class QuizActivity extends AppCompatActivity {
         answerbuttons.clearCheck();
 
         //recheck if already answered
-        if(checkedAnswers[track]!=0) {
-            switch (checkedAnswers[track]) {
-                case R.id.question_closed_A:
-                    answerA.setChecked(true);
-                    break;
-                case R.id.question_closed_B:
-                    answerB.setChecked(true);
-                    break;
-                case R.id.question_closed_C:
-                    answerC.setChecked(true);
-                    break;
-                case R.id.question_closed_D:
-                    answerD.setChecked(true);
-                    break;
+        if(!(track>(questions.size()-1))) {
+            if (checkedAnswers[track] != 0) {
+                switch (checkedAnswers[track]) {
+                    case R.id.question_closed_A:
+                        answerA.setChecked(true);
+                        break;
+                    case R.id.question_closed_B:
+                        answerB.setChecked(true);
+                        break;
+                    case R.id.question_closed_C:
+                        answerC.setChecked(true);
+                        break;
+                    case R.id.question_closed_D:
+                        answerD.setChecked(true);
+                        break;
+                }
             }
         }
 
         //update progress bar if no time limit is given
-        /*
+
         if (!giventimelimit){
             prgrbar.setProgress(track);
         }
-        */
     }
+
+
 
     private void toResults(){
         //create submittedquiz objects with given answers
-        SubmittedQuiz finalQuiz = new SubmittedQuiz(quiz);
-        finalQuiz.setAnswers(submittedAnswers);
+        submission = new SubmittedQuiz(quiz);
+        submission.setAnswers(subAnswers);
 
         //submit finalquiz to DB
-        DBInterface dbi = AppContext.getInstance().getDBI();
-        dbi.submitQuiz(finalQuiz);
+        //DBInterface dbi = AppContext.getInstance().getDBI();
+        //dbi.submitQuiz(submission);
 
         //go to results activity
         //pass submittedquiz as extra
         Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
-        intent.putExtra("quiz", new Gson().toJson(finalQuiz));
+        intent.putExtra("subQuiz", new Gson().toJson(submission));
         startActivity(intent);
     }
+
+
 
     class ProgressTask extends AsyncTask<Void, Void, Void>{
         int currentProgress = 0;

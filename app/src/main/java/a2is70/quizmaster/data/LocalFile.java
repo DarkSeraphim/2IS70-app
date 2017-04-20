@@ -11,7 +11,7 @@ public class LocalFile implements FileManager{
      * @param data contents of the file.
      * @param c callback for remote operations. Leave as null here.
      */
-    public void create(String path, Quiz data, Callback c){
+    public void create(String path, Quiz data, Callback<Quiz> c){
         File f;
         FileOutputStream fo;
         String contents = data.toString();
