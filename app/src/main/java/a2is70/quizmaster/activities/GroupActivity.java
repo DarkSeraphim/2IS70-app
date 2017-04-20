@@ -53,36 +53,10 @@ public class GroupActivity extends AppCompatActivity {
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
-        //Dummy data.
-        groupList = new ArrayList<Group>();
-        List<Account> membersList = new ArrayList<Account>();
-        membersList.add(new Account(-1,"Jasper",Account.Type.STUDENT,"jasper@tue.nl"));
-        Group g1 = new Group(-1, "Group1", "12345");
-        g1.setMembers(membersList);
-        groupList.add(g1);
-        groupList.add(new Group(-2, "Group2", "23456"));
-        groupList.add(new Group(-3, "Group3", "34567"));
-        groupList.add(new Group(-4, "Group4", "45678"));
-        groupList.add(new Group(-5, "Group5", "56789"));
-        adapter.notifyDataSetChanged();
-        AppContext.getInstance().setAccount(new Account(-1, "Test",Account.Type.TEACHER, "email"));
-        //End Dummy data.
-
         dbi = AppContext.getInstance().getDBI();
 
         //Pull group data from database.
-        dbi.getGroups().enqueue(new Callback<List<Group>>() {
-            @Override
-            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
-                groupList = response.body();
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<List<Group>> call, Throwable t) {
-                //Stuff went wrong.
-            }
-        });
+        loadGroups();
 
         recycler.addOnItemTouchListener(new GroupListener());
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +81,6 @@ public class GroupActivity extends AppCompatActivity {
     public void openEditDialog(final Group g){
         final RecyclerView rv;
         final RecyclerView.Adapter adapter;
-        final LayoutInflater inf;
         final View view = inflater.inflate(R.layout.dialog_edit_group, null);
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Edit existing group.")
@@ -133,7 +106,6 @@ public class GroupActivity extends AppCompatActivity {
 
         //Populate recyclerview with group data.
         rv = ((RecyclerView)view.findViewById(R.id.edit_group_recyclerview));
-        inf = LayoutInflater.from(this);
         adapter = new RecyclerView.Adapter(){
             public void onBindViewHolder(RecyclerView.ViewHolder vh, final int position){
                 //Populate item_member with relevant data.
@@ -142,7 +114,7 @@ public class GroupActivity extends AppCompatActivity {
             }
 
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup vg, int position){
-                final View view = inf.inflate(R.layout.item_member, vg, false);
+                final View view = inflater.inflate(R.layout.item_member, vg, false);
                 return new GroupHolder(view);
             }
 
@@ -168,14 +140,14 @@ public class GroupActivity extends AppCompatActivity {
                         return false;
                     }
                     final AlertDialog confirm = new AlertDialog.Builder(GroupActivity.this)
-                            .setTitle("Really kick this member?")
+                            .setTitle("Really kick member "+a.getName()+"?")
                             .setPositiveButton("Kick", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dbi.kickMember(g.getId(), a.getId()).enqueue(new Callback<Void>() {
                                         @Override
                                         public void onResponse(Call<Void> call, Response<Void> response) {
-                                            g.getMembers().remove(position);
+                                            g.getMembers().remove(a);
                                             adapter.notifyDataSetChanged();
                                         }
 
@@ -298,6 +270,8 @@ public class GroupActivity extends AppCompatActivity {
                         dbi.createGroup(new Group(-1, name, code)).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
+                                //reload the group list (hopefully with newly added list).
+                                loadGroups();
                                 dialog.cancel();
                             }
 
@@ -314,6 +288,22 @@ public class GroupActivity extends AppCompatActivity {
                     }})
                 .setView(R.layout.dialog_create_group).create();
         dialog.show();
+    }
+
+    /**Method to (re-)load groups from database and display them in the list.*/
+    public void loadGroups(){
+        dbi.getGroups().enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                groupList = response.body();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                //Stuff went wrong.
+            }
+        });
     }
 
     /**
