@@ -44,9 +44,10 @@ public class OverviewActivity extends AppCompatActivity {
 
     private TextView emptyView;
 
-    private Semaphore reloadLock = new Semaphore(1);
 
     private List<Quiz> quizzes;
+
+    private Group[] groups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,12 @@ public class OverviewActivity extends AppCompatActivity {
 
         quizzes = Collections.emptyList();
         refreshQuizList();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle == null || bundle.getString("groups") == null) {
+            throw new IllegalStateException("Missing 'groups' in extra bundle, serialized Group[] required");
+        }
+        groups = new Gson().fromJson(bundle.getString("groups"), Group[].class);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
@@ -70,6 +77,7 @@ public class OverviewActivity extends AppCompatActivity {
                     startActivity(new Intent(OverviewActivity.this, CreateActivity.class));
                 }
             });
+            mAddQuizButton.setEnabled(groups != null && groups.length > 0);
         } else {
             mAddQuizButton.setVisibility(View.GONE);
         }
@@ -101,39 +109,7 @@ public class OverviewActivity extends AppCompatActivity {
     }
 
     private void refreshQuizList() {
-        boolean failed = true;
-        try {
-            if (!reloadLock.tryAcquire()) {
-                failed = false;
-                return;
-            }
-            DBInterface dbi = AppContext.getInstance().getDBI();
-            dbi.getQuizzes().enqueue(new Callback<List<Quiz>>() {
-                @Override
-                public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
-                    try {
-                        quizzes = response.body();
-                        mAdapter.notifyDataSetChanged();
-                    } finally {
-                        reloadLock.release();
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<List<Quiz>> call, Throwable t) {
-                    try {
-                        Toast.makeText(OverviewActivity.this, "Failed to fetch quizes", Toast.LENGTH_SHORT).show();
-                    } finally {
-                        reloadLock.release();
-                    }
-                }
-            });
-            failed = false;
-        } finally {
-            if (failed) {
-                reloadLock.release();
-            }
-        }
     }
 
     @Override

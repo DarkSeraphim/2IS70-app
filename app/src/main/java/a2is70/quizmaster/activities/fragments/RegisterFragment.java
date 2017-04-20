@@ -165,7 +165,7 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void accept(Account value) {
                         if (value != null) {
-                            startActivity(new Intent(((LoginActivity) mListener), OverviewActivity.class));
+                            ((LoginActivity) mListener).goToOverview();
                         } else {
                             mRegisterEmail.setError(getString(R.string.error_email_exists));
                             mRegisterEmail.requestFocus();

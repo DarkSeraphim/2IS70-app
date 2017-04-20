@@ -1,6 +1,7 @@
 package a2is70.quizmaster.activities;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -10,13 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import a2is70.quizmaster.R;
 import a2is70.quizmaster.activities.fragments.LoginFragment;
 import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
+import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.database.DBInterface;
 import a2is70.quizmaster.utils.function.Consumer;
 import retrofit2.Call;
@@ -154,6 +159,30 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    public void goToOverview() {
+        AppContext.getInstance().getDBI().getGroups().enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                if (response.code() == 200) {
+                    String groups = new Gson().toJson(response.body());
+                    Intent intent = new Intent(LoginActivity.this, OverviewActivity.class);
+                    intent.putExtra("groups", groups);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(LoginActivity.this, "Failed to fetch data", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                // TODO: handle
+                throw new RuntimeException("Unexpected error", t);
+
+            }
+        });
+
     }
 }
 

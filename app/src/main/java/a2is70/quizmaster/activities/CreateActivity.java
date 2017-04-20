@@ -417,6 +417,7 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                             public void onResponse(Call<Quiz> call, Response<Quiz> response) {
                                 // TODO: Stop progress
                                 Intent intent = new Intent(CreateActivity.this, OverviewActivity.class);
+                                intent.putExtra("groups", new Gson().toJson(groupsAccessible));
                                 Toast.makeText(CreateActivity.this, "Quiz has been published", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                             }

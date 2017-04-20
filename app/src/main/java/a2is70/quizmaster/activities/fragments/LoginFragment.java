@@ -142,7 +142,7 @@ public class LoginFragment extends Fragment {
                 @Override
                 public void accept(Account value) {
                     if (value != null) {
-                        startActivity(new Intent(((LoginActivity) mListener), OverviewActivity.class));
+                        ((LoginActivity) mListener).goToOverview();
                     } else {
                         mPasswordView.setError(getString(R.string.error_incorrect_password));
                         mPasswordView.requestFocus();
