@@ -13,7 +13,7 @@ import a2is70.quizmaster.data.SubmittedQuiz;
  * Created by Jasper on 01/04/2017.
  */
 
-public class DerpData {
+class DerpDataNope {
 
 
     static Account account1 = new Account(1,"Jasper", Account.Type.TEACHER,"Jasper@tue.nl");

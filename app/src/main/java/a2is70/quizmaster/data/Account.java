@@ -1,5 +1,7 @@
 package a2is70.quizmaster.data;
 
+import com.google.gson.annotations.SerializedName;
+
 import a2is70.quizmaster.database.DBInterface;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -65,7 +67,9 @@ public class Account {
     }
 
     public enum Type {
+        @SerializedName("teacher")
         TEACHER,
+        @SerializedName("student")
         STUDENT
     }
 }

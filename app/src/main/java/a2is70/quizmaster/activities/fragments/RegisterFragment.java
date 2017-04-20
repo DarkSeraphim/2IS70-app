@@ -1,6 +1,7 @@
 package a2is70.quizmaster.activities.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -17,8 +18,11 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import a2is70.quizmaster.R;
+import a2is70.quizmaster.activities.LoginActivity;
 import a2is70.quizmaster.activities.LoginFormHandler;
+import a2is70.quizmaster.activities.OverviewActivity;
 import a2is70.quizmaster.data.Account;
+import a2is70.quizmaster.utils.function.Consumer;
 
 public class RegisterFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -157,7 +161,17 @@ public class RegisterFragment extends Fragment {
         } else {
             // Pass the submitted values to the listener to check them
             if (mListener != null) {
-                mListener.onRegister(email, password, type);
+                mListener.onRegister(name, email, password, type, new Consumer<Account>() {
+                    @Override
+                    public void accept(Account value) {
+                        if (value != null) {
+                            startActivity(new Intent(((LoginActivity) mListener), OverviewActivity.class));
+                        } else {
+                            mRegisterEmail.setError(getString(R.string.error_email_exists));
+                            mRegisterEmail.requestFocus();
+                        }
+                    }
+                });
             }
         }
     }

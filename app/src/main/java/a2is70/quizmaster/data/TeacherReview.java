@@ -1,5 +1,6 @@
 package a2is70.quizmaster.data;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Collection;
 
@@ -48,34 +49,30 @@ public class TeacherReview {
     private int maxScore;
     
     public List<QuestionStatistics> getStatistics() {
-        //return new Collection.unmodifiableList(this.statistics);
-        return null;
-    }
-    
-    public List<Question> gimmeQuestionsPls() {
-        throw new UnsupportedOperationException("Call getStatistics() for a List of question statistics, which contains Question objects");
+        return Collections.unmodifiableList(this.statistics);
     }
 
-    public int[] gimmeSuccesRatesPls(){
+    public int[] getCorrectRate(){
         int[] temp = new int[statistics.size()];
         for (int i = 0; i < temp.length; i++) {
             temp[i] = (int) Math.round(statistics.get(i).getCorrectRate());
         }
-        return null;
+        return temp;
     }
 
-    public int gimmeOverallCompletionPls(){
+    public int getOverallCompletionRate(){
         return (int) Math.round((double) submissions / totalStudents);
     }
 
-    public int gimmeMaxPls(){
+    public int getMaxScore(){
         return maxScore;
     }
-    public int gimmeMinPls(){
+
+    public int getMinScore(){
         return minScore;
     }
 
-    public int gimmeAveragePls(){
+    public int getAverageScore(){
         return averageScore;
     }
 }
