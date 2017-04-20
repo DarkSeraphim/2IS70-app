@@ -1,11 +1,15 @@
 package a2is70.quizmaster.activities;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,8 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+
+import com.google.gson.Gson;
 
 import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
@@ -38,7 +44,7 @@ public class GroupActivity extends AppCompatActivity {
 
     private LayoutInflater inflater;
 
-    private List<Group> groupList = new ArrayList();
+    private List<Group> groupList = new ArrayList<>();
 
     private DBInterface dbi;
 
@@ -203,7 +209,7 @@ public class GroupActivity extends AppCompatActivity {
                                 dialog.dismiss();
                                 //Reload the Activity.
                                 finish();
-                                startActivity(getIntent());
+                                //startActivity(getIntent());
                             }})
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                             @Override
@@ -256,14 +262,13 @@ public class GroupActivity extends AppCompatActivity {
      * Dialog to create a new Group. Only to be accessed by Teachers.
      */
     public void openCreateDialog(){
-        final View v = inflater.inflate(R.layout.dialog_create_group, null);
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Create a new group.")
                 .setPositiveButton("Create", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(final DialogInterface dialog, int which){
-                        String name = ((EditText)v.findViewById(R.id.create_group_name)).getText().toString();
-                        String code = ((EditText)v.findViewById(R.id.create_group_code)).getText().toString();
+                        String name = ((EditText)((AlertDialog) dialog).findViewById(R.id.create_group_name)).getText().toString();
+                        String code = ((EditText)((AlertDialog) dialog).findViewById(R.id.create_group_code)).getText().toString();
                         if (name.equals("") || code.equals("")){
                             //If we want to do input checking.
                         }
@@ -271,6 +276,7 @@ public class GroupActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 //reload the group list (hopefully with newly added list).
+                                Log.d("Groups", "Create status: " + response.code());
                                 loadGroups();
                                 dialog.cancel();
                             }
@@ -278,6 +284,7 @@ public class GroupActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call<Void> call, Throwable t) {
                                 //Stuff went wrong.
+                                Log.e("Groups", "Add error: ", t);
                             }
                         });
                     }})
@@ -295,15 +302,51 @@ public class GroupActivity extends AppCompatActivity {
         dbi.getGroups().enqueue(new Callback<List<Group>>() {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                Log.d("Groups", "Status: " + response.code());
+
                 groupList = response.body();
+
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Call<List<Group>> call, Throwable t) {
                 //Stuff went wrong.
+                Log.e("Groups", "Exception: ", t);
             }
         });
+    }
+
+    // Either onKeyDown or onOptionsItemSelected is fired
+    // I have no clue
+    // But this overrides the back button, and throws back the groups
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //Do something here
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, OverviewActivity.class);
+        intent.putExtra("groups", new Gson().toJson(groupList));
+        startActivity(intent);
+        finish();
     }
 
     /**
