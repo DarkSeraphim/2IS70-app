@@ -3,14 +3,17 @@ package a2is70.quizmaster.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ProgressBar;
 
@@ -69,8 +72,6 @@ public class QuizActivity extends AppCompatActivity {
         prevQuestionButton.setVisibility(View.GONE);
 
 
-        //@TODO if image/audio: differentiate
-
         //radiogroup
         answerbuttons = (RadioGroup) findViewById(R.id.answer_buttons);
         //radiobuttons
@@ -99,6 +100,17 @@ public class QuizActivity extends AppCompatActivity {
             track = 0;
             currentQ = questions.get(track);
 
+            //@TODO if image/audio: differentiate
+            if (currentQ.getImage() != null) {
+                //@todo test what this does
+                View imView = new ImageView(this.getBaseContext());
+                RelativeLayout rLayout = (RelativeLayout) findViewById(R.id.activity_quiz);
+                rLayout.addView(imView);
+            }
+            else if (currentQ.getAudio() != null) {//@todo audio?
+                //MediaPlayer mediaPlayer= MediaPlayer.create(this, currentQ.getAudio().getFile(@todo what goes in here ));
+            }
+
             //set all text
             questiontext.setText(currentQ.getText());
 
@@ -118,7 +130,7 @@ public class QuizActivity extends AppCompatActivity {
             //progress bar
             prgrbar = (ProgressBar) findViewById(R.id.question_closed_progress);
 
-            //TODO configure progress bar
+            //configure progress bar
             if(quiz.getTimeLimit() < 0){ //no time limit means it's set to -1
                 giventimelimit = false;
                 prgrbar.setMax(quiz.getQuestions().size());
@@ -304,7 +316,7 @@ public class QuizActivity extends AppCompatActivity {
         submission = new SubmittedQuiz(quiz);
         submission.setAnswers(subAnswers);
 
-        //submit finalquiz to DB
+        //@todo submit finalquiz to DB
         //DBInterface dbi = AppContext.getInstance().getDBI();
         //dbi.submitQuiz(submission);
 

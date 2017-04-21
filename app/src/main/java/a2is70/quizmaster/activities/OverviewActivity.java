@@ -74,7 +74,9 @@ public class OverviewActivity extends AppCompatActivity {
             mAddQuizButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(OverviewActivity.this, CreateActivity.class));
+                    Intent intent = new Intent(OverviewActivity.this, CreateActivity.class);
+                    intent.putExtra("groups", new Gson().toJson(groups));
+                    startActivity(intent);
                 }
             });
             mAddQuizButton.setEnabled(groups != null && groups.length > 0);
