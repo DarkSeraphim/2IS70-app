@@ -220,7 +220,9 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
             timeLimit.setError("Not a number");
             return;
         }
-
+        if (timelimit == 1234567890) {
+            timelimit = -1;
+        }
 
         questionListAdapter = new QuestionListAdapter();
         questionList = (RecyclerView) findViewById(R.id.create_question_list);
@@ -416,7 +418,9 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                         Toast.makeText(CreateActivity.this, "Quiz published", Toast.LENGTH_SHORT).show();
                         Group[] groups = enabled.toArray(new Group[enabled.size()]);
                         Quiz quiz = new Quiz(quizName.getText().toString(), groups, accountje, questions);
+
                         quiz.setTimeLimit(timelimit);
+
 
                         Map<String, RequestBody> resources = new HashMap<>();
                         List<Question> questions = quiz.getQuestions();
