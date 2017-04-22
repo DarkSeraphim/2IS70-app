@@ -29,6 +29,7 @@ import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Quiz;
+import a2is70.quizmaster.data.StudentReview;
 import a2is70.quizmaster.data.TeacherReview;
 import a2is70.quizmaster.database.DBInterface;
 import retrofit2.Call;
@@ -197,6 +198,9 @@ public class OverviewActivity extends AppCompatActivity {
 
         private Context mContext;
 
+        TeacherReview tReview;
+        StudentReview sReview;
+
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
@@ -254,7 +258,6 @@ public class OverviewActivity extends AppCompatActivity {
             // Get the data model based on position
             final Quiz quiz = mQuizzes.get(position);
 
-
             // Set item views based on your views and data model
             TextView quizNameView = holder.quizNameView;
             quizNameView.setText(quiz.getName());
@@ -282,11 +285,25 @@ public class OverviewActivity extends AppCompatActivity {
                     // Open Review activity for teacher OR student
                     // @TODO pass info to the intent about which quiz is clicked
                     if(AppContext.getInstance().getAccount().getType()== Account.Type.TEACHER) {
-                        TeacherReview review = null; // TODO: fetch data
+                         // TODO: fetch data
+                        AppContext.getInstance().getDBI().reviewTeacherQuiz(quiz.getID()).enqueue(new Callback<TeacherReview>() {
+                            @Override
+                            public void onResponse(Call<TeacherReview> call, Response<TeacherReview> response) {
+                                tReview = response.body();
+                            }
+
+                            @Override
+                            public void onFailure(Call<TeacherReview> call, Throwable t) {
+
+                            }
+                        });
+
+
+
                         Intent intent = new Intent(getContext(), ReviewActivity.class);
-                        intent.putExtra("statistics", new Gson().toJson(review));
+                        intent.putExtra("statistics", new Gson().toJson(tReview));
                         getContext().startActivity(intent);
-                    } else {
+                    } else if(AppContext.getInstance().getAccount().getType()== Account.Type.STUDENT){
                         // Make the quiz
                         boolean notTaken = true; // Query this? Store this locally?
                         if (quiz.getCloseAt() < System.currentTimeMillis() && notTaken) {
@@ -295,6 +312,20 @@ public class OverviewActivity extends AppCompatActivity {
                             getContext().startActivity(intent);
                         } else {
                             // TODO: Start review activity
+                            AppContext.getInstance().getDBI().reviewStudentQuiz(quiz.getID()).enqueue(new Callback<StudentReview>() {
+                                @Override
+                                public void onResponse(Call<StudentReview> call, Response<StudentReview> response) {
+                                    sReview = response.body();
+                                }
+
+                                @Override
+                                public void onFailure(Call<StudentReview> call, Throwable t) {
+
+                                }
+                            });
+                            Intent intent = new Intent(getContext(), ReviewActivity.class);
+                            intent.putExtra("statistics", new Gson().toJson(sReview));
+                            getContext().startActivity(intent);
                         }
                     }
                 }

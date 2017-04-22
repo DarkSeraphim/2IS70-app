@@ -6,7 +6,9 @@ import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Question;
 import a2is70.quizmaster.data.Quiz;
+import a2is70.quizmaster.data.StudentReview;
 import a2is70.quizmaster.data.SubmittedQuiz;
+import a2is70.quizmaster.data.TeacherReview;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -106,11 +108,9 @@ public interface DBInterface {
 
     /**Method to request a student's test review.*/
     @GET("/review/as_teacher")
-    // TODO: create StudentReview object
-    Call<Object> reviewStudentQuiz(@Query("test_id") int testId);
+    Call<StudentReview> reviewStudentQuiz(@Query("test_id") int testId);
 
     /**Method to request a teacher's test review.*/
     @GET("/review/as_student")
-    // TODO: create TeacherReview object
-    Call<Object> reviewTeacherQuiz(@Query("test_id") int testId);
+    Call<TeacherReview> reviewTeacherQuiz(@Query("test_id") int testId);
 }
