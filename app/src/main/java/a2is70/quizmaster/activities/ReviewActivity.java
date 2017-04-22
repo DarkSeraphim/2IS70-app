@@ -18,6 +18,7 @@ import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.SubmittedQuiz;
 import a2is70.quizmaster.data.TeacherReview;
+import a2is70.quizmaster.utils.JsonConverter;
 
 public class ReviewActivity extends AppCompatActivity {
 
@@ -40,8 +41,8 @@ public class ReviewActivity extends AppCompatActivity {
 
 
         if (extras != null) { //if extras were passed
-            subQuiz = new Gson().fromJson(extras.getString("subQuiz"), SubmittedQuiz.class);
-            quiz = new Gson().fromJson(extras.getString("quiz"),Quiz.class);
+            subQuiz = JsonConverter.fromJson(extras.getString("subQuiz"), SubmittedQuiz.class);
+            quiz = JsonConverter.fromJson(extras.getString("quiz"),Quiz.class);
         }
 
         recView = (RecyclerView)findViewById(R.id.rec_view);
@@ -64,7 +65,7 @@ public class ReviewActivity extends AppCompatActivity {
                 break;
             case TEACHER:
                 String json = getIntent().getExtras().getString("statistics");
-                TeacherReview review = new Gson().fromJson(json, TeacherReview.class);
+                TeacherReview review = JsonConverter.fromJson(json, TeacherReview.class);
                 tAdapter = new TeacherAdapter(quiz, review.getCorrectRate(),this);
                 title.setText(quiz.getName());
                 recView.setAdapter(tAdapter);

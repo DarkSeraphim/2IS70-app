@@ -30,6 +30,7 @@ import a2is70.quizmaster.database.DBInterface;
 import java.util.List;
 import java.util.ArrayList;
 
+import a2is70.quizmaster.utils.JsonConverter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -342,7 +343,7 @@ public class GroupActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(this, OverviewActivity.class);
-        intent.putExtra("groups", new Gson().toJson(groupList));
+        intent.putExtra("groups", JsonConverter.toJson(groupList));
         startActivity(intent);
         finish();
     }

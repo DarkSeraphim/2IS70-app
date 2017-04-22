@@ -28,6 +28,7 @@ import a2is70.quizmaster.data.Question;
 import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.SubmittedQuiz;
 import a2is70.quizmaster.database.DBInterface;
+import a2is70.quizmaster.utils.JsonConverter;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -88,7 +89,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (extras != null) { //if extras were passed
             //key of json moet met 'quiz' string gepassed worden
-            quiz = new Gson().fromJson(extras.getString("quiz"), Quiz.class);
+            quiz = JsonConverter.fromJson(extras.getString("quiz"), Quiz.class);
 
             Log.d("kei mooi",extras.getString("quiz"));
 
@@ -323,7 +324,7 @@ public class QuizActivity extends AppCompatActivity {
         //go to results activity
         //pass submittedquiz as extra
         Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
-        intent.putExtra("subQuiz", new Gson().toJson(submission));
+        intent.putExtra("subQuiz", JsonConverter.toJson(submission));
         startActivity(intent);
     }
 

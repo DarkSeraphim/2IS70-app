@@ -49,6 +49,7 @@ import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Question;
 import a2is70.quizmaster.data.Quiz;
+import a2is70.quizmaster.utils.JsonConverter;
 import a2is70.quizmaster.utils.MediaCreator;
 import a2is70.quizmaster.utils.function.Consumer;
 import okhttp3.MediaType;
@@ -220,7 +221,7 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.getString("groups") != null) {
-            groupsAccessible = new Gson().fromJson(bundle.getString("groups"), Group[].class);
+            groupsAccessible = JsonConverter.fromJson(bundle.getString("groups"), Group[].class);
         } else {
             throw new IllegalStateException("Missing 'groups' data in extra, requires a serialised Group[]");
         }
@@ -430,7 +431,7 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                             public void onResponse(Call<Quiz> call, Response<Quiz> response) {
                                 // TODO: Stop progress
                                 Intent intent = new Intent(CreateActivity.this, OverviewActivity.class);
-                                intent.putExtra("groups", new Gson().toJson(groupsAccessible));
+                                intent.putExtra("groups", JsonConverter.toJson(groupsAccessible));
                                 Toast.makeText(CreateActivity.this, "Quiz has been published", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                             }
@@ -516,6 +517,6 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                 ((TextView) view.findViewById(R.id.item_question_name)).setText(question.getText());
             }
         }
-
+        
     }
 }
