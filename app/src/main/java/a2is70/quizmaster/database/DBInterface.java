@@ -61,7 +61,7 @@ public interface DBInterface {
     Call<List<Group>> getGroups();
 
     /**Method to retrieve Quiz data for one account (to list in overviewActivity).*/
-    @GET("/tests")
+    @GET("/quizes")
     Call<List<Quiz>> getQuizzes();
 
     /**Method to join group data.*/
@@ -102,7 +102,7 @@ public interface DBInterface {
     Call<Void> deleteQuiz(@Query("quiz_id") int id);
 
     /**Method to submit a completed Quiz.*/
-    @POST("/test/submit")
+    @POST("/quiz/submit")
     @Headers(JSON_CONTENT)
     Call<Quiz> submitQuiz(@Body SubmittedQuiz q);
 

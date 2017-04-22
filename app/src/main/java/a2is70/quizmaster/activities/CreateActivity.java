@@ -316,7 +316,6 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                         Spinner correctAnsField = (Spinner) view.findViewById(R.id.add_question_correct);
                         int correctAns;
                         correctAns = Integer.parseInt(String.valueOf(correctAnsField.getSelectedItem()));
-
                         Question.Answer correct = answers[0];
 
                         if(!open) {
@@ -438,6 +437,7 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                                 Intent intent = new Intent(CreateActivity.this, OverviewActivity.class);
                                 intent.putExtra("groups", JsonConverter.toJson(groupsAccessible));
                                 Toast.makeText(CreateActivity.this, "Quiz has been published", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CreateActivity.this, "response: " + response.code(), Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                             }
 
