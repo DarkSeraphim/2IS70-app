@@ -53,8 +53,23 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // @todo replace with actual quizzes
         // create a quizzes list
+        AppContext.getInstance().getDBI().getQuizzes().enqueue(new Callback<List<Quiz>>() {
+            @Override
+            public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
+                // TODO: Stop progress
+                quizzes = response.body();
+                Toast.makeText(OverviewActivity.this, "Load request succeeded", Toast.LENGTH_SHORT).show();
+            }
 
-        quizzes = Collections.emptyList();
+            @Override
+            public void onFailure(Call<List<Quiz>> call, Throwable t) {
+                // TODO: stop progress
+                Toast.makeText(OverviewActivity.this, "Failed to load quizzes", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        //quizzes = Collections.emptyList();
         refreshQuizList();
 
         Bundle bundle = getIntent().getExtras();
@@ -90,6 +105,7 @@ public class OverviewActivity extends AppCompatActivity {
         if (quizzes == null || quizzes.isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
+            Toast.makeText(OverviewActivity.this, "Quizlist is empty", Toast.LENGTH_SHORT).show();
         }
         else {
             mRecyclerView.setVisibility(View.VISIBLE);
