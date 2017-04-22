@@ -23,6 +23,7 @@ import a2is70.quizmaster.data.Account;
 import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.database.DBInterface;
+import a2is70.quizmaster.utils.JsonConverter;
 import a2is70.quizmaster.utils.function.Consumer;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -166,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFormHandler
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                 showProgress(false);
                 if (response.code() == 200) {
-                    String groups = new Gson().toJson(response.body());
+                    String groups = JsonConverter.toJson(response.body());
                     Intent intent = new Intent(LoginActivity.this, OverviewActivity.class);
                     intent.putExtra("groups", groups);
                     startActivity(intent);

@@ -32,6 +32,7 @@ import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.StudentReview;
 import a2is70.quizmaster.data.TeacherReview;
 import a2is70.quizmaster.database.DBInterface;
+import a2is70.quizmaster.utils.JsonConverter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,7 +78,7 @@ public class OverviewActivity extends AppCompatActivity {
         if (bundle == null || bundle.getString("groups") == null) {
             throw new IllegalStateException("Missing 'groups' in extra bundle, serialized Group[] required");
         }
-        groups = new Gson().fromJson(bundle.getString("groups"), Group[].class);
+        groups = JsonConverter.fromJson(bundle.getString("groups"), Group[].class);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
@@ -91,7 +92,7 @@ public class OverviewActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(OverviewActivity.this, CreateActivity.class);
-                    intent.putExtra("groups", new Gson().toJson(groups));
+                    intent.putExtra("groups", JsonConverter.toJson(groups));
                     startActivity(intent);
                 }
             });
@@ -188,7 +189,7 @@ public class OverviewActivity extends AppCompatActivity {
 
     /*TODO pass Quiz object to QuizActivity through intents
     * Intent i = new Intent(getApplicationContext(), QuizActivity.class);
-    * i.putExtra("quiz",new Gson().toJson(Quiz Object));
+    * i.putExtra("quiz",JsonConverter.toJson(Quiz Object));
     * startActivity(i);
     */
 
@@ -301,14 +302,14 @@ public class OverviewActivity extends AppCompatActivity {
 
 
                         Intent intent = new Intent(getContext(), ReviewActivity.class);
-                        intent.putExtra("statistics", new Gson().toJson(tReview));
+                        intent.putExtra("statistics", JsonConverter.toJson(tReview));
                         getContext().startActivity(intent);
                     } else if(AppContext.getInstance().getAccount().getType()== Account.Type.STUDENT){
                         // Make the quiz
                         boolean notTaken = true; // Query this? Store this locally?
                         if (quiz.getCloseAt() < System.currentTimeMillis() && notTaken) {
                             Intent intent = new Intent(getContext(), QuizActivity.class);
-                            intent.putExtra("quiz", new Gson().toJson(quiz));
+                            intent.putExtra("quiz", JsonConverter.toJson(quiz));
                             getContext().startActivity(intent);
                         } else {
                             // TODO: Start review activity
@@ -324,7 +325,7 @@ public class OverviewActivity extends AppCompatActivity {
                                 }
                             });
                             Intent intent = new Intent(getContext(), ReviewActivity.class);
-                            intent.putExtra("statistics", new Gson().toJson(sReview));
+                            intent.putExtra("statistics", JsonConverter.toJson(sReview));
                             getContext().startActivity(intent);
                         }
                     }

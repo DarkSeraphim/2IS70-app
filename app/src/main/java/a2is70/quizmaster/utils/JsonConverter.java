@@ -12,7 +12,7 @@ public class JsonConverter {
       if (gson == null) {
         gson = new GsonBuilder()
                         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                        .create()
+                        .create();
       }
       return gson;
     }
