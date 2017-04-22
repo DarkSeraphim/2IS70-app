@@ -25,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -311,15 +312,17 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                             answers = new Question.Answer[] {answers[0]};
                         }
 
-                        EditText correctAnsField = (EditText) view.findViewById(R.id.add_question_correct);
+
+                        Spinner correctAnsField = (Spinner) view.findViewById(R.id.add_question_correct);
                         int correctAns;
-                        try {
-                            correctAns = Integer.parseInt(correctAnsField.getText().toString());
-                        } catch (NumberFormatException ex) {
-                            correctAnsField.setError("Not a number");
-                            return;
+                        correctAns = Integer.parseInt(String.valueOf(correctAnsField.getSelectedItem()));
+
+                        Question.Answer correct = answers[0];
+
+                        if(!open) {
+                            correct = answers[(correctAns-1)];
                         }
-                        Question.Answer correct = answers[(correctAns-1)];
+
                         EditText weightText = (EditText) view.findViewById(R.id.add_question_weight);
                         int weight;
                         try {
@@ -403,14 +406,16 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                 .setPositiveButton("Publish", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //@todo ander account? + timelimit?
                         Account accountje = AppContext.getInstance().getAccount();
                         Toast.makeText(CreateActivity.this, "Quiz published", Toast.LENGTH_SHORT).show();
                         Group[] groups = enabled.toArray(new Group[enabled.size()]);
                         Quiz quiz = new Quiz(quizName.getText().toString(), groups, accountje, questions);
 
-                        quiz.setTimeLimit(Integer.parseInt(((EditText)findViewById(R.id.create_time_limit)).getText().toString()));
-
+                        if (((EditText)findViewById(R.id.create_time_limit)).getText().toString().equals("")) {
+                            quiz.setTimeLimit(-1);
+                        } else {
+                            quiz.setTimeLimit(Integer.parseInt(((EditText) findViewById(R.id.create_time_limit)).getText().toString()));
+                        }
 
                         Map<String, RequestBody> resources = new HashMap<>();
                         List<Question> questions = quiz.getQuestions();
