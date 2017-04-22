@@ -157,6 +157,8 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
 
     private EditText timeLimit;
 
+    int timelimit;
+
     private QuestionListAdapter questionListAdapter;
 
     private RecyclerView questionList;
@@ -212,6 +214,13 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
 
 
         timeLimit = (EditText) findViewById(R.id.create_time_limit);
+        try {
+            timelimit = Integer.parseInt(timeLimit.getText().toString());
+        } catch (NumberFormatException ex) {
+            timeLimit.setError("Not a number");
+            return;
+        }
+
 
         questionListAdapter = new QuestionListAdapter();
         questionList = (RecyclerView) findViewById(R.id.create_question_list);
@@ -309,7 +318,16 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                         if (open) {
                             answers = new Question.Answer[] {answers[0]};
                         }
-                        Question.Answer correct = answers[0];
+
+                        EditText correctAnsField = (EditText) view.findViewById(R.id.add_question_correct);
+                        int correctAns;
+                        try {
+                            correctAns = Integer.parseInt(correctAnsField.getText().toString());
+                        } catch (NumberFormatException ex) {
+                            correctAnsField.setError("Not a number");
+                            return;
+                        }
+                        Question.Answer correct = answers[(correctAns-1)];
                         EditText weightText = (EditText) view.findViewById(R.id.add_question_weight);
                         int weight;
                         try {
@@ -393,10 +411,12 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                 .setPositiveButton("Publish", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Account accountje = new Account(2,"jan", Account.Type.TEACHER," ");
+                        //@todo ander account? + timelimit?
+                        Account accountje = AppContext.getInstance().getAccount();
                         Toast.makeText(CreateActivity.this, "Quiz published", Toast.LENGTH_SHORT).show();
                         Group[] groups = enabled.toArray(new Group[enabled.size()]);
                         Quiz quiz = new Quiz(quizName.getText().toString(), groups, accountje, questions);
+                        quiz.setTimeLimit(timelimit);
 
                         Map<String, RequestBody> resources = new HashMap<>();
                         List<Question> questions = quiz.getQuestions();

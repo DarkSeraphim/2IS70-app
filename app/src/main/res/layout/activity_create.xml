@@ -115,7 +115,7 @@
             android:layout_below="@+id/create_deadline_date"
             android:layout_marginTop="31dp"
             android:ems="10"
-            android:hint="Time limit"
+            android:hint="Time limit in minutes (enter -1 if you don't want a time limit set)"
             android:inputType="number" />
 
         <TextView
