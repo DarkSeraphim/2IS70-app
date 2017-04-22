@@ -269,6 +269,7 @@ public class GroupActivity extends AppCompatActivity {
                         if (name.equals("") || code.equals("")){
                             //If we want to do input checking.
                         }
+                        Log.d("Groups", new Gson().toJson(new Group(-1, name, code)));
                         dbi.createGroup(new Group(-1, name, code)).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -276,7 +277,6 @@ public class GroupActivity extends AppCompatActivity {
                                 Log.d("Groups", "Create status: " + response.code());
                                 loadGroups();
                                 dialog.cancel();
-                                adapter.notifyDataSetChanged();
                             }
 
                             @Override

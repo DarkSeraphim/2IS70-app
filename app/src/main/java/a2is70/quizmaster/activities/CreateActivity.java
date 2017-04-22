@@ -212,18 +212,6 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
             }
         });
 
-
-        timeLimit = (EditText) findViewById(R.id.create_time_limit);
-        try {
-            timelimit = Integer.parseInt(timeLimit.getText().toString());
-        } catch (NumberFormatException ex) {
-            timeLimit.setError("Not a number");
-            return;
-        }
-        if (timelimit == 1234567890) {
-            timelimit = -1;
-        }
-
         questionListAdapter = new QuestionListAdapter();
         questionList = (RecyclerView) findViewById(R.id.create_question_list);
         questionList.setLayoutManager(new LinearLayoutManager(questionList.getContext()));
@@ -276,6 +264,7 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
 
     private void addQuestion(Question question) {
         this.questions.add(question);
+        Log.d("Create", new Gson().toJson(questionListAdapter));
         questionListAdapter.setItems(this.questions);
     }
 
@@ -338,7 +327,7 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                             weightText.setError("Not a number");
                             return;
                         }
-                        CreateActivity.this.addQuestion(new Question(text, answers, correct, weight, image.file, audio.file));
+                        addQuestion(new Question(text, answers, correct, weight, image.file, audio.file));
                         dialog.dismiss();
                     }
                 });
@@ -419,7 +408,7 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                         Group[] groups = enabled.toArray(new Group[enabled.size()]);
                         Quiz quiz = new Quiz(quizName.getText().toString(), groups, accountje, questions);
 
-                        quiz.setTimeLimit(timelimit);
+                        quiz.setTimeLimit(Integer.parseInt(((EditText)findViewById(R.id.create_time_limit)).getText().toString()));
 
 
                         Map<String, RequestBody> resources = new HashMap<>();
@@ -474,7 +463,7 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
 
         private List<Question> questions;
 
-        private QuestionListAdapter() {
+        public QuestionListAdapter() {
             this.questions = new ArrayList<>();
         }
 
