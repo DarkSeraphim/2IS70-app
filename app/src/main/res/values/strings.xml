@@ -20,6 +20,12 @@
         completions."
     </string>
 
+    <string-array name="correctAns_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 
     <!-- Dummy text placeholders -->
     <string-array name="placeholder_group_list">
