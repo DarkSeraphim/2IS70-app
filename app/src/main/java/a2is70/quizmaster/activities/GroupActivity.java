@@ -197,7 +197,7 @@ public class GroupActivity extends AppCompatActivity {
                                 dbi.deleteGroup(g.getId()).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        groupList.remove(g);
+                                        loadGroups();
                                         adapter.notifyDataSetChanged();
                                     }
 
@@ -207,9 +207,6 @@ public class GroupActivity extends AppCompatActivity {
                                     }
                                 });
                                 dialog.dismiss();
-                                //Reload the Activity.
-                                finish();
-                                //startActivity(getIntent());
                             }})
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                             @Override
@@ -279,6 +276,7 @@ public class GroupActivity extends AppCompatActivity {
                                 Log.d("Groups", "Create status: " + response.code());
                                 loadGroups();
                                 dialog.cancel();
+                                adapter.notifyDataSetChanged();
                             }
 
                             @Override
