@@ -21,10 +21,7 @@ public class Quiz {
     /**String identifying the owner of this Quiz.*/
     private Account creator;
 
-    /**String identifying which group this Quiz is aimed at.*/
-    private int[] groups;
-
-    private transient Group[] groupObjects;
+    private Group[] groups;
 
     /**String representing this Quiz' start date.*/
     private long startAt;
@@ -82,15 +79,11 @@ public class Quiz {
     }
 
     public Group[] getGroup(){
-        return this.groupObjects;
+        return this.groups;
     }
 
     public void setGroups(Group[] groups){
-        this.groups = new int[groups.length];
-        for (int i = 0; i < groups.length; i++) {
-            this.groups[i] = groups[i].getId();
-        }
-        this.groupObjects = groups;
+        this.groups = groups;
     }
 
     public long getStartAt() {
