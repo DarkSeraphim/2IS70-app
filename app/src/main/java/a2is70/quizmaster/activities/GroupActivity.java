@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -37,7 +36,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 //@todo member deletion
-//@todo when joining a group wrong pop-up message appears
+//@todo leave a group
+//@todo popup when accescode already exists
 public class GroupActivity extends AppCompatActivity {
 
     private RecyclerView recycler;
@@ -91,7 +91,7 @@ public class GroupActivity extends AppCompatActivity {
     public void openEditDialog(final Group g){
         final RecyclerView rv;
         final RecyclerView.Adapter adapter;
-        final View view = inflater.inflate(R.layout.dialog_edit_group, null);
+        //final View view = inflater.inflate(R.layout.dialog_edit_group, null);
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Edit existing group.")
                 .setPositiveButton("Save", new DialogInterface.OnClickListener(){
@@ -104,10 +104,13 @@ public class GroupActivity extends AppCompatActivity {
                     public void onClick(DialogInterface d, int which){
                         d.dismiss();
                     }})
-                .setView(view).create();
+                .setView(R.layout.dialog_edit_group)
+                .create();
         //Populate fields with relevant information (group name, group access code).
-        EditText groupName = ((EditText)view.findViewById(R.id.edit_group_groupname));
-        EditText groupCode = ((EditText)view.findViewById(R.id.edit_group_accesscode));
+        //@todo fix the null errors
+        EditText groupName = (EditText) dialog.findViewById(R.id.edit_group_groupname);
+        EditText groupCode = (EditText) dialog.findViewById(R.id.edit_group_accesscode);
+
         groupName.setText(g.getName());
         groupCode.setText(g.getAccessCode());
         //These values can not be changed by the user (not implemented).
@@ -115,7 +118,7 @@ public class GroupActivity extends AppCompatActivity {
         groupCode.setFocusable(false);
 
         //Populate recyclerview with group data.
-        rv = ((RecyclerView)view.findViewById(R.id.edit_group_recyclerview));
+        rv = ((RecyclerView)dialog.findViewById(R.id.edit_group_recyclerview));
         adapter = new RecyclerView.Adapter(){
             public void onBindViewHolder(RecyclerView.ViewHolder vh, final int position){
                 //Populate item_member with relevant data.
@@ -188,7 +191,7 @@ public class GroupActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        view.findViewById(R.id.dialog_edit_delete).setOnClickListener(new Button.OnClickListener(){
+        dialog.findViewById(R.id.dialog_edit_delete).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 //Delete this group from the list and database.
                 final AlertDialog confirm = new AlertDialog.Builder(GroupActivity.this)
@@ -308,7 +311,6 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                 Log.d("Groups", "Status: " + response.code());
-                Toast.makeText(GroupActivity.this, "status" + response.code(), Toast.LENGTH_SHORT).show();
                 groupList.clear();
                 groupList.addAll(response.body());
 
