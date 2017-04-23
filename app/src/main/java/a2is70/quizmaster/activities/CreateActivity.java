@@ -23,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -170,6 +171,11 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
     private static final String[] PERMISSIONS = {Manifest.permission.RECORD_AUDIO};
 
     private Group[] groupsAccessible;
+
+    public void updateQs(List<Question> qs){
+        this.questions = qs;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -445,6 +451,7 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                             public void onFailure(Call<Quiz> call, Throwable t) {
                                 // TODO: stop progress
                                 Toast.makeText(CreateActivity.this, "Failed to publish quiz", Toast.LENGTH_SHORT).show();
+                                Log.d("failed quiz publish", "msg", t);
                             }
                         });
 
@@ -490,10 +497,26 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
             return this.questions.isEmpty() ? 0 : 1;
         }
 
+        private void removeItem(int pos) {
+            this.questions.remove(pos);
+            updateQs(this.questions);
+            notifyDataSetChanged();
+        }
+
+
         @Override
-        public void onBindViewHolder(QuestionListEntry holder, int position) {
+        public void onBindViewHolder(QuestionListEntry holder, final int position) {
             if (!this.questions.isEmpty()) {
                 holder.setData(questions.get(position));
+            }
+            if (holder.imageView!=null) {
+                holder.imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        removeItem(position);
+                        Toast.makeText(CreateActivity.this, "Question deleted", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }
 
@@ -512,10 +535,12 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
         class QuestionListEntry extends RecyclerView.ViewHolder {
 
             private final View view;
+            ImageView imageView;
 
             public QuestionListEntry(View itemView) {
                 super(itemView);
                 this.view = itemView;
+                imageView = (ImageView) itemView.findViewById(R.id.member_image);
             }
 
             public void setData(Question question) {

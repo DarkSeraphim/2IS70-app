@@ -45,13 +45,12 @@ public class Quiz {
     private DBInterface dbi;
 
     public Quiz(String name, Group[] groups, Account owner, List<Question> questions){
-        //@todo should timeLimit have a default value?
         this.name = name;
         setGroups(groups);
         this.creator = owner;
         this.questions = questions;
         this.ID = 0;
-
+        this.timeLimit = -1; //default timelimit value used in createactivity
         dbi = AppContext.getInstance().getDBI();
     }
 

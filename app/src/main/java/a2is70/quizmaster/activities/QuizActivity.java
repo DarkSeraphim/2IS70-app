@@ -101,7 +101,6 @@ public class QuizActivity extends AppCompatActivity {
             track = 0;
             currentQ = questions.get(track);
 
-            //@TODO if image/audio: differentiate
             if (currentQ.getImage() != null) {
                 //@todo test what this does
                 View imView = new ImageView(this.getBaseContext());
@@ -317,7 +316,7 @@ public class QuizActivity extends AppCompatActivity {
         submission = new SubmittedQuiz(quiz);
         submission.setAnswers(subAnswers);
 
-        //@todo submit finalquiz to DB
+        //@todo test
         DBInterface dbi = AppContext.getInstance().getDBI();
         dbi.submitQuiz(submission);
 
