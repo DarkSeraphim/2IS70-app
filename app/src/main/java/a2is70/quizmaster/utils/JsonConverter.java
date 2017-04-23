@@ -8,7 +8,7 @@ public class JsonConverter {
   
     private static Gson gson;
 
-    private static Gson getGson() {
+    public static Gson getGson() {
       if (gson == null) {
         gson = new GsonBuilder()
                         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

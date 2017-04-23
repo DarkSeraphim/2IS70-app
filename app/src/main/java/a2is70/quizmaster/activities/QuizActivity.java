@@ -318,8 +318,8 @@ public class QuizActivity extends AppCompatActivity {
         submission.setAnswers(subAnswers);
 
         //@todo submit finalquiz to DB
-        //DBInterface dbi = AppContext.getInstance().getDBI();
-        //dbi.submitQuiz(submission);
+        DBInterface dbi = AppContext.getInstance().getDBI();
+        dbi.submitQuiz(submission);
 
         //go to results activity
         //pass submittedquiz as extra

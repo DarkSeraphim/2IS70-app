@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 
 import a2is70.quizmaster.database.DBInterface;
+import a2is70.quizmaster.utils.JsonConverter;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -54,7 +55,7 @@ public class AppContext {
             }).build();
             Retrofit.Builder builder = new Retrofit.Builder()
                     .baseUrl(DBInterface.SERVER_URL)
-                    .addConverterFactory(GsonConverterFactory.create());
+                    .addConverterFactory(GsonConverterFactory.create(JsonConverter.getGson()));
 
             Retrofit retrofit = builder.client(client).build();
 
