@@ -108,7 +108,7 @@ public interface DBInterface {
 
     /**Method to request a student's test review.*/
     @GET("/review/as_student")
-    Call<StudentReview> reviewStudentQuiz(@Query("quiz_id") int testId);
+    Call<SubmittedQuiz> reviewStudentQuiz(@Query("quiz_id") int testId);
 
     /**Method to request a teacher's test review.*/
     @GET("/review/as_teacher")
