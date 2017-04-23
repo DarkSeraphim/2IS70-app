@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 
 import a2is70.quizmaster.R;
@@ -20,6 +19,7 @@ import a2is70.quizmaster.data.SubmittedQuiz;
 import a2is70.quizmaster.data.TeacherReview;
 import a2is70.quizmaster.utils.JsonConverter;
 
+//@todo reviewing is only missing functionality right now
 public class ReviewActivity extends AppCompatActivity {
 
     private RecyclerView recView;
@@ -41,6 +41,7 @@ public class ReviewActivity extends AppCompatActivity {
 
 
         if (extras != null) { //if extras were passed
+
             subQuiz = JsonConverter.fromJson(extras.getString("subQuiz"), SubmittedQuiz.class);
             quiz = JsonConverter.fromJson(extras.getString("quiz"),Quiz.class);
         }
