@@ -325,13 +325,16 @@ public class QuizActivity extends AppCompatActivity {
         dbi.submitQuiz(submission).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(QuizActivity.this, "http" + response.code(), Toast.LENGTH_SHORT).show();
-
-                //go to results activity
-                //pass submittedquiz as extra
-                Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
-                intent.putExtra("subQuiz", JsonConverter.toJson(submission));
-                startActivity(intent);
+                if (response.code() == 200) {
+                    //everything is gucci
+                    //go to results activity
+                    //pass submittedquiz as extra
+                    Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
+                    intent.putExtra("subQuiz", JsonConverter.toJson(submission));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(QuizActivity.this, "http" + response.code(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
