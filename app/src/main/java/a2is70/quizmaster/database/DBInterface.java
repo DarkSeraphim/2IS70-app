@@ -67,7 +67,7 @@ public interface DBInterface {
     /**Method to join group data.*/
     @POST("/group/subscription")
     @FormUrlEncoded
-    Call<Group> joinGroup(@Field("access_code") String accessCode);
+    Call<Void> joinGroup(@Field("access_code") String accessCode);
 
     /**Method to create a new group.*/
     @POST("/group")
