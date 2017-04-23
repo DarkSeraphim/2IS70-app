@@ -320,7 +320,7 @@ public class QuizActivity extends AppCompatActivity {
         submission.setAnswers(subAnswers);
 
         //@todo test
-        DBInterface dbi = AppContext.getInstance().getDBI();
+        final DBInterface dbi = AppContext.getInstance().getDBI();
         dbi.submitQuiz(submission).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -328,9 +328,21 @@ public class QuizActivity extends AppCompatActivity {
                     //everything is gucci
                     //go to results activity
                     //pass submittedquiz as extra
-                    Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
-                    intent.putExtra("subQuiz", JsonConverter.toJson(submission));
-                    startActivity(intent);
+                    dbi.reviewStudentQuiz(quiz.getID()).enqueue(new Callback<SubmittedQuiz>() {
+                        @Override
+                        public void onResponse(Call<SubmittedQuiz> call, Response<SubmittedQuiz> response) {
+                            Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
+                            intent.putExtra("quiz", JsonConverter.toJson(quiz));
+                            intent.putExtra("subQuiz", JsonConverter.toJson(response.body()));
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure(Call<SubmittedQuiz> call, Throwable t) {
+
+                        }
+                    });
+
                 } else {
                     Toast.makeText(QuizActivity.this, "http" + response.code(), Toast.LENGTH_SHORT).show();
                 }

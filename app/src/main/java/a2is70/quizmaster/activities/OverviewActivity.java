@@ -325,29 +325,28 @@ public class OverviewActivity extends AppCompatActivity {
 
                     } else if(AppContext.getInstance().getAccount().getType()== Account.Type.STUDENT){
                         // Make the quiz
-                        boolean notTaken = true; // Query this? Store this locally?
-                        if (quiz.getCloseAt() < System.currentTimeMillis() && notTaken) {
-                            Intent intent = new Intent(getContext(), QuizActivity.class);
-                            intent.putExtra("quiz", JsonConverter.toJson(quiz));
-                            getContext().startActivity(intent);
-                        } else {
-                            // TODO: Start review activity
-                            AppContext.getInstance().getDBI().reviewStudentQuiz(quiz.getID()).enqueue(new Callback<SubmittedQuiz>() {
-                                @Override
-                                public void onResponse(Call<SubmittedQuiz> call, Response<SubmittedQuiz> response) {
+                        // TODO: Start review activity
+                        AppContext.getInstance().getDBI().reviewStudentQuiz(quiz.getID()).enqueue(new Callback<SubmittedQuiz>() {
+                            @Override
+                            public void onResponse(Call<SubmittedQuiz> call, Response<SubmittedQuiz> response) {
+                                if (response.code() == 200) {
                                     SubmittedQuiz sReview = response.body();
                                     Intent intent = new Intent(getContext(), ReviewActivity.class);
+                                    intent.putExtra("quiz", JsonConverter.toJson(quiz));
                                     intent.putExtra("subQuiz", JsonConverter.toJson(sReview));
                                     getContext().startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent(getContext(), QuizActivity.class);
+                                    intent.putExtra("quiz", JsonConverter.toJson(quiz));
+                                    getContext().startActivity(intent);
                                 }
+                            }
 
-                                @Override
-                                public void onFailure(Call<SubmittedQuiz> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<SubmittedQuiz> call, Throwable t) {
 
-                                }
-                            });
-
-                        }
+                            }
+                        });
                     }
                 }
             });

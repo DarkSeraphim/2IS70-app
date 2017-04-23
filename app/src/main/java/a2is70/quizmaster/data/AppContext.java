@@ -50,6 +50,9 @@ public class AppContext {
                         }
                     }
 
+                    Log.d("OKHTTP", "Code: " + response.code());
+                    Log.d("OKHTTP", response.peekBody(Long.MAX_VALUE).string());
+
                     return response;
                 }
             }).build();

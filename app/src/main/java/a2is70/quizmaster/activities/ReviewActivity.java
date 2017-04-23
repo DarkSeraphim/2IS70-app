@@ -51,7 +51,7 @@ public class ReviewActivity extends AppCompatActivity {
         switch (typ) {
             case STUDENT:
                 sAdapter = new StudentAdapter(subQuiz,this);
-                title.setText(subQuiz.getQuiz().getName());
+                title.setText(quiz.getName());
                 recView.setAdapter(sAdapter);
                 rLay.removeView(findViewById(R.id.textViewCompletedLabel));
                 rLay.removeView(findViewById(R.id.textViewAverageLabel));
