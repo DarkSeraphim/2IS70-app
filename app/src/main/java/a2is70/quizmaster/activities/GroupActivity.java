@@ -402,7 +402,7 @@ public class GroupActivity extends AppCompatActivity {
                     openEditDialog(g);
                 } else {
                     //User is a STUDENT.
-                    final AlertDialog leave = new AlertDialog.Builder(null)
+                    final AlertDialog leave = new AlertDialog.Builder(GroupActivity.this)
                             .setTitle("Leave Group")
                             .setMessage("Leave this Group?")
                             .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
