@@ -305,6 +305,12 @@ public class OverviewActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<TeacherReview> call, Response<TeacherReview> response) {
                                 tReview = response.body();
+                                Intent intent = new Intent(getContext(), ReviewActivity.class);
+                                if(tReview!=null) {
+                                    intent.putExtra("quiz",JsonConverter.toJson(quiz));
+                                    intent.putExtra("statistics", JsonConverter.toJson(tReview));
+                                    getContext().startActivity(intent);
+                                }
                                 Log.d("review", "response gelukt");
                             }
 
@@ -316,12 +322,7 @@ public class OverviewActivity extends AppCompatActivity {
 
 
 
-                        Intent intent = new Intent(getContext(), ReviewActivity.class);
-                        if(tReview!=null) {
-                            intent.putExtra("quiz",JsonConverter.toJson(quiz));
-                            intent.putExtra("statistics", JsonConverter.toJson(tReview));
-                            getContext().startActivity(intent);
-                        }
+
                     } else if(AppContext.getInstance().getAccount().getType()== Account.Type.STUDENT){
                         // Make the quiz
                         boolean notTaken = true; // Query this? Store this locally?
@@ -334,7 +335,10 @@ public class OverviewActivity extends AppCompatActivity {
                             AppContext.getInstance().getDBI().reviewStudentQuiz(quiz.getID()).enqueue(new Callback<SubmittedQuiz>() {
                                 @Override
                                 public void onResponse(Call<SubmittedQuiz> call, Response<SubmittedQuiz> response) {
-                                    sReview = response.body();
+                                    SubmittedQuiz sReview = response.body();
+                                    Intent intent = new Intent(getContext(), ReviewActivity.class);
+                                    intent.putExtra("subQuiz", JsonConverter.toJson(sReview));
+                                    getContext().startActivity(intent);
                                 }
 
                                 @Override
@@ -342,9 +346,7 @@ public class OverviewActivity extends AppCompatActivity {
 
                                 }
                             });
-                            Intent intent = new Intent(getContext(), ReviewActivity.class);
-                            intent.putExtra("subQuiz", JsonConverter.toJson(sReview));
-                            getContext().startActivity(intent);
+
                         }
                     }
                 }
