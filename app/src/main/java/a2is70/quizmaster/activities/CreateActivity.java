@@ -55,10 +55,12 @@ import a2is70.quizmaster.utils.JsonConverter;
 import a2is70.quizmaster.utils.MediaCreator;
 import a2is70.quizmaster.utils.function.Consumer;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Multipart;
 
 public class CreateActivity extends AppCompatActivity implements MediaCreator.ResultListener {
 
@@ -421,17 +423,25 @@ public class CreateActivity extends AppCompatActivity implements MediaCreator.Re
                             quiz.setTimeLimit(Integer.parseInt(((EditText) findViewById(R.id.create_time_limit)).getText().toString()));
                         }
 
-                        Map<String, RequestBody> resources = new HashMap<>();
+                        List<MultipartBody.Part> resources = new ArrayList<>();
                         List<Question> questions = quiz.getQuestions();
                         for (int j = 0; j < questions.size(); j++) {
                             Question question = questions.get(j);
                             if (question.getImage() != null) {
                                 File file = question.getImage().getFile(null);
-                                resources.put("question-" + j + "-image", RequestBody.create(MediaType.parse("image/jpeg"), file));
+                                RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), file);
+                                MultipartBody.Part part = MultipartBody.Part.createFormData("question-" + j + "-image",
+                                                                                            "image.jpg",
+                                                                                            body);
+                                resources.add(part);
                             }
                             if (question.getAudio() != null) {
                                 File file = question.getAudio().getFile(null);
-                                resources.put("question-" + j + "-audio", RequestBody.create(MediaType.parse("audio/mp3"), file));
+                                RequestBody body = RequestBody.create(MediaType.parse("audio/mp3"), file);
+                                MultipartBody.Part part = MultipartBody.Part.createFormData("question-" + j + "-audio",
+                                        "audio.mp3",
+                                        body);
+                                resources.add(part);
                             }
                         }
                         // TODO: start progress

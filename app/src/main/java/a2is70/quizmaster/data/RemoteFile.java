@@ -1,11 +1,13 @@
 package a2is70.quizmaster.data;
 import a2is70.quizmaster.database.DBInterface;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Retrofit;
@@ -23,18 +25,23 @@ public class RemoteFile implements FileManager {
     }
 
     public void create(String path, Quiz data, Callback<Quiz> c){
-        Map<String, RequestBody> resources = new HashMap<>();
+        List<MultipartBody.Part> resources = new ArrayList<>();
         List<Question> questions = data.getQuestions();
         for (int i = 0; i < questions.size(); i++) {
             Question question = questions.get(i);
-            // TODO: sort out files
             if (question.getImage() != null) {
                 File file = question.getImage().getFile(null);
-                resources.put("question-" + i + "-image", RequestBody.create(MediaType.parse("image/jpeg"), file));
+                RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), file);
+                MultipartBody.Part part;
+                part = MultipartBody.Part.createFormData("question-" + i + "-image", "image.jpg", body);
+                resources.add(part);
             }
             if (question.getAudio() != null) {
                 File file = question.getAudio().getFile(null);
-                resources.put("question-" + i + "-audio", RequestBody.create(MediaType.parse("audio/mp3"), file));
+                RequestBody body = RequestBody.create(MediaType.parse("audio/mp3"), file);
+                MultipartBody.Part part;
+                part = MultipartBody.Part.createFormData("question-" + i + "-audio", "audio.jpg", body);
+                resources.add(part);
             }
         }
         dbi.addQuiz(data, resources).enqueue(c);

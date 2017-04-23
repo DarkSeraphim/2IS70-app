@@ -9,6 +9,7 @@ import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.StudentReview;
 import a2is70.quizmaster.data.SubmittedQuiz;
 import a2is70.quizmaster.data.TeacherReview;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -89,7 +90,7 @@ public interface DBInterface {
     /**Method to create a new Quiz.*/
     @POST("/quiz")
     @Multipart
-    Call<Quiz> addQuiz(@Part("data") Quiz q, @PartMap Map<String, RequestBody> resources);
+    Call<Quiz> addQuiz(@Part("data") Quiz q, @Part List<MultipartBody.Part> resources);
 
     /**Method to edit an existing Quiz.
      * Possible could have.*/
