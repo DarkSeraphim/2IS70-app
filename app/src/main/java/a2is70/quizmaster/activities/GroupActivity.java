@@ -227,10 +227,14 @@ public class GroupActivity extends AppCompatActivity {
     public void openJoinDialog(){
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Join a new group.")
-                .setPositiveButton("Join", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface d, int which){
-                        dbi.joinGroup(((EditText)findViewById(R.id.join_group_access_code)).getText().toString())
+                .setPositiveButton("Join", null)
+                .setNegativeButton("Cancel", null)
+                .setView(R.layout.dialog_join_group)
+                .create();
+        dialog.setButton(dialog.BUTTON_POSITIVE, "Join", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface d, int which){
+                dbi.joinGroup(((EditText)dialog.findViewById(R.id.join_group_access_code)).getText().toString())
                         .enqueue(new Callback<Group>() {
                             @Override
                             public void onResponse(Call<Group> call, Response<Group> response) {
@@ -241,18 +245,17 @@ public class GroupActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call<Group> call, Throwable t) {
                                 final AlertDialog fail = new AlertDialog.Builder(GroupActivity.this)
-                                .setMessage("Could not join group with this access code.").create();
+                                        .setMessage("Could not join group with this access code.").create();
                                 fail.show();
                             }
                         });
-                        d.cancel();
-                    }})
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface d, int which) {
-                        d.cancel();
-                    }})
-                .setView(R.layout.dialog_join_group).create();
+                d.cancel();
+            }});
+        dialog.setButton(dialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface d, int which) {
+                d.cancel();
+            }});
         dialog.show();
     }
 
