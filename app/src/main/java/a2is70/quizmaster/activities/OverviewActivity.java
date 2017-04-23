@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -47,29 +48,13 @@ public class OverviewActivity extends AppCompatActivity {
     private TextView emptyView;
 
 
-    private List<Quiz> quizzes;
+    private List<Quiz> quizzes = new ArrayList<>();
 
     private Group[] groups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // @todo replace with actual quizzes
-        // create a quizzes list
-        AppContext.getInstance().getDBI().getQuizzes().enqueue(new Callback<List<Quiz>>() {
-            @Override
-            public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
-                // TODO: Stop progress
-                quizzes = response.body();
-                Toast.makeText(OverviewActivity.this, "Load request succeeded", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<List<Quiz>> call, Throwable t) {
-                // TODO: stop progress
-                Toast.makeText(OverviewActivity.this, "Failed to load quizzes", Toast.LENGTH_SHORT).show();
-            }
-        });
-
 
         //quizzes = Collections.emptyList();
         refreshQuizList();
@@ -104,17 +89,6 @@ public class OverviewActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.overview_quizzes);
         emptyView = (TextView) findViewById(R.id.empty_view);
 
-        if (quizzes == null || quizzes.isEmpty()) {
-            mRecyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
-            Toast.makeText(OverviewActivity.this, "Quizlist is empty", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            emptyView.setVisibility(View.GONE);
-        }
-
-
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -125,6 +99,34 @@ public class OverviewActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         // Set layout manager to position the items
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // create a quizzes list
+        AppContext.getInstance().getDBI().getQuizzes().enqueue(new Callback<List<Quiz>>() {
+            @Override
+            public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
+                // TODO: Stop progress
+                quizzes.clear();
+                quizzes.addAll(response.body());
+                mAdapter.notifyDataSetChanged();
+                Toast.makeText(OverviewActivity.this, "Load request succeeded", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<List<Quiz>> call, Throwable t) {
+                // TODO: stop progress
+                Toast.makeText(OverviewActivity.this, "Failed to load quizzes", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        if (quizzes == null || quizzes.isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+            Toast.makeText(OverviewActivity.this, "Quizlist is empty", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
         // That's all!
     }
 
