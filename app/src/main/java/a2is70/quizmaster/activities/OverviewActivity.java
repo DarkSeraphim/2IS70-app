@@ -313,6 +313,7 @@ public class OverviewActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(getContext(), ReviewActivity.class);
                         if(tReview!=null) {
+                            intent.putExtra("quiz",JsonConverter.toJson(quiz));
                             intent.putExtra("statistics", JsonConverter.toJson(tReview));
                             getContext().startActivity(intent);
                         }
