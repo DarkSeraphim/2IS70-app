@@ -100,6 +100,11 @@ public class OverviewActivity extends AppCompatActivity {
         // Set layout manager to position the items
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // The list is empty, trust me, we haven't loaded shit
+        mRecyclerView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
+        Toast.makeText(OverviewActivity.this, "Quizlist is empty", Toast.LENGTH_SHORT).show();
+        
         // create a quizzes list
         AppContext.getInstance().getDBI().getQuizzes().enqueue(new Callback<List<Quiz>>() {
             @Override
@@ -107,6 +112,15 @@ public class OverviewActivity extends AppCompatActivity {
                 // TODO: Stop progress
                 quizzes.clear();
                 quizzes.addAll(response.body());
+                if (quizzes == null || quizzes.isEmpty()) {
+                    mRecyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                    Toast.makeText(OverviewActivity.this, "Quizlist is empty", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
                 mAdapter.notifyDataSetChanged();
                 Toast.makeText(OverviewActivity.this, "Load request succeeded", Toast.LENGTH_SHORT).show();
             }
@@ -118,15 +132,7 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
-        if (quizzes == null || quizzes.isEmpty()) {
-            mRecyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
-            Toast.makeText(OverviewActivity.this, "Quizlist is empty", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            emptyView.setVisibility(View.GONE);
-        }
+        
         // That's all!
     }
 
