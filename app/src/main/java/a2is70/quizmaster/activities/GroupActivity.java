@@ -35,8 +35,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-//@todo member deletion
-//@todo leave a group
 //@todo popup when accescode already exists
 public class GroupActivity extends AppCompatActivity {
 
@@ -91,7 +89,7 @@ public class GroupActivity extends AppCompatActivity {
     public void openEditDialog(final Group g){
         final RecyclerView rv;
         final RecyclerView.Adapter adapter;
-        //final View view = inflater.inflate(R.layout.dialog_edit_group, null);
+        final View view = inflater.inflate(R.layout.dialog_edit_group, null);
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Edit existing group.")
                 .setPositiveButton("Save", new DialogInterface.OnClickListener(){
@@ -104,12 +102,12 @@ public class GroupActivity extends AppCompatActivity {
                     public void onClick(DialogInterface d, int which){
                         d.dismiss();
                     }})
-                .setView(R.layout.dialog_edit_group)
+                .setView(view)
                 .create();
         //Populate fields with relevant information (group name, group access code).
-        //@todo fix the null errors
-        EditText groupName = (EditText) dialog.findViewById(R.id.edit_group_groupname);
-        EditText groupCode = (EditText) dialog.findViewById(R.id.edit_group_accesscode);
+        EditText groupName = (EditText) view.findViewById(R.id.edit_group_groupname);
+        EditText groupCode = (EditText) view.findViewById(R.id.edit_group_accesscode);
+
 
         groupName.setText(g.getName());
         groupCode.setText(g.getAccessCode());
@@ -118,7 +116,7 @@ public class GroupActivity extends AppCompatActivity {
         groupCode.setFocusable(false);
 
         //Populate recyclerview with group data.
-        rv = ((RecyclerView)dialog.findViewById(R.id.edit_group_recyclerview));
+        rv = ((RecyclerView)view.findViewById(R.id.edit_group_recyclerview));
         adapter = new RecyclerView.Adapter(){
             public void onBindViewHolder(RecyclerView.ViewHolder vh, final int position){
                 //Populate item_member with relevant data.
@@ -191,7 +189,7 @@ public class GroupActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        dialog.findViewById(R.id.dialog_edit_delete).setOnClickListener(new Button.OnClickListener(){
+        view.findViewById(R.id.dialog_edit_delete).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 //Delete this group from the list and database.
                 final AlertDialog confirm = new AlertDialog.Builder(GroupActivity.this)
@@ -392,7 +390,7 @@ public class GroupActivity extends AppCompatActivity {
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
             if (e.getAction() == MotionEvent.ACTION_DOWN) {
                 View position = rv.findChildViewUnder(e.getX(), e.getY());
-                Group g;
+                final Group g;
                 try {
                     g = groupList.get(rv.getChildAdapterPosition(position));
                 } catch (ArrayIndexOutOfBoundsException ex) {
@@ -409,10 +407,12 @@ public class GroupActivity extends AppCompatActivity {
                             .setMessage("Leave this Group?")
                             .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
                                 public void onClick(final DialogInterface d, int which) {
-                                    dbi.leaveGroup(AppContext.getInstance().getAccount().getId()).enqueue(new Callback<Void>() {
+                                    dbi.leaveGroup(g.getId()).enqueue(new Callback<Void>() {
                                         @Override
                                         public void onResponse(Call<Void> call, Response<Void> response) {
+                                            Log.d("Leave Group", "Response: "+response.code());
                                             d.cancel();
+                                            loadGroups();
                                         }
 
                                         @Override
