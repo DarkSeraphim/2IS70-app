@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -109,7 +110,6 @@ public class OverviewActivity extends AppCompatActivity {
         // The list is empty, trust me, we haven't loaded shit
         mRecyclerView.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
-        Toast.makeText(OverviewActivity.this, "Quizlist is empty", Toast.LENGTH_SHORT).show();
 
         // create a quizzes list
         AppContext.getInstance().getDBI().getQuizzes().enqueue(new Callback<List<Quiz>>() {
@@ -117,18 +117,32 @@ public class OverviewActivity extends AppCompatActivity {
             public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
                 // TODO: Stop progress
                 quizzes.clear();
-                quizzes.addAll(response.body());
+                HashMap<Integer, Boolean> checked = new HashMap<Integer, Boolean>();
+
+                for (Quiz q : response.body()) {
+                    if (!checked.containsKey(q.getID())) {
+                        checked.put(q.getID(), false);
+                    }
+                }
+
+                for (Quiz q : response.body()) {
+                    if (!checked.get(q.getID())) {
+                        quizzes.add(q);
+                        checked.put(q.getID(), true);
+                    }
+                }
+
+
+                //quizzes.addAll(toAdd);
                 if (quizzes == null || quizzes.isEmpty()) {
                     mRecyclerView.setVisibility(View.GONE);
                     emptyView.setVisibility(View.VISIBLE);
-                    Toast.makeText(OverviewActivity.this, "Quizlist is empty", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     mRecyclerView.setVisibility(View.VISIBLE);
                     emptyView.setVisibility(View.GONE);
                 }
                 mAdapter.notifyDataSetChanged();
-                Toast.makeText(OverviewActivity.this, "Load request succeeded", Toast.LENGTH_SHORT).show();
             }
 
             @Override

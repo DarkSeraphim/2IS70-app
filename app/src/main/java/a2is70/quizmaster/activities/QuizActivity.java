@@ -331,10 +331,14 @@ public class QuizActivity extends AppCompatActivity {
                     dbi.reviewStudentQuiz(quiz.getID()).enqueue(new Callback<SubmittedQuiz>() {
                         @Override
                         public void onResponse(Call<SubmittedQuiz> call, Response<SubmittedQuiz> response) {
-                            Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
-                            intent.putExtra("quiz", JsonConverter.toJson(quiz));
-                            intent.putExtra("subQuiz", JsonConverter.toJson(response.body()));
-                            startActivity(intent);
+                            if (response.code() == 200) {
+                                Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
+                                intent.putExtra("quiz", JsonConverter.toJson(quiz));
+                                intent.putExtra("subQuiz", JsonConverter.toJson(response.body()));
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(QuizActivity.this, "reviewStudentQuiz: http" + response.code(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -344,7 +348,7 @@ public class QuizActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    Toast.makeText(QuizActivity.this, "http" + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(QuizActivity.this, "submitQuiz: http" + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
