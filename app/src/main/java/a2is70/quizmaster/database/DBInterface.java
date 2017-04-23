@@ -107,10 +107,10 @@ public interface DBInterface {
     Call<Quiz> submitQuiz(@Body SubmittedQuiz q);
 
     /**Method to request a student's test review.*/
-    @GET("/review/as_teacher")
-    Call<StudentReview> reviewStudentQuiz(@Query("test_id") int testId);
+    @GET("/review/as_student")
+    Call<StudentReview> reviewStudentQuiz(@Query("quiz_id") int testId);
 
     /**Method to request a teacher's test review.*/
-    @GET("/review/as_student")
-    Call<TeacherReview> reviewTeacherQuiz(@Query("test_id") int testId);
+    @GET("/review/as_teacher")
+    Call<TeacherReview> reviewTeacherQuiz(@Query("quiz_id") int testId);
 }

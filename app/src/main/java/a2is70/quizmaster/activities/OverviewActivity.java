@@ -300,19 +300,22 @@ public class OverviewActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<TeacherReview> call, Response<TeacherReview> response) {
                                 tReview = response.body();
+                                Log.d("review", "response gelukt");
                             }
 
                             @Override
                             public void onFailure(Call<TeacherReview> call, Throwable t) {
-
+                                Log.d("review", "response niet gelukt");
                             }
                         });
 
 
 
                         Intent intent = new Intent(getContext(), ReviewActivity.class);
-                        intent.putExtra("statistics", JsonConverter.toJson(tReview));
-                        getContext().startActivity(intent);
+                        if(tReview!=null) {
+                            intent.putExtra("statistics", JsonConverter.toJson(tReview));
+                            getContext().startActivity(intent);
+                        }
                     } else if(AppContext.getInstance().getAccount().getType()== Account.Type.STUDENT){
                         // Make the quiz
                         boolean notTaken = true; // Query this? Store this locally?
