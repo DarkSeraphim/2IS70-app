@@ -72,6 +72,10 @@ public class OverviewActivity extends AppCompatActivity {
 
         final Button mAddQuizButton = (Button) findViewById(R.id.overview_add_quiz);
 
+        //if you somehow skipped login
+        if(AppContext.getInstance().getAccount() == null) {
+            startActivity(new Intent(OverviewActivity.this, LoginActivity.class));
+        }
         // Only show Add quiz button when a teacher is logged in
         if(AppContext.getInstance().getAccount().getType()== Account.Type.TEACHER) {
             mAddQuizButton.setVisibility(View.VISIBLE);
@@ -106,7 +110,7 @@ public class OverviewActivity extends AppCompatActivity {
         mRecyclerView.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
         Toast.makeText(OverviewActivity.this, "Quizlist is empty", Toast.LENGTH_SHORT).show();
-        
+
         // create a quizzes list
         AppContext.getInstance().getDBI().getQuizzes().enqueue(new Callback<List<Quiz>>() {
             @Override
@@ -134,7 +138,7 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
-        
+
         // That's all!
     }
 

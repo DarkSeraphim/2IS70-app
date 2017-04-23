@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -29,6 +30,9 @@ import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.SubmittedQuiz;
 import a2is70.quizmaster.database.DBInterface;
 import a2is70.quizmaster.utils.JsonConverter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -318,13 +322,23 @@ public class QuizActivity extends AppCompatActivity {
 
         //@todo test
         DBInterface dbi = AppContext.getInstance().getDBI();
-        dbi.submitQuiz(submission);
+        dbi.submitQuiz(submission).enqueue(new Callback<Quiz>() {
+            @Override
+            public void onResponse(Call<Quiz> call, Response<Quiz> response) {
+                Toast.makeText(QuizActivity.this, "http" + response.code(), Toast.LENGTH_SHORT).show();
 
-        //go to results activity
-        //pass submittedquiz as extra
-        Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
-        intent.putExtra("subQuiz", JsonConverter.toJson(submission));
-        startActivity(intent);
+                //go to results activity
+                //pass submittedquiz as extra
+                Intent intent = new Intent(QuizActivity.this, ReviewActivity.class);
+                intent.putExtra("subQuiz", JsonConverter.toJson(submission));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<Quiz> call, Throwable t) {
+                Log.d("submitquiz", "error: ", t);
+            }
+        });
     }
 
 
