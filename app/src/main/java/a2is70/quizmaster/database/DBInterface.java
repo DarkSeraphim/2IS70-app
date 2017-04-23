@@ -105,7 +105,7 @@ public interface DBInterface {
     /**Method to submit a completed Quiz.*/
     @POST("/quiz/submit")
     @Headers(JSON_CONTENT)
-    Call<Quiz> submitQuiz(@Body SubmittedQuiz q);
+    Call<Void> submitQuiz(@Body SubmittedQuiz q);
 
     /**Method to request a student's test review.*/
     @GET("/review/as_student")

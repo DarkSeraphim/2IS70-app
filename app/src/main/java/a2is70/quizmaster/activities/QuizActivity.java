@@ -322,9 +322,9 @@ public class QuizActivity extends AppCompatActivity {
 
         //@todo test
         DBInterface dbi = AppContext.getInstance().getDBI();
-        dbi.submitQuiz(submission).enqueue(new Callback<Quiz>() {
+        dbi.submitQuiz(submission).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Quiz> call, Response<Quiz> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 Toast.makeText(QuizActivity.this, "http" + response.code(), Toast.LENGTH_SHORT).show();
 
                 //go to results activity
@@ -335,7 +335,7 @@ public class QuizActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Quiz> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.d("submitquiz", "error: ", t);
             }
         });
