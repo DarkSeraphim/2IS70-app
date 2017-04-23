@@ -68,7 +68,7 @@ public interface DBInterface {
     /**Method to join group data.*/
     @POST("/group/subscription")
     @FormUrlEncoded
-    Call<Group> joinGroup(@Field("access_code") String accessCode);
+    Call<Void> joinGroup(@Field("access_code") String accessCode);
 
     /**Method to create a new group.*/
     @POST("/group")
@@ -108,10 +108,10 @@ public interface DBInterface {
     Call<Quiz> submitQuiz(@Body SubmittedQuiz q);
 
     /**Method to request a student's test review.*/
-    @GET("/review/as_teacher")
-    Call<StudentReview> reviewStudentQuiz(@Query("test_id") int testId);
+    @GET("/review/as_student")
+    Call<SubmittedQuiz> reviewStudentQuiz(@Query("quiz_id") int testId);
 
     /**Method to request a teacher's test review.*/
-    @GET("/review/as_student")
-    Call<TeacherReview> reviewTeacherQuiz(@Query("test_id") int testId);
+    @GET("/review/as_teacher")
+    Call<TeacherReview> reviewTeacherQuiz(@Query("quiz_id") int testId);
 }

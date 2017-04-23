@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -35,6 +36,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//@todo member deletion
+//@todo when joining a group wrong pop-up message appears
 public class GroupActivity extends AppCompatActivity {
 
     private RecyclerView recycler;
@@ -227,32 +230,35 @@ public class GroupActivity extends AppCompatActivity {
     public void openJoinDialog(){
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Join a new group.")
-                .setPositiveButton("Join", new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface d, int which){
-                        dbi.joinGroup(((EditText)findViewById(R.id.join_group_access_code)).getText().toString())
-                        .enqueue(new Callback<Group>() {
+                .setPositiveButton("Join", null)
+                .setNegativeButton("Cancel", null)
+                .setView(R.layout.dialog_join_group)
+                .create();
+        dialog.setButton(dialog.BUTTON_POSITIVE, "Join", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface d, int which){
+                dbi.joinGroup(((EditText)dialog.findViewById(R.id.join_group_access_code)).getText().toString())
+                        .enqueue(new Callback<Void>() {
                             @Override
-                            public void onResponse(Call<Group> call, Response<Group> response) {
-                                groupList.add(response.body());
-                                adapter.notifyDataSetChanged();
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                loadGroups();
                             }
 
                             @Override
-                            public void onFailure(Call<Group> call, Throwable t) {
+                            public void onFailure(Call<Void> call, Throwable t) {
                                 final AlertDialog fail = new AlertDialog.Builder(GroupActivity.this)
-                                .setMessage("Could not join group with this access code.").create();
+                                        .setMessage("Could not join group with this access code.").create();
                                 fail.show();
+                                Log.d("GroupActivity", "JoinGroup error: " + t);
                             }
                         });
-                        d.cancel();
-                    }})
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface d, int which) {
-                        d.cancel();
-                    }})
-                .setView(R.layout.dialog_join_group).create();
+                d.cancel();
+            }});
+        dialog.setButton(dialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface d, int which) {
+                d.cancel();
+            }});
         dialog.show();
     }
 
@@ -302,8 +308,9 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                 Log.d("Groups", "Status: " + response.code());
-
-                groupList = response.body();
+                Toast.makeText(GroupActivity.this, "status" + response.code(), Toast.LENGTH_SHORT).show();
+                groupList.clear();
+                groupList.addAll(response.body());
 
                 adapter.notifyDataSetChanged();
             }
@@ -395,7 +402,7 @@ public class GroupActivity extends AppCompatActivity {
                     openEditDialog(g);
                 } else {
                     //User is a STUDENT.
-                    final AlertDialog leave = new AlertDialog.Builder(null)
+                    final AlertDialog leave = new AlertDialog.Builder(GroupActivity.this)
                             .setTitle("Leave Group")
                             .setMessage("Leave this Group?")
                             .setPositiveButton("Leave", new DialogInterface.OnClickListener() {

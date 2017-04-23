@@ -32,6 +32,7 @@ import a2is70.quizmaster.data.AppContext;
 import a2is70.quizmaster.data.Group;
 import a2is70.quizmaster.data.Quiz;
 import a2is70.quizmaster.data.StudentReview;
+import a2is70.quizmaster.data.SubmittedQuiz;
 import a2is70.quizmaster.data.TeacherReview;
 import a2is70.quizmaster.database.DBInterface;
 import a2is70.quizmaster.utils.JsonConverter;
@@ -209,7 +210,7 @@ public class OverviewActivity extends AppCompatActivity {
         private Context mContext;
 
         TeacherReview tReview;
-        StudentReview sReview;
+        SubmittedQuiz sReview;
 
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
@@ -300,19 +301,23 @@ public class OverviewActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<TeacherReview> call, Response<TeacherReview> response) {
                                 tReview = response.body();
+                                Log.d("review", "response gelukt");
                             }
 
                             @Override
                             public void onFailure(Call<TeacherReview> call, Throwable t) {
-
+                                Log.d("review", "response niet gelukt");
                             }
                         });
 
 
 
                         Intent intent = new Intent(getContext(), ReviewActivity.class);
-                        intent.putExtra("statistics", JsonConverter.toJson(tReview));
-                        getContext().startActivity(intent);
+                        if(tReview!=null) {
+                            intent.putExtra("quiz",JsonConverter.toJson(quiz));
+                            intent.putExtra("statistics", JsonConverter.toJson(tReview));
+                            getContext().startActivity(intent);
+                        }
                     } else if(AppContext.getInstance().getAccount().getType()== Account.Type.STUDENT){
                         // Make the quiz
                         boolean notTaken = true; // Query this? Store this locally?
@@ -322,19 +327,19 @@ public class OverviewActivity extends AppCompatActivity {
                             getContext().startActivity(intent);
                         } else {
                             // TODO: Start review activity
-                            AppContext.getInstance().getDBI().reviewStudentQuiz(quiz.getID()).enqueue(new Callback<StudentReview>() {
+                            AppContext.getInstance().getDBI().reviewStudentQuiz(quiz.getID()).enqueue(new Callback<SubmittedQuiz>() {
                                 @Override
-                                public void onResponse(Call<StudentReview> call, Response<StudentReview> response) {
+                                public void onResponse(Call<SubmittedQuiz> call, Response<SubmittedQuiz> response) {
                                     sReview = response.body();
                                 }
 
                                 @Override
-                                public void onFailure(Call<StudentReview> call, Throwable t) {
+                                public void onFailure(Call<SubmittedQuiz> call, Throwable t) {
 
                                 }
                             });
                             Intent intent = new Intent(getContext(), ReviewActivity.class);
-                            intent.putExtra("statistics", JsonConverter.toJson(sReview));
+                            intent.putExtra("subQuiz", JsonConverter.toJson(sReview));
                             getContext().startActivity(intent);
                         }
                     }
