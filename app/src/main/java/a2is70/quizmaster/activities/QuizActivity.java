@@ -46,7 +46,6 @@ public class QuizActivity extends AppCompatActivity {
     RadioButton answerD;
     TextView questiontext;
     Question currentQ;
-    SubmittedQuiz submission;
     SubmittedQuiz.Answer[] submittedAnswers;
     List<SubmittedQuiz.Answer> subAnswers = new ArrayList<>();
     RadioGroup answerbuttons;
@@ -317,7 +316,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private void toResults(){
         //create submittedquiz objects with given answers
-        submission = new SubmittedQuiz(quiz);
+        final SubmittedQuiz submission = new SubmittedQuiz(quiz);
         submission.setAnswers(subAnswers);
 
         //@todo test
