@@ -2,12 +2,7 @@ package a2is70.quizmaster.data;
 import java.util.List;
 
 import a2is70.quizmaster.database.DBInterface;
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
 /**Object to represent a Quiz.*/
 public class Quiz {
@@ -15,8 +10,8 @@ public class Quiz {
     /**String identifying this Quiz.*/
     private final String name;
 
-    /**ID of this Quiz.*/
-    private int ID;
+    /**id of this Quiz.*/
+    private int id;
 
     /**String identifying the owner of this Quiz.*/
     private Account creator;
@@ -46,7 +41,7 @@ public class Quiz {
         setGroups(groups);
         this.creator = owner;
         this.questions = questions;
-        this.ID = 0;
+        this.id = 0;
         this.timeLimit = -1; //default timelimit value used in createactivity
         dbi = AppContext.getInstance().getDBI();
     }
@@ -127,10 +122,10 @@ public class Quiz {
     }
 
     public int getID(){
-        return ID;
+        return id;
     }
 
     public void setID(int id){
-        ID = id;
+        this.id = id;
     }
 }
